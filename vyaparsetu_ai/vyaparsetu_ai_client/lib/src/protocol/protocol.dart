@@ -16,13 +16,20 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
+import 'package:vyaparsetu_ai_client/src/protocol/product.dart' as _idm7l56a;
 import 'account_profile.dart' as _i9dsm4op;
 import 'greetings/greeting.dart' as _izw8z7ou;
 import 'marketplace_role.dart' as _i1ko12if;
+import 'product.dart' as _i8ctgxfn;
+import 'product_draft_exception.dart' as _i1druvxr;
+import 'product_status.dart' as _izdy7rp7;
 import 'profile_exception.dart' as _ip8pwhpv;
 export 'account_profile.dart';
 export 'greetings/greeting.dart';
 export 'marketplace_role.dart';
+export 'product.dart';
+export 'product_draft_exception.dart';
+export 'product_status.dart';
 export 'profile_exception.dart';
 export 'client.dart';
 
@@ -42,11 +49,18 @@ class Protocol extends _isc.SerializationManager
           _isc.getType<_i9dsm4op.AccountProfile>,
           _isc.getType<_izw8z7ou.Greeting>,
           _isc.getType<_i1ko12if.MarketplaceRole>,
+          _isc.getType<_i8ctgxfn.Product>,
+          _isc.getType<_i1druvxr.ProductDraftException>,
+          _isc.getType<_izdy7rp7.ProductStatus>,
           _isc.getType<_ip8pwhpv.ProfileException>,
           _isc.getType<_i9dsm4op.AccountProfile?>,
           _isc.getType<_izw8z7ou.Greeting?>,
           _isc.getType<_i1ko12if.MarketplaceRole?>,
+          _isc.getType<_i8ctgxfn.Product?>,
+          _isc.getType<_i1druvxr.ProductDraftException?>,
+          _isc.getType<_izdy7rp7.ProductStatus?>,
           _isc.getType<_ip8pwhpv.ProfileException?>,
+          _isc.getType<List<_idm7l56a.Product>>,
         ],
         modules: const [
           _iaic.Protocol.new,
@@ -56,6 +70,9 @@ class Protocol extends _isc.SerializationManager
           'AccountProfile',
           'Greeting',
           'MarketplaceRole',
+          'Product',
+          'ProductDraftException',
+          'ProductStatus',
           'ProfileException',
         ],
       );
@@ -93,6 +110,15 @@ class Protocol extends _isc.SerializationManager
     if (t == _i1ko12if.MarketplaceRole) {
       return _i1ko12if.MarketplaceRole.fromJson(data) as T;
     }
+    if (t == _i8ctgxfn.Product) {
+      return _i8ctgxfn.Product.fromJson(data) as T;
+    }
+    if (t == _i1druvxr.ProductDraftException) {
+      return _i1druvxr.ProductDraftException.fromJson(data) as T;
+    }
+    if (t == _izdy7rp7.ProductStatus) {
+      return _izdy7rp7.ProductStatus.fromJson(data) as T;
+    }
     if (t == _ip8pwhpv.ProfileException) {
       return _ip8pwhpv.ProfileException.fromJson(data) as T;
     }
@@ -107,8 +133,27 @@ class Protocol extends _isc.SerializationManager
       return (data != null ? _i1ko12if.MarketplaceRole.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_i8ctgxfn.Product?>()) {
+      return (data != null ? _i8ctgxfn.Product.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i1druvxr.ProductDraftException?>()) {
+      return (data != null
+              ? _i1druvxr.ProductDraftException.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _isc.getType<_izdy7rp7.ProductStatus?>()) {
+      return (data != null ? _izdy7rp7.ProductStatus.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_ip8pwhpv.ProfileException?>()) {
       return (data != null ? _ip8pwhpv.ProfileException.fromJson(data) : null)
+          as T;
+    }
+    if (t == List<_idm7l56a.Product>) {
+      return (data as List)
+              .map((e) => deserialize<_idm7l56a.Product>(e))
+              .toList()
           as T;
     }
     final modules = deserializationMetadata.modulesForDeserialization(
@@ -129,6 +174,9 @@ class Protocol extends _isc.SerializationManager
       _i9dsm4op.AccountProfile => 'AccountProfile',
       _izw8z7ou.Greeting => 'Greeting',
       _i1ko12if.MarketplaceRole => 'MarketplaceRole',
+      _i8ctgxfn.Product => 'Product',
+      _i1druvxr.ProductDraftException => 'ProductDraftException',
+      _izdy7rp7.ProductStatus => 'ProductStatus',
       _ip8pwhpv.ProfileException => 'ProfileException',
       _ => null,
     };
@@ -153,6 +201,12 @@ class Protocol extends _isc.SerializationManager
         return 'Greeting';
       case _i1ko12if.MarketplaceRole():
         return 'MarketplaceRole';
+      case _i8ctgxfn.Product():
+        return 'Product';
+      case _i1druvxr.ProductDraftException():
+        return 'ProductDraftException';
+      case _izdy7rp7.ProductStatus():
+        return 'ProductStatus';
       case _ip8pwhpv.ProfileException():
         return 'ProfileException';
     }
@@ -185,6 +239,15 @@ class Protocol extends _isc.SerializationManager
     }
     if (dataClassName == 'MarketplaceRole') {
       return deserialize<_i1ko12if.MarketplaceRole>(data['data']);
+    }
+    if (dataClassName == 'Product') {
+      return deserialize<_i8ctgxfn.Product>(data['data']);
+    }
+    if (dataClassName == 'ProductDraftException') {
+      return deserialize<_i1druvxr.ProductDraftException>(data['data']);
+    }
+    if (dataClassName == 'ProductStatus') {
+      return deserialize<_izdy7rp7.ProductStatus>(data['data']);
     }
     if (dataClassName == 'ProfileException') {
       return deserialize<_ip8pwhpv.ProfileException>(data['data']);

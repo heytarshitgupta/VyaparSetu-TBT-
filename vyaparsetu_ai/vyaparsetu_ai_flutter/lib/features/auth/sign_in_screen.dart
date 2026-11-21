@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 import '../../providers/session_provider.dart';
+import '../producer/product_drafts_screen.dart';
 import 'profile_setup_form.dart';
 
 class SignInScreen extends ConsumerWidget {
@@ -103,6 +104,17 @@ class _AccountPageState extends ConsumerState<_AccountPage> {
                     ),
                     const SizedBox(height: 8),
                     Text('Welcome, ${value.displayName}.'),
+                    if (value.role == MarketplaceRole.producer) ...[
+                      const SizedBox(height: 24),
+                      FilledButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const ProductDraftsScreen(),
+                          ),
+                        ),
+                        child: const Text('My Products'),
+                      ),
+                    ],
                   ],
                 ),
         ),

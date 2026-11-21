@@ -18,6 +18,7 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
 import 'package:vyaparsetu_ai_server/src/generated/marketplace_role.dart'
     as _i2pxwtoh;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
+import '../endpoints/product_endpoint.dart' as _im5j1753;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
 import '../greetings/greeting_endpoint.dart' as _il624ik7;
 
@@ -38,6 +39,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'emailIdp',
+          null,
+        ),
+      'product': _im5j1753.ProductEndpoint()
+        ..initialize(
+          server,
+          'product',
           null,
         ),
       'profile': _i2cx2pww.ProfileEndpoint()
@@ -318,6 +325,47 @@ class Endpoints extends _is.EndpointDispatch {
                 Map<String, dynamic> params,
               ) async => (endpoints['emailIdp'] as _iuc1hd5t.EmailIdpEndpoint)
                   .hasAccount(session),
+        ),
+      },
+    );
+    connectors['product'] = _is.EndpointConnector(
+      name: 'product',
+      endpoint: endpoints['product']!,
+      methodConnectors: {
+        'createDraft': _is.MethodConnector(
+          name: 'createDraft',
+          params: {
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'description': _is.ParameterDescription(
+              name: 'description',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['product'] as _im5j1753.ProductEndpoint)
+                  .createDraft(
+                    session,
+                    name: params['name'],
+                    description: params['description'],
+                  ),
+        ),
+        'listMyDrafts': _is.MethodConnector(
+          name: 'listMyDrafts',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['product'] as _im5j1753.ProductEndpoint)
+                  .listMyDrafts(session),
         ),
       },
     );

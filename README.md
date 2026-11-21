@@ -6,7 +6,7 @@ This is the new [hackathon repository](https://github.com/heytarshitgupta/Vyapar
 
 ## Start here
 
-**Latest checkpoint: AUTH-01.** The app has real email-code sign-in and saves a Buyer or Producer profile. The role-specific workspace currently shows a welcome screen. Product listings, search, quotes, orders, and voice input are future tasks.
+**Latest checkpoint: PROD-01A.** The app has real email-code sign-in and saves a Buyer or Producer profile, and producers can save and view private product drafts with database persistence and role isolation. Product photos, publish, catalog search, quotes, orders, and voice input are future tasks.
 
 **Current team assignment:** [whatsapp.md](whatsapp.md) has the active task, starter code, tests, and commit instructions. Pull updated `main` before opening it.
 
@@ -27,7 +27,17 @@ serverpod start --no-docker
 2. Complete registration if prompted. Enter a display name, choose **Buyer**, then click **Save profile**. Expect **Buyer workspace** and your display name.
 3. Sign out and sign in again with the same email. Expect the same workspace and name without repeating onboarding. Repeat with a different test email and choose **Producer** to see **Producer workspace**.
 
-Use `Ctrl+C` or the runner's `Q` option when you are done with the preview. Five server integration tests and two Flutter widget tests passed for this checkpoint. Cloud email delivery and Android device testing are pending.
+### Check PROD-01A yourself
+
+1. Sign in to a test Producer account (or register one by selecting **Producer** during onboarding).
+2. On the **Producer workspace**, click **My Products**.
+3. Under **New draft**, enter a product name (e.g. `Copper Bottle`) and optional description (e.g. `Handcrafted pure copper water bottle`), then click **Save draft**.
+4. Confirm the record appears under **Saved drafts** with status `draft`.
+5. Reload/reopen the screen to confirm the draft persists from the database.
+6. Sign into another test Producer account and confirm the first producer's draft does not appear there.
+7. Sign into a Buyer account and confirm there is no **My Products** button, and buyer draft access is rejected by the server.
+
+Use `Ctrl+C` or the runner's `Q` option when you are done with the preview. Ten server integration tests and four Flutter widget tests passed for this checkpoint (`dart analyze` clean). Cloud email delivery and Android device testing are pending.
 
 ## Workspace
 
@@ -80,7 +90,7 @@ To rerun the Flutter tests from the outer repo folder:
 
 ```powershell
 cd .\vyaparsetu_ai\vyaparsetu_ai_flutter
-flutter test --no-pub test/profile_setup_form_test.dart
+flutter test --no-pub
 ```
 
 To rerun the server tests in a separate PowerShell terminal from the outer repo folder on Windows, use the test Compose database. Set up matching test credentials first, as described above.
@@ -91,7 +101,7 @@ docker compose up -d postgres_test
 $env:SERVERPOD_DATABASE_DATA_PATH = ' '
 $env:SERVERPOD_DATABASE_HOST = '127.0.0.1'
 $env:SERVERPOD_DATABASE_PORT = '9090'
-dart test test/integration/profile_test.dart test/integration/greeting_endpoint_test.dart
+dart test test/integration/product_drafts_test.dart test/integration/profile_test.dart test/integration/greeting_endpoint_test.dart
 docker compose stop postgres_test
 ```
 
@@ -103,7 +113,8 @@ Close the test terminal afterward to clear its environment variables.
 | --- | --- | --- |
 | SETUP-00 | Coordinator | Flutter preview could call the local Serverpod backend. On `main`. |
 | AUTH-01 | MEMBER_1 (coordinator) | Sign in, choose a role, and reload the saved profile. On `main`. |
-| PROD-01A / PROD-01B | MEMBER_3 | First save and view private drafts. Then add photo upload, publish, and hide in a separate PR. |
+| PROD-01A | MEMBER_3 | Save and view private product drafts with database persistence and role isolation. On `feat/prod-01a-product-drafts`. |
+| PROD-01B | MEMBER_3 | Add photo upload, publish, and hide in a separate PR. |
 | CAT-01 | MEMBER_2 | A buyer can find the producer's published listing in the real catalog. |
 | TRADE-01 | MEMBER_4 | A buyer requests a quote, a producer responds, and acceptance creates one order. |
 | AI-01 / QA-01 | MEMBER_5 | Draft a listing from speech, verify the phone demo and CI, and prepare approved Cloud deployment. |

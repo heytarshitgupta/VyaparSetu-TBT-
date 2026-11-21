@@ -1,0 +1,10 @@
+class: Product
+table: product
+fields:
+  producerProfileId: int, relation(parent=account_profile, onDelete=Cascade)
+  name: String
+  description: String
+  status: ProductStatus, default=draft
+indexes:
+  product_producer_profile_idx:
+    fields: producerProfileId

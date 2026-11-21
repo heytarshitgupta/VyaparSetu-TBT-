@@ -23,6 +23,7 @@ import 'package:vyaparsetu_ai_client/src/protocol/greetings/greeting.dart'
     as _i6ek115x;
 import 'package:vyaparsetu_ai_client/src/protocol/marketplace_role.dart'
     as _ibpr19yd;
+import 'package:vyaparsetu_ai_client/src/protocol/product.dart' as _idm7l56a;
 import 'protocol.dart' as _il2as5qe;
 
 /// By extending [EmailOtpIdpBaseEndpoint], the email identity provider
@@ -310,6 +311,33 @@ class EndpointEmailIdp extends _iaic.EndpointEmailOtpIdpBase {
 }
 
 /// {@category Endpoint}
+class EndpointProduct extends _isc.EndpointRef {
+  EndpointProduct(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'product';
+
+  _ida.Future<_idm7l56a.Product> createDraft({
+    required String name,
+    required String description,
+  }) => caller.callServerEndpoint<_idm7l56a.Product>(
+    'product',
+    'createDraft',
+    {
+      'name': name,
+      'description': description,
+    },
+  );
+
+  _ida.Future<List<_idm7l56a.Product>> listMyDrafts() =>
+      caller.callServerEndpoint<List<_idm7l56a.Product>>(
+        'product',
+        'listMyDrafts',
+        {},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointProfile extends _isc.EndpointRef {
   EndpointProfile(_isc.EndpointCaller caller) : super(caller);
 
@@ -393,12 +421,15 @@ class Client extends _isc.ServerpodClientShared {
          httpClientOverride: httpClientOverride,
        ) {
     emailIdp = EndpointEmailIdp(this);
+    product = EndpointProduct(this);
     profile = EndpointProfile(this);
     greeting = EndpointGreeting(this);
     modules = Modules(this);
   }
 
   late final EndpointEmailIdp emailIdp;
+
+  late final EndpointProduct product;
 
   late final EndpointProfile profile;
 
@@ -409,6 +440,7 @@ class Client extends _isc.ServerpodClientShared {
   @override
   Map<String, _isc.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
+    'product': product,
     'profile': profile,
     'greeting': greeting,
   };

@@ -11,6 +11,9 @@ emailIdp:
   - verifyPasswordResetCode:
   - finishPasswordReset:
   - hasAccount:
+product:
+  - createDraft:
+  - listMyDrafts:
 profile:
   - getMine:
   - completeOnboarding:
