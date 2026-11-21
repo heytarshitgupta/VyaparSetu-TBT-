@@ -17,13 +17,20 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'package:vyaparsetu_ai_server/src/generated/product.dart' as _iiz32gqo;
 import 'account_profile.dart' as _i9dsm4op;
 import 'greetings/greeting.dart' as _izw8z7ou;
 import 'marketplace_role.dart' as _i1ko12if;
+import 'product.dart' as _i8ctgxfn;
+import 'product_draft_exception.dart' as _i1druvxr;
+import 'product_status.dart' as _izdy7rp7;
 import 'profile_exception.dart' as _ip8pwhpv;
 export 'account_profile.dart';
 export 'greetings/greeting.dart';
 export 'marketplace_role.dart';
+export 'product.dart';
+export 'product_draft_exception.dart';
+export 'product_status.dart';
 export 'profile_exception.dart';
 
 class Protocol extends _is.DatabaseSerializationManager
@@ -42,11 +49,18 @@ class Protocol extends _is.DatabaseSerializationManager
           _is.getType<_i9dsm4op.AccountProfile>,
           _is.getType<_izw8z7ou.Greeting>,
           _is.getType<_i1ko12if.MarketplaceRole>,
+          _is.getType<_i8ctgxfn.Product>,
+          _is.getType<_i1druvxr.ProductDraftException>,
+          _is.getType<_izdy7rp7.ProductStatus>,
           _is.getType<_ip8pwhpv.ProfileException>,
           _is.getType<_i9dsm4op.AccountProfile?>,
           _is.getType<_izw8z7ou.Greeting?>,
           _is.getType<_i1ko12if.MarketplaceRole?>,
+          _is.getType<_i8ctgxfn.Product?>,
+          _is.getType<_i1druvxr.ProductDraftException?>,
+          _is.getType<_izdy7rp7.ProductStatus?>,
           _is.getType<_ip8pwhpv.ProfileException?>,
+          _is.getType<List<_iiz32gqo.Product>>,
         ],
         modules: const [
           _iais.Protocol.new,
@@ -57,6 +71,9 @@ class Protocol extends _is.DatabaseSerializationManager
           'AccountProfile',
           'Greeting',
           'MarketplaceRole',
+          'Product',
+          'ProductDraftException',
+          'ProductStatus',
           'ProfileException',
         ],
       );
@@ -130,6 +147,74 @@ class Protocol extends _is.DatabaseSerializationManager
       ],
       managed: true,
     ),
+    _isp.TableDefinition(
+      name: 'product',
+      dartName: 'Product',
+      schema: 'public',
+      module: 'vyaparsetu_ai',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'producerProfileId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'name',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'description',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'status',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:ProductStatus',
+          columnDefault: '\'draft\'',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'product_fk_0',
+          columns: ['producerProfileId'],
+          referenceTable: 'account_profile',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'product_producer_profile_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'producerProfileId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
   ];
 
   static String? getClassNameFromObjectJson(dynamic data) =>
@@ -165,6 +250,15 @@ class Protocol extends _is.DatabaseSerializationManager
     if (t == _i1ko12if.MarketplaceRole) {
       return _i1ko12if.MarketplaceRole.fromJson(data) as T;
     }
+    if (t == _i8ctgxfn.Product) {
+      return _i8ctgxfn.Product.fromJson(data) as T;
+    }
+    if (t == _i1druvxr.ProductDraftException) {
+      return _i1druvxr.ProductDraftException.fromJson(data) as T;
+    }
+    if (t == _izdy7rp7.ProductStatus) {
+      return _izdy7rp7.ProductStatus.fromJson(data) as T;
+    }
     if (t == _ip8pwhpv.ProfileException) {
       return _ip8pwhpv.ProfileException.fromJson(data) as T;
     }
@@ -179,8 +273,27 @@ class Protocol extends _is.DatabaseSerializationManager
       return (data != null ? _i1ko12if.MarketplaceRole.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_i8ctgxfn.Product?>()) {
+      return (data != null ? _i8ctgxfn.Product.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i1druvxr.ProductDraftException?>()) {
+      return (data != null
+              ? _i1druvxr.ProductDraftException.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _is.getType<_izdy7rp7.ProductStatus?>()) {
+      return (data != null ? _izdy7rp7.ProductStatus.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_ip8pwhpv.ProfileException?>()) {
       return (data != null ? _ip8pwhpv.ProfileException.fromJson(data) : null)
+          as T;
+    }
+    if (t == List<_iiz32gqo.Product>) {
+      return (data as List)
+              .map((e) => deserialize<_iiz32gqo.Product>(e))
+              .toList()
           as T;
     }
     final modules = deserializationMetadata.modulesForDeserialization(
@@ -201,6 +314,9 @@ class Protocol extends _is.DatabaseSerializationManager
       _i9dsm4op.AccountProfile => 'AccountProfile',
       _izw8z7ou.Greeting => 'Greeting',
       _i1ko12if.MarketplaceRole => 'MarketplaceRole',
+      _i8ctgxfn.Product => 'Product',
+      _i1druvxr.ProductDraftException => 'ProductDraftException',
+      _izdy7rp7.ProductStatus => 'ProductStatus',
       _ip8pwhpv.ProfileException => 'ProfileException',
       _ => null,
     };
@@ -225,6 +341,12 @@ class Protocol extends _is.DatabaseSerializationManager
         return 'Greeting';
       case _i1ko12if.MarketplaceRole():
         return 'MarketplaceRole';
+      case _i8ctgxfn.Product():
+        return 'Product';
+      case _i1druvxr.ProductDraftException():
+        return 'ProductDraftException';
+      case _izdy7rp7.ProductStatus():
+        return 'ProductStatus';
       case _ip8pwhpv.ProfileException():
         return 'ProfileException';
     }
@@ -261,6 +383,15 @@ class Protocol extends _is.DatabaseSerializationManager
     }
     if (dataClassName == 'MarketplaceRole') {
       return deserialize<_i1ko12if.MarketplaceRole>(data['data']);
+    }
+    if (dataClassName == 'Product') {
+      return deserialize<_i8ctgxfn.Product>(data['data']);
+    }
+    if (dataClassName == 'ProductDraftException') {
+      return deserialize<_i1druvxr.ProductDraftException>(data['data']);
+    }
+    if (dataClassName == 'ProductStatus') {
+      return deserialize<_izdy7rp7.ProductStatus>(data['data']);
     }
     if (dataClassName == 'ProfileException') {
       return deserialize<_ip8pwhpv.ProfileException>(data['data']);
@@ -314,6 +445,8 @@ class Protocol extends _is.DatabaseSerializationManager
     switch (t) {
       case _i9dsm4op.AccountProfile:
         return _i9dsm4op.AccountProfile.t;
+      case _i8ctgxfn.Product:
+        return _i8ctgxfn.Product.t;
     }
     return null;
   }
