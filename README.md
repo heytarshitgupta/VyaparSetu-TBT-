@@ -8,6 +8,8 @@ This is the new [hackathon repository](https://github.com/heytarshitgupta/Vyapar
 
 **Latest checkpoint: AUTH-01.** The app has real email-code sign-in and saves a Buyer or Producer profile. The role-specific workspace currently shows a welcome screen. Product listings, search, quotes, orders, and voice input are future tasks.
 
+**Current team assignment:** [whatsapp.md](whatsapp.md) has the active task, starter code, tests, and commit instructions. Pull updated `main` before opening it.
+
 ### Open the app on the setup laptop
 
 If the preview is already running, open [localhost:53075](http://localhost:53075/). If it does not open, start Docker Desktop, then run the following in **PowerShell**. Keep the last command running and use the Flutter preview address it prints. The port may change after a restart.
@@ -72,19 +74,7 @@ Keep `.env` and `config/passwords.yaml` local. Commit the example files and migr
 
 A commit saves a snapshot on your laptop. A push uploads that branch to GitHub. A pull request lets the team review it before it becomes part of `main`.
 
-For AUTH-01, run these commands from the **outer repository folder**. Check that the staged file list contains only AUTH-01 and its README update before committing.
-
-```powershell
-cd C:\Users\Lenovo\PERSONAL\VyaparSetu
-git switch -c feat/auth-01-marketplace-accounts
-git add -A -- README.md vyaparsetu_ai
-git diff --cached --check
-git diff --cached --stat
-git commit -m "feat: add verified sign-in and marketplace roles"
-git push -u origin feat/auth-01-marketplace-accounts
-```
-
-On GitHub, open **Compare & pull request** and choose `main` as the base. After review and merge, the next contributor branches from the updated `main`.
+Use the branch name, file list, tests, and commit message in [whatsapp.md](whatsapp.md). On GitHub, open **Compare & pull request** and choose `main` as the base. After review and merge, the coordinator updates the assignment before the next contributor branches from `main`.
 
 To rerun the Flutter tests from the outer repo folder:
 
@@ -112,13 +102,13 @@ Close the test terminal afterward to clear its environment variables.
 | Checkpoint | Owner | What the team will verify |
 | --- | --- | --- |
 | SETUP-00 | Coordinator | Flutter preview could call the local Serverpod backend. On `main`. |
-| AUTH-01 | Coordinator, with MEMBER_1 and MEMBER_4 for verification/review | Sign in, choose a role, and reload the saved profile. Local changes ready for PR. |
-| PROD-01 | MEMBER_3 | Create a draft, attach a photo, publish, and hide a listing. First friend implementation PR, after AUTH-01 merges. |
+| AUTH-01 | MEMBER_1 (coordinator) | Sign in, choose a role, and reload the saved profile. On `main`. |
+| PROD-01A / PROD-01B | MEMBER_3 | First save and view private drafts. Then add photo upload, publish, and hide in a separate PR. |
 | CAT-01 | MEMBER_2 | A buyer can find the producer's published listing in the real catalog. |
 | TRADE-01 | MEMBER_4 | A buyer requests a quote, a producer responds, and acceptance creates one order. |
 | AI-01 / QA-01 | MEMBER_5 | Draft a listing from speech, verify the phone demo and CI, and prepare approved Cloud deployment. |
 
-MEMBER_1 owns the next auth/profile follow-up after the demo foundation, or earlier if an auth fix is needed. Each contributor works on a branch from updated `main`, implements and tests their actual changes, commits under their own account, and opens a PR. The coordinator reviews or assigns review, then merges before the next dependent task starts.
+MEMBER_1 coordinates reviews and updates [whatsapp.md](whatsapp.md) after each merge. Each assigned contributor works on a branch from updated `main`, implements and tests their changes, commits under their own account, and opens a PR.
 
 After the core demo, the backlog includes wishlist, cart, negotiation, fulfillment, notifications, multilingual support, photo enhancement, pricing, analytics, and seller verification.
 
