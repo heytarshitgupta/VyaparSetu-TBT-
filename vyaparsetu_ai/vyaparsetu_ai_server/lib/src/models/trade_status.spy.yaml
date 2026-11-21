@@ -1,0 +1,6 @@
+enum: TradeStatus
+serialized: byName
+values:
+  - requested
+  - quoted
+  - accepted

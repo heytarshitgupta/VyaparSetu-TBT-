@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +19,7 @@ class _FakeProductDraftsNotifier extends ProductDraftsNotifier {
   Future<Product> createDraft({
     required String name,
     required String description,
+    ByteData? photo,
   }) async {
     final draft = Product(
       id: 99,
@@ -36,16 +39,18 @@ class _FakeSignedInUserId extends SignedInUserId {
 }
 
 void main() {
-  testWidgets('renders empty state and validates empty name on save', (tester) async {
+  testWidgets('renders empty state and validates empty name on save', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           signedInUserIdProvider.overrideWith(_FakeSignedInUserId.new),
-          productDraftsProvider.overrideWith(() => _FakeProductDraftsNotifier([])),
+          productDraftsProvider.overrideWith(
+            () => _FakeProductDraftsNotifier([]),
+          ),
         ],
-        child: const MaterialApp(
-          home: ProductDraftsScreen(),
-        ),
+        child: const MaterialApp(home: ProductDraftsScreen()),
       ),
     );
 
@@ -53,9 +58,10 @@ void main() {
 
     expect(find.text('My Products'), findsOneWidget);
     expect(find.text('New draft'), findsOneWidget);
-    expect(find.text('No product drafts yet.'), findsOneWidget);
+    expect(find.text('No products yet.'), findsOneWidget);
 
     // Try saving with empty name
+    await tester.ensureVisible(find.text('Save draft'));
     await tester.tap(find.text('Save draft'));
     await tester.pumpAndSettle();
 
@@ -75,11 +81,11 @@ void main() {
       ProviderScope(
         overrides: [
           signedInUserIdProvider.overrideWith(_FakeSignedInUserId.new),
-          productDraftsProvider.overrideWith(() => _FakeProductDraftsNotifier([existing])),
+          productDraftsProvider.overrideWith(
+            () => _FakeProductDraftsNotifier([existing]),
+          ),
         ],
-        child: const MaterialApp(
-          home: ProductDraftsScreen(),
-        ),
+        child: const MaterialApp(home: ProductDraftsScreen()),
       ),
     );
 
@@ -97,6 +103,7 @@ void main() {
       find.widgetWithText(TextFormField, 'Description (optional)'),
       'Terracotta pot',
     );
+    await tester.ensureVisible(find.text('Save draft'));
     await tester.tap(find.text('Save draft'));
     await tester.pumpAndSettle();
 

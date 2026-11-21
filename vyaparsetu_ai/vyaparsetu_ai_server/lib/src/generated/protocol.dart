@@ -18,20 +18,28 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
 import 'package:vyaparsetu_ai_server/src/generated/product.dart' as _iiz32gqo;
+import 'package:vyaparsetu_ai_server/src/generated/trade_request.dart'
+    as _ij7yvnp4;
 import 'account_profile.dart' as _i9dsm4op;
 import 'greetings/greeting.dart' as _izw8z7ou;
 import 'marketplace_role.dart' as _i1ko12if;
 import 'product.dart' as _i8ctgxfn;
 import 'product_draft_exception.dart' as _i1druvxr;
+import 'product_photo.dart' as _ihhflbx4;
 import 'product_status.dart' as _izdy7rp7;
 import 'profile_exception.dart' as _ip8pwhpv;
+import 'trade_request.dart' as _ixjhwvo7;
+import 'trade_status.dart' as _ieevlvna;
 export 'account_profile.dart';
 export 'greetings/greeting.dart';
 export 'marketplace_role.dart';
 export 'product.dart';
 export 'product_draft_exception.dart';
+export 'product_photo.dart';
 export 'product_status.dart';
 export 'profile_exception.dart';
+export 'trade_request.dart';
+export 'trade_status.dart';
 
 class Protocol extends _is.DatabaseSerializationManager
     implements _is.DatabaseProtocolDeserializationProvider {
@@ -51,16 +59,23 @@ class Protocol extends _is.DatabaseSerializationManager
           _is.getType<_i1ko12if.MarketplaceRole>,
           _is.getType<_i8ctgxfn.Product>,
           _is.getType<_i1druvxr.ProductDraftException>,
+          _is.getType<_ihhflbx4.ProductPhoto>,
           _is.getType<_izdy7rp7.ProductStatus>,
           _is.getType<_ip8pwhpv.ProfileException>,
+          _is.getType<_ixjhwvo7.TradeRequest>,
+          _is.getType<_ieevlvna.TradeStatus>,
           _is.getType<_i9dsm4op.AccountProfile?>,
           _is.getType<_izw8z7ou.Greeting?>,
           _is.getType<_i1ko12if.MarketplaceRole?>,
           _is.getType<_i8ctgxfn.Product?>,
           _is.getType<_i1druvxr.ProductDraftException?>,
+          _is.getType<_ihhflbx4.ProductPhoto?>,
           _is.getType<_izdy7rp7.ProductStatus?>,
           _is.getType<_ip8pwhpv.ProfileException?>,
+          _is.getType<_ixjhwvo7.TradeRequest?>,
+          _is.getType<_ieevlvna.TradeStatus?>,
           _is.getType<List<_iiz32gqo.Product>>,
+          _is.getType<List<_ij7yvnp4.TradeRequest>>,
         ],
         modules: const [
           _iais.Protocol.new,
@@ -73,8 +88,11 @@ class Protocol extends _is.DatabaseSerializationManager
           'MarketplaceRole',
           'Product',
           'ProductDraftException',
+          'ProductPhoto',
           'ProductStatus',
           'ProfileException',
+          'TradeRequest',
+          'TradeStatus',
         ],
       );
 
@@ -215,6 +233,192 @@ class Protocol extends _is.DatabaseSerializationManager
       ],
       managed: true,
     ),
+    _isp.TableDefinition(
+      name: 'product_photo',
+      dartName: 'ProductPhoto',
+      schema: 'public',
+      module: 'vyaparsetu_ai',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'productId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'bytes',
+          columnType: _isp.ColumnType.bytea,
+          isNullable: false,
+          dartType: 'dart:typed_data:ByteData',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'product_photo_fk_0',
+          columns: ['productId'],
+          referenceTable: 'product',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'product_photo_product_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'productId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'trade_request',
+      dartName: 'TradeRequest',
+      schema: 'public',
+      module: 'vyaparsetu_ai',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'productId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'buyerProfileId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'producerProfileId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'productName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'quantity',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'requirements',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'status',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:TradeStatus',
+          columnDefault: '\'requested\'',
+        ),
+        _isp.ColumnDefinition(
+          name: 'totalPaise',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'trade_request_fk_0',
+          columns: ['productId'],
+          referenceTable: 'product',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'trade_request_fk_1',
+          columns: ['buyerProfileId'],
+          referenceTable: 'account_profile',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'trade_request_fk_2',
+          columns: ['producerProfileId'],
+          referenceTable: 'account_profile',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'trade_request_buyer_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'buyerProfileId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'trade_request_producer_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'producerProfileId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
   ];
 
   static String? getClassNameFromObjectJson(dynamic data) =>
@@ -256,11 +460,20 @@ class Protocol extends _is.DatabaseSerializationManager
     if (t == _i1druvxr.ProductDraftException) {
       return _i1druvxr.ProductDraftException.fromJson(data) as T;
     }
+    if (t == _ihhflbx4.ProductPhoto) {
+      return _ihhflbx4.ProductPhoto.fromJson(data) as T;
+    }
     if (t == _izdy7rp7.ProductStatus) {
       return _izdy7rp7.ProductStatus.fromJson(data) as T;
     }
     if (t == _ip8pwhpv.ProfileException) {
       return _ip8pwhpv.ProfileException.fromJson(data) as T;
+    }
+    if (t == _ixjhwvo7.TradeRequest) {
+      return _ixjhwvo7.TradeRequest.fromJson(data) as T;
+    }
+    if (t == _ieevlvna.TradeStatus) {
+      return _ieevlvna.TradeStatus.fromJson(data) as T;
     }
     if (t == _is.getType<_i9dsm4op.AccountProfile?>()) {
       return (data != null ? _i9dsm4op.AccountProfile.fromJson(data) : null)
@@ -282,6 +495,9 @@ class Protocol extends _is.DatabaseSerializationManager
               : null)
           as T;
     }
+    if (t == _is.getType<_ihhflbx4.ProductPhoto?>()) {
+      return (data != null ? _ihhflbx4.ProductPhoto.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_izdy7rp7.ProductStatus?>()) {
       return (data != null ? _izdy7rp7.ProductStatus.fromJson(data) : null)
           as T;
@@ -290,9 +506,21 @@ class Protocol extends _is.DatabaseSerializationManager
       return (data != null ? _ip8pwhpv.ProfileException.fromJson(data) : null)
           as T;
     }
+    if (t == _is.getType<_ixjhwvo7.TradeRequest?>()) {
+      return (data != null ? _ixjhwvo7.TradeRequest.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ieevlvna.TradeStatus?>()) {
+      return (data != null ? _ieevlvna.TradeStatus.fromJson(data) : null) as T;
+    }
     if (t == List<_iiz32gqo.Product>) {
       return (data as List)
               .map((e) => deserialize<_iiz32gqo.Product>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_ij7yvnp4.TradeRequest>) {
+      return (data as List)
+              .map((e) => deserialize<_ij7yvnp4.TradeRequest>(e))
               .toList()
           as T;
     }
@@ -316,8 +544,11 @@ class Protocol extends _is.DatabaseSerializationManager
       _i1ko12if.MarketplaceRole => 'MarketplaceRole',
       _i8ctgxfn.Product => 'Product',
       _i1druvxr.ProductDraftException => 'ProductDraftException',
+      _ihhflbx4.ProductPhoto => 'ProductPhoto',
       _izdy7rp7.ProductStatus => 'ProductStatus',
       _ip8pwhpv.ProfileException => 'ProfileException',
+      _ixjhwvo7.TradeRequest => 'TradeRequest',
+      _ieevlvna.TradeStatus => 'TradeStatus',
       _ => null,
     };
   }
@@ -345,10 +576,16 @@ class Protocol extends _is.DatabaseSerializationManager
         return 'Product';
       case _i1druvxr.ProductDraftException():
         return 'ProductDraftException';
+      case _ihhflbx4.ProductPhoto():
+        return 'ProductPhoto';
       case _izdy7rp7.ProductStatus():
         return 'ProductStatus';
       case _ip8pwhpv.ProfileException():
         return 'ProfileException';
+      case _ixjhwvo7.TradeRequest():
+        return 'TradeRequest';
+      case _ieevlvna.TradeStatus():
+        return 'TradeStatus';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -390,11 +627,20 @@ class Protocol extends _is.DatabaseSerializationManager
     if (dataClassName == 'ProductDraftException') {
       return deserialize<_i1druvxr.ProductDraftException>(data['data']);
     }
+    if (dataClassName == 'ProductPhoto') {
+      return deserialize<_ihhflbx4.ProductPhoto>(data['data']);
+    }
     if (dataClassName == 'ProductStatus') {
       return deserialize<_izdy7rp7.ProductStatus>(data['data']);
     }
     if (dataClassName == 'ProfileException') {
       return deserialize<_ip8pwhpv.ProfileException>(data['data']);
+    }
+    if (dataClassName == 'TradeRequest') {
+      return deserialize<_ixjhwvo7.TradeRequest>(data['data']);
+    }
+    if (dataClassName == 'TradeStatus') {
+      return deserialize<_ieevlvna.TradeStatus>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       return _iais.Protocol().deserializeByClassName({
@@ -447,6 +693,10 @@ class Protocol extends _is.DatabaseSerializationManager
         return _i9dsm4op.AccountProfile.t;
       case _i8ctgxfn.Product:
         return _i8ctgxfn.Product.t;
+      case _ihhflbx4.ProductPhoto:
+        return _ihhflbx4.ProductPhoto.t;
+      case _ixjhwvo7.TradeRequest:
+        return _ixjhwvo7.TradeRequest.t;
     }
     return null;
   }

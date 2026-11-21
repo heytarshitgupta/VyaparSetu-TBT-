@@ -48,4 +48,4 @@ If the user asks you to test the app:
 
 The app is launched from `vyaparsetu_ai_flutter/lib/driver.dart`, which starts the Flutter driver extension with text entry emulation turned off so the app stays usable by hand. To let the driver type, set `enableTextEntryEmulation: true` there and `hot_restart` the app.
 
-IMPORTANT: After building the first version of the app, update this AGENTS.md file with information about the app we're building. KEEP the info about the MCP server and the checklist. Remove this paragraph.
+VyaparSetu AI is a two-sided marketplace. Producers save, publish and hide listings. Buyers search published products and request quotes. A producer quotes a total in paise, and acceptance confirms the order on the same request record. Keep ownership checks and state transitions on the server.

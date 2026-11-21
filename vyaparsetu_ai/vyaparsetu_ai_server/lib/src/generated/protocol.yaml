@@ -13,9 +13,19 @@ emailIdp:
   - hasAccount:
 product:
   - createDraft:
+  - getPhoto:
   - listMyDrafts:
+  - listMyProducts:
+  - catalog:
+  - publish:
+  - hide:
 profile:
   - getMine:
   - completeOnboarding:
+trade:
+  - listMine:
+  - requestQuote:
+  - quote:
+  - accept:
 greeting:
   - hello:

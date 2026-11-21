@@ -10,6 +10,7 @@
 // ignore_for_file: invalid_use_of_internal_member
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:typed_data' as _idt;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
@@ -20,6 +21,7 @@ import 'package:vyaparsetu_ai_server/src/generated/marketplace_role.dart'
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../endpoints/product_endpoint.dart' as _im5j1753;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
+import '../endpoints/trade_endpoint.dart' as _ikltzxd8;
 import '../greetings/greeting_endpoint.dart' as _il624ik7;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -51,6 +53,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'profile',
+          null,
+        ),
+      'trade': _ikltzxd8.TradeEndpoint()
+        ..initialize(
+          server,
+          'trade',
           null,
         ),
       'greeting': _il624ik7.GreetingEndpoint()
@@ -345,6 +353,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String>(),
               nullable: false,
             ),
+            'photo': _is.ParameterDescription(
+              name: 'photo',
+              type: _is.getType<_idt.ByteData?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -355,6 +368,26 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     name: params['name'],
                     description: params['description'],
+                    photo: params['photo'],
+                  ),
+        ),
+        'getPhoto': _is.MethodConnector(
+          name: 'getPhoto',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['product'] as _im5j1753.ProductEndpoint).getPhoto(
+                    session,
+                    productId: params['productId'],
                   ),
         ),
         'listMyDrafts': _is.MethodConnector(
@@ -366,6 +399,73 @@ class Endpoints extends _is.EndpointDispatch {
                 Map<String, dynamic> params,
               ) async => (endpoints['product'] as _im5j1753.ProductEndpoint)
                   .listMyDrafts(session),
+        ),
+        'listMyProducts': _is.MethodConnector(
+          name: 'listMyProducts',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['product'] as _im5j1753.ProductEndpoint)
+                  .listMyProducts(session),
+        ),
+        'catalog': _is.MethodConnector(
+          name: 'catalog',
+          params: {
+            'query': _is.ParameterDescription(
+              name: 'query',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['product'] as _im5j1753.ProductEndpoint).catalog(
+                    session,
+                    query: params['query'],
+                  ),
+        ),
+        'publish': _is.MethodConnector(
+          name: 'publish',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['product'] as _im5j1753.ProductEndpoint).publish(
+                    session,
+                    productId: params['productId'],
+                  ),
+        ),
+        'hide': _is.MethodConnector(
+          name: 'hide',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['product'] as _im5j1753.ProductEndpoint).hide(
+                    session,
+                    productId: params['productId'],
+                  ),
         ),
       },
     );
@@ -407,6 +507,95 @@ class Endpoints extends _is.EndpointDispatch {
                     displayName: params['displayName'],
                     role: params['role'],
                   ),
+        ),
+      },
+    );
+    connectors['trade'] = _is.EndpointConnector(
+      name: 'trade',
+      endpoint: endpoints['trade']!,
+      methodConnectors: {
+        'listMine': _is.MethodConnector(
+          name: 'listMine',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['trade'] as _ikltzxd8.TradeEndpoint)
+                  .listMine(session),
+        ),
+        'requestQuote': _is.MethodConnector(
+          name: 'requestQuote',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'quantity': _is.ParameterDescription(
+              name: 'quantity',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'requirements': _is.ParameterDescription(
+              name: 'requirements',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['trade'] as _ikltzxd8.TradeEndpoint).requestQuote(
+                    session,
+                    productId: params['productId'],
+                    quantity: params['quantity'],
+                    requirements: params['requirements'],
+                  ),
+        ),
+        'quote': _is.MethodConnector(
+          name: 'quote',
+          params: {
+            'requestId': _is.ParameterDescription(
+              name: 'requestId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'totalPaise': _is.ParameterDescription(
+              name: 'totalPaise',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['trade'] as _ikltzxd8.TradeEndpoint).quote(
+                session,
+                requestId: params['requestId'],
+                totalPaise: params['totalPaise'],
+              ),
+        ),
+        'accept': _is.MethodConnector(
+          name: 'accept',
+          params: {
+            'requestId': _is.ParameterDescription(
+              name: 'requestId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['trade'] as _ikltzxd8.TradeEndpoint).accept(
+                session,
+                requestId: params['requestId'],
+              ),
         ),
       },
     );
