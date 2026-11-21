@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: '4.1.2'
-      SERVERPOD_PASSWORD_database: '7DI6WxpyIii2vA3ptF3GNdeEkoMUf__0'
-      SERVERPOD_PASSWORD_redis: 'OWELGHKVrILBL8yMZ5TCHkq1fT30oi_C'
 
     steps:
       - uses: actions/checkout@v4
@@ -44,6 +42,15 @@ jobs:
       - name: Run Serverpod generator
         working-directory: vyaparsetu_ai_server
         run: serverpod generate
+
+      - name: Generate ephemeral test credentials
+        shell: bash
+        run: |
+          for key in database redis emailSecretHashPepper jwtHmacSha512PrivateKey jwtRefreshTokenHashPepper; do
+            value="$(openssl rand -hex 32)"
+            echo "::add-mask::$value"
+            printf 'SERVERPOD_PASSWORD_%s=%s\n' "$key" "$value" >> "$GITHUB_ENV"
+          done
 
       - name: Run tests
         working-directory: vyaparsetu_ai_server

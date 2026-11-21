@@ -3,19 +3,19 @@ services:
   postgres:
     image: ghcr.io/serverpod/postgres:16
     ports:
-      - "8090:5432"
+      - "127.0.0.1:8090:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: vyaparsetu_ai
-      POSTGRES_PASSWORD: "vy1fyUwuCasEXkaUiJHFkorujaiG1v2m"
+      POSTGRES_PASSWORD: "${VYAPARSETU_DEV_DB_PASSWORD:-}"
     volumes:
       - vyaparsetu_ai_data:/var/lib/postgresql/data
 
   redis:
     image: redis:6.2.6
     ports:
-      - "8091:6379"
-    command: redis-server --requirepass "z0jP2AWVvLrnsScVBkDhO3xTZ1bDup8g"
+      - "127.0.0.1:8091:6379"
+    command: redis-server --requirepass "${VYAPARSETU_DEV_REDIS_PASSWORD:-}"
     environment:
       - REDIS_REPLICATION_MODE=master
 
@@ -23,19 +23,19 @@ services:
   postgres_test:
     image: ghcr.io/serverpod/postgres:16
     ports:
-      - "9090:5432"
+      - "127.0.0.1:9090:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: vyaparsetu_ai_test
-      POSTGRES_PASSWORD: "7DI6WxpyIii2vA3ptF3GNdeEkoMUf__0"
+      POSTGRES_PASSWORD: "${VYAPARSETU_TEST_DB_PASSWORD:-}"
     volumes:
       - vyaparsetu_ai_test_data:/var/lib/postgresql/data
 
   redis_test:
     image: redis:6.2.6
     ports:
-      - "9091:6379"
-    command: redis-server --requirepass "OWELGHKVrILBL8yMZ5TCHkq1fT30oi_C"
+      - "127.0.0.1:9091:6379"
+    command: redis-server --requirepass "${VYAPARSETU_TEST_REDIS_PASSWORD:-}"
     environment:
       - REDIS_REPLICATION_MODE=master
 

@@ -5,11 +5,11 @@
       "label": "serverpod_start",
       "type": "shell",
       "command": "serverpod",
-      "args": ["start"],
+      "args": ["start", "--no-docker"],
       "options": {
         "cwd": "${workspaceFolder}/vyaparsetu_ai_server",
         "env": {
-          "SERVERPOD_PASSWORD_database": "vy1fyUwuCasEXkaUiJHFkorujaiG1v2m",
+
           // Marks a `serverpod start` launched from the IDE, which is the
           // only kind that honors the Flutter device picked in VS Code. A run
           // started from a plain terminal carries no marker, so a device file

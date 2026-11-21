@@ -1,1 +1,23 @@
 VyaparSetu_Cursor_Codex_Master_Prompt.md
+
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+**/config/passwords.yaml
+**/config/firebase_service_account_key.json
+key.properties
+*.jks
+*.keystore
+*.pem
+*.p12
+*.pfx
+
+# Local databases, exports, and Serverpod runtime files
+.serverpod/
+.scloud/
+*.dump
+*.sql.gz
+*.sqlite
+*.sqlite3
