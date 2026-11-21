@@ -17,8 +17,14 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'account_profile.dart' as _i9dsm4op;
 import 'greetings/greeting.dart' as _izw8z7ou;
+import 'marketplace_role.dart' as _i1ko12if;
+import 'profile_exception.dart' as _ip8pwhpv;
+export 'account_profile.dart';
 export 'greetings/greeting.dart';
+export 'marketplace_role.dart';
+export 'profile_exception.dart';
 
 class Protocol extends _is.DatabaseSerializationManager
     implements _is.DatabaseProtocolDeserializationProvider {
@@ -33,15 +39,26 @@ class Protocol extends _is.DatabaseSerializationManager
       _is.ProtocolDeserialization.cached(
         this,
         types: const [
+          _is.getType<_i9dsm4op.AccountProfile>,
           _is.getType<_izw8z7ou.Greeting>,
+          _is.getType<_i1ko12if.MarketplaceRole>,
+          _is.getType<_ip8pwhpv.ProfileException>,
+          _is.getType<_i9dsm4op.AccountProfile?>,
           _is.getType<_izw8z7ou.Greeting?>,
+          _is.getType<_i1ko12if.MarketplaceRole?>,
+          _is.getType<_ip8pwhpv.ProfileException?>,
         ],
         modules: const [
           _iais.Protocol.new,
           _iacs.Protocol.new,
           _isp.Protocol.new,
         ],
-        classNames: const ['Greeting'],
+        classNames: const [
+          'AccountProfile',
+          'Greeting',
+          'MarketplaceRole',
+          'ProfileException',
+        ],
       );
 
   static List<_isp.TableDefinition> get targetTableDefinitions => [
@@ -51,7 +68,69 @@ class Protocol extends _is.DatabaseSerializationManager
     ..._isp.Protocol.targetTableDefinitions,
   ];
 
-  static List<_isp.TableDefinition> get _ownTableDefinitions => [];
+  static List<_isp.TableDefinition> get _ownTableDefinitions => [
+    _isp.TableDefinition(
+      name: 'account_profile',
+      dartName: 'AccountProfile',
+      schema: 'public',
+      module: 'vyaparsetu_ai',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'displayName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'role',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:MarketplaceRole',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'account_profile_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'account_profile_auth_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+  ];
 
   static String? getClassNameFromObjectJson(dynamic data) =>
       _is.ProtocolDeserialization.readClassName(data);
@@ -77,11 +156,32 @@ class Protocol extends _is.DatabaseSerializationManager
       }
     }
 
+    if (t == _i9dsm4op.AccountProfile) {
+      return _i9dsm4op.AccountProfile.fromJson(data) as T;
+    }
     if (t == _izw8z7ou.Greeting) {
       return _izw8z7ou.Greeting.fromJson(data) as T;
     }
+    if (t == _i1ko12if.MarketplaceRole) {
+      return _i1ko12if.MarketplaceRole.fromJson(data) as T;
+    }
+    if (t == _ip8pwhpv.ProfileException) {
+      return _ip8pwhpv.ProfileException.fromJson(data) as T;
+    }
+    if (t == _is.getType<_i9dsm4op.AccountProfile?>()) {
+      return (data != null ? _i9dsm4op.AccountProfile.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_izw8z7ou.Greeting?>()) {
       return (data != null ? _izw8z7ou.Greeting.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i1ko12if.MarketplaceRole?>()) {
+      return (data != null ? _i1ko12if.MarketplaceRole.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_ip8pwhpv.ProfileException?>()) {
+      return (data != null ? _ip8pwhpv.ProfileException.fromJson(data) : null)
+          as T;
     }
     final modules = deserializationMetadata.modulesForDeserialization(
       t,
@@ -98,7 +198,10 @@ class Protocol extends _is.DatabaseSerializationManager
 
   static String? getClassNameForType(Type type) {
     return switch (type) {
+      _i9dsm4op.AccountProfile => 'AccountProfile',
       _izw8z7ou.Greeting => 'Greeting',
+      _i1ko12if.MarketplaceRole => 'MarketplaceRole',
+      _ip8pwhpv.ProfileException => 'ProfileException',
       _ => null,
     };
   }
@@ -116,8 +219,14 @@ class Protocol extends _is.DatabaseSerializationManager
     }
 
     switch (data) {
+      case _i9dsm4op.AccountProfile():
+        return 'AccountProfile';
       case _izw8z7ou.Greeting():
         return 'Greeting';
+      case _i1ko12if.MarketplaceRole():
+        return 'MarketplaceRole';
+      case _ip8pwhpv.ProfileException():
+        return 'ProfileException';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -144,8 +253,17 @@ class Protocol extends _is.DatabaseSerializationManager
     if (dataClassName is! String) {
       return super.deserializeByClassName(data);
     }
+    if (dataClassName == 'AccountProfile') {
+      return deserialize<_i9dsm4op.AccountProfile>(data['data']);
+    }
     if (dataClassName == 'Greeting') {
       return deserialize<_izw8z7ou.Greeting>(data['data']);
+    }
+    if (dataClassName == 'MarketplaceRole') {
+      return deserialize<_i1ko12if.MarketplaceRole>(data['data']);
+    }
+    if (dataClassName == 'ProfileException') {
+      return deserialize<_ip8pwhpv.ProfileException>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       return _iais.Protocol().deserializeByClassName({
@@ -192,6 +310,10 @@ class Protocol extends _is.DatabaseSerializationManager
       if (table != null) {
         return table;
       }
+    }
+    switch (t) {
+      case _i9dsm4op.AccountProfile:
+        return _i9dsm4op.AccountProfile.t;
     }
     return null;
   }

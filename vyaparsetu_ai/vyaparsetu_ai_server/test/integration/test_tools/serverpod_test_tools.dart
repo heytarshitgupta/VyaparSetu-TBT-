@@ -19,8 +19,12 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
 import 'package:serverpod_test/serverpod_test.dart' as _ist;
+import 'package:vyaparsetu_ai_server/src/generated/account_profile.dart'
+    as _ircimpdt;
 import 'package:vyaparsetu_ai_server/src/generated/greetings/greeting.dart'
     as _i9vwe0de;
+import 'package:vyaparsetu_ai_server/src/generated/marketplace_role.dart'
+    as _i2pxwtoh;
 import 'package:vyaparsetu_ai_server/src/generated/protocol.dart';
 import 'package:vyaparsetu_ai_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -156,7 +160,7 @@ void withServerpod(
 class TestEndpoints {
   late final _EmailIdpEndpoint emailIdp;
 
-  late final _JwtRefreshEndpoint jwtRefresh;
+  late final _ProfileEndpoint profile;
 
   late final _GreetingEndpoint greeting;
 }
@@ -172,7 +176,7 @@ class _InternalTestEndpoints extends TestEndpoints
       endpoints,
       serializationManager,
     );
-    jwtRefresh = _JwtRefreshEndpoint(
+    profile = _ProfileEndpoint(
       endpoints,
       serializationManager,
     );
@@ -591,8 +595,8 @@ class _EmailIdpEndpoint {
   }
 }
 
-class _JwtRefreshEndpoint {
-  _JwtRefreshEndpoint(
+class _ProfileEndpoint {
+  _ProfileEndpoint(
     this._endpointDispatch,
     this._serializationManager,
   );
@@ -601,22 +605,21 @@ class _JwtRefreshEndpoint {
 
   final _is.SerializationManager _serializationManager;
 
-  _ida.Future<_iacs.AuthSuccess> refreshAccessToken(
-    _ist.TestSessionBuilder sessionBuilder, {
-    String? refreshToken,
-  }) async {
+  _ida.Future<_ircimpdt.AccountProfile?> getMine(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
-            endpoint: 'jwtRefresh',
-            method: 'refreshAccessToken',
+            endpoint: 'profile',
+            method: 'getMine',
           );
       try {
         var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
-          endpointPath: 'jwtRefresh',
-          methodName: 'refreshAccessToken',
-          parameters: _ist.testObjectToJson({'refreshToken': refreshToken}),
+          endpointPath: 'profile',
+          methodName: 'getMine',
+          parameters: _ist.testObjectToJson({}),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =
@@ -624,7 +627,42 @@ class _JwtRefreshEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _ida.Future<_iacs.AuthSuccess>);
+                as _ida.Future<_ircimpdt.AccountProfile?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ircimpdt.AccountProfile> completeOnboarding(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required String displayName,
+    required _i2pxwtoh.MarketplaceRole role,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'profile',
+            method: 'completeOnboarding',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'profile',
+          methodName: 'completeOnboarding',
+          parameters: _ist.testObjectToJson({
+            'displayName': displayName,
+            'role': role,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ircimpdt.AccountProfile>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

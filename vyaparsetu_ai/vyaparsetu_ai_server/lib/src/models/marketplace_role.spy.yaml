@@ -1,0 +1,5 @@
+enum: MarketplaceRole
+serialized: byName
+values:
+  - buyer
+  - producer

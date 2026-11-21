@@ -16,8 +16,14 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
+import 'account_profile.dart' as _i9dsm4op;
 import 'greetings/greeting.dart' as _izw8z7ou;
+import 'marketplace_role.dart' as _i1ko12if;
+import 'profile_exception.dart' as _ip8pwhpv;
+export 'account_profile.dart';
 export 'greetings/greeting.dart';
+export 'marketplace_role.dart';
+export 'profile_exception.dart';
 export 'client.dart';
 
 class Protocol extends _isc.SerializationManager
@@ -33,14 +39,25 @@ class Protocol extends _isc.SerializationManager
       _isc.ProtocolDeserialization.cached(
         this,
         types: const [
+          _isc.getType<_i9dsm4op.AccountProfile>,
           _isc.getType<_izw8z7ou.Greeting>,
+          _isc.getType<_i1ko12if.MarketplaceRole>,
+          _isc.getType<_ip8pwhpv.ProfileException>,
+          _isc.getType<_i9dsm4op.AccountProfile?>,
           _isc.getType<_izw8z7ou.Greeting?>,
+          _isc.getType<_i1ko12if.MarketplaceRole?>,
+          _isc.getType<_ip8pwhpv.ProfileException?>,
         ],
         modules: const [
           _iaic.Protocol.new,
           _iacc.Protocol.new,
         ],
-        classNames: const ['Greeting'],
+        classNames: const [
+          'AccountProfile',
+          'Greeting',
+          'MarketplaceRole',
+          'ProfileException',
+        ],
       );
 
   static String? getClassNameFromObjectJson(dynamic data) =>
@@ -67,11 +84,32 @@ class Protocol extends _isc.SerializationManager
       }
     }
 
+    if (t == _i9dsm4op.AccountProfile) {
+      return _i9dsm4op.AccountProfile.fromJson(data) as T;
+    }
     if (t == _izw8z7ou.Greeting) {
       return _izw8z7ou.Greeting.fromJson(data) as T;
     }
+    if (t == _i1ko12if.MarketplaceRole) {
+      return _i1ko12if.MarketplaceRole.fromJson(data) as T;
+    }
+    if (t == _ip8pwhpv.ProfileException) {
+      return _ip8pwhpv.ProfileException.fromJson(data) as T;
+    }
+    if (t == _isc.getType<_i9dsm4op.AccountProfile?>()) {
+      return (data != null ? _i9dsm4op.AccountProfile.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_izw8z7ou.Greeting?>()) {
       return (data != null ? _izw8z7ou.Greeting.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i1ko12if.MarketplaceRole?>()) {
+      return (data != null ? _i1ko12if.MarketplaceRole.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ip8pwhpv.ProfileException?>()) {
+      return (data != null ? _ip8pwhpv.ProfileException.fromJson(data) : null)
+          as T;
     }
     final modules = deserializationMetadata.modulesForDeserialization(
       t,
@@ -88,7 +126,10 @@ class Protocol extends _isc.SerializationManager
 
   static String? getClassNameForType(Type type) {
     return switch (type) {
+      _i9dsm4op.AccountProfile => 'AccountProfile',
       _izw8z7ou.Greeting => 'Greeting',
+      _i1ko12if.MarketplaceRole => 'MarketplaceRole',
+      _ip8pwhpv.ProfileException => 'ProfileException',
       _ => null,
     };
   }
@@ -106,8 +147,14 @@ class Protocol extends _isc.SerializationManager
     }
 
     switch (data) {
+      case _i9dsm4op.AccountProfile():
+        return 'AccountProfile';
       case _izw8z7ou.Greeting():
         return 'Greeting';
+      case _i1ko12if.MarketplaceRole():
+        return 'MarketplaceRole';
+      case _ip8pwhpv.ProfileException():
+        return 'ProfileException';
     }
     className = _iaic.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -130,8 +177,17 @@ class Protocol extends _isc.SerializationManager
     if (dataClassName is! String) {
       return super.deserializeByClassName(data);
     }
+    if (dataClassName == 'AccountProfile') {
+      return deserialize<_i9dsm4op.AccountProfile>(data['data']);
+    }
     if (dataClassName == 'Greeting') {
       return deserialize<_izw8z7ou.Greeting>(data['data']);
+    }
+    if (dataClassName == 'MarketplaceRole') {
+      return deserialize<_i1ko12if.MarketplaceRole>(data['data']);
+    }
+    if (dataClassName == 'ProfileException') {
+      return deserialize<_ip8pwhpv.ProfileException>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       return _iaic.Protocol().deserializeByClassName({

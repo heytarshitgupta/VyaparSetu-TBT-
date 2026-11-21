@@ -46,7 +46,7 @@ jobs:
       - name: Generate ephemeral test credentials
         shell: bash
         run: |
-          for key in database redis emailSecretHashPepper jwtHmacSha512PrivateKey jwtRefreshTokenHashPepper; do
+          for key in database redis emailSecretHashPepper serverSideSessionKeyHashPepper; do
             value="$(openssl rand -hex 32)"
             echo "::add-mask::$value"
             printf 'SERVERPOD_PASSWORD_%s=%s\n' "$key" "$value" >> "$GITHUB_ENV"

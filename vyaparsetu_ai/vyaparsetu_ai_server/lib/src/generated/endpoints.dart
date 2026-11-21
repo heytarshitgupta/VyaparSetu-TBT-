@@ -15,8 +15,10 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'package:vyaparsetu_ai_server/src/generated/marketplace_role.dart'
+    as _i2pxwtoh;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
-import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
+import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
 import '../greetings/greeting_endpoint.dart' as _il624ik7;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -38,10 +40,10 @@ class Endpoints extends _is.EndpointDispatch {
           'emailIdp',
           null,
         ),
-      'jwtRefresh': _inwq3ztq.JwtRefreshEndpoint()
+      'profile': _i2cx2pww.ProfileEndpoint()
         ..initialize(
           server,
-          'jwtRefresh',
+          'profile',
           null,
         ),
       'greeting': _il624ik7.GreetingEndpoint()
@@ -319,29 +321,44 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
-    connectors['jwtRefresh'] = _is.EndpointConnector(
-      name: 'jwtRefresh',
-      endpoint: endpoints['jwtRefresh']!,
+    connectors['profile'] = _is.EndpointConnector(
+      name: 'profile',
+      endpoint: endpoints['profile']!,
       methodConnectors: {
-        'refreshAccessToken': _is.MethodConnector(
-          name: 'refreshAccessToken',
+        'getMine': _is.MethodConnector(
+          name: 'getMine',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .getMine(session),
+        ),
+        'completeOnboarding': _is.MethodConnector(
+          name: 'completeOnboarding',
           params: {
-            'refreshToken': _is.ParameterDescription(
-              name: 'refreshToken',
-              type: _is.getType<String?>(),
-              nullable: true,
+            'displayName': _is.ParameterDescription(
+              name: 'displayName',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'role': _is.ParameterDescription(
+              name: 'role',
+              type: _is.getType<_i2pxwtoh.MarketplaceRole>(),
+              nullable: false,
             ),
           },
           call:
               (
                 _is.Session session,
                 Map<String, dynamic> params,
-              ) async =>
-                  (endpoints['jwtRefresh'] as _inwq3ztq.JwtRefreshEndpoint)
-                      .refreshAccessToken(
-                        session,
-                        refreshToken: params['refreshToken'],
-                      ),
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .completeOnboarding(
+                    session,
+                    displayName: params['displayName'],
+                    role: params['role'],
+                  ),
         ),
       },
     );

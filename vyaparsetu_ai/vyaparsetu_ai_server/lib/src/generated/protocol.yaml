@@ -11,7 +11,8 @@ emailIdp:
   - verifyPasswordResetCode:
   - finishPasswordReset:
   - hasAccount:
-jwtRefresh:
-  - refreshAccessToken:
+profile:
+  - getMine:
+  - completeOnboarding:
 greeting:
   - hello:

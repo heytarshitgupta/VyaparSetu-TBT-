@@ -19,8 +19,10 @@ void run(List<String> args) async {
   // and the identity providers will be the authentication options available for users.
   pod.initializeAuthServices(
     tokenManagerBuilders: [
-      // Use JWT for authentication keys towards the server.
-      JwtConfigFromPasswords(),
+      ServerSideSessionsConfigFromPasswords(
+        defaultSessionLifetime: const Duration(days: 30),
+        defaultSessionInactivityTimeout: const Duration(days: 7),
+      ),
     ],
     identityProviderBuilders: [
       // Configure the email identity provider for email/password authentication.
