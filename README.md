@@ -12,14 +12,20 @@ This is the new [hackathon repository](https://github.com/heytarshitgupta/Vyapar
 
 ### Open the app on the setup laptop
 
-If the preview is already running, open [localhost:53075](http://localhost:53075/). If it does not open, start Docker Desktop, then run the following in **PowerShell**. Keep the last command running and use the Flutter preview address it prints. The port may change after a restart.
+Start Docker Desktop, then run these commands in **PowerShell** on the setup laptop. Keep the last command running. Click the **Flutter preview URL** printed in the terminal. The port can change after a restart.
 
 ```powershell
 cd C:\Users\Lenovo\PERSONAL\VyaparSetu\vyaparsetu_ai
 docker start vyaparsetu-ai-quickstart-db
-flutter pub get
 serverpod start --no-docker
 ```
+
+| What you want to see | Where to look |
+| --- | --- |
+| Actual app | The Flutter preview URL in the Serverpod terminal, usually `http://localhost:<port>`. Open it in Chrome. |
+| Backend | Serverpod listens at `http://localhost:8080` with the default local config. The app calls it automatically. |
+| Database | Local PostgreSQL on port `8090`. Reloading **My Products** shows drafts read from that database. |
+| Public web or phone app | Cloud deployment and Android device verification are pending. `localhost` opens only on the computer running the app. |
 
 ### Check AUTH-01 yourself
 
@@ -37,7 +43,7 @@ serverpod start --no-docker
 6. Sign into another test Producer account and confirm the first producer's draft does not appear there.
 7. Sign into a Buyer account and confirm there is no **My Products** button, and buyer draft access is rejected by the server.
 
-Use `Ctrl+C` or the runner's `Q` option when you are done with the preview. Ten server integration tests and four Flutter widget tests passed for this checkpoint (`dart analyze` clean). Cloud email delivery and Android device testing are pending.
+Use `Ctrl+C` or the runner's `Q` option when you are done with the preview. You can try this screen at any time while the local stack is running.
 
 ## Workspace
 
@@ -47,24 +53,36 @@ The baseline was verified with Flutter 3.50.1, Dart 3.14.0, and Serverpod CLI 4.
 
 ## First-time setup for a teammate on Windows
 
-1. From the outer repository folder, create local copies of any missing configuration files. Keep existing values when you already have a working database.
+1. Install Git, Flutter, the Serverpod 4 CLI, and Docker Desktop if they are missing. Start Docker Desktop. Clone and open the server folder. [Serverpod Quickstart](https://docs.serverpod.dev/quickstart)
 
    ```powershell
-   cd .\vyaparsetu_ai\vyaparsetu_ai_server
-   if (-not (Test-Path -LiteralPath .env)) { Copy-Item .env.example .env }
-   if (-not (Test-Path -LiteralPath config\passwords.yaml)) {
-     Copy-Item config\passwords.yaml.example config\passwords.yaml
-   }
+   git clone https://github.com/heytarshitgupta/VyaparSetu-TBT-.git
+   cd .\VyaparSetu-TBT-\vyaparsetu_ai\vyaparsetu_ai_server
    ```
 
-2. Fill in `.env` and `config/passwords.yaml` locally. If you already ran Quickstart, add `serverSideSessionKeyHashPepper` under `development` and `test` with different values. For a random value on Windows PowerShell, run the block below once per value. Keep its output local. The four `.env` entries match the development and test `database` and `redis` entries in `passwords.yaml`.
+2. On a **fresh clone**, paste this block into PowerShell from the server folder. It generates matching local credentials and saves them privately. If both files already exist and your database works, skip this step. Existing quickstart setups also need a local `serverSideSessionKeyHashPepper` under development and test.
 
    ```powershell
-   $bytes = New-Object byte[] 32
+   if ((Test-Path .env) -or (Test-Path config\passwords.yaml)) {
+     throw 'Local configuration already exists. Keep its credentials and use the run step below.'
+   }
    $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-   $rng.GetBytes($bytes)
+   $values = @{}
+   $template = Get-Content -Raw config\passwords.yaml.example
+   foreach ($placeholder in [regex]::Matches($template, 'replace-with-[a-z-]+').Value) {
+     $bytes = New-Object byte[] 32
+     $rng.GetBytes($bytes)
+     $values[$placeholder] = -join ($bytes | ForEach-Object { $_.ToString('x2') })
+     $template = $template.Replace($placeholder, $values[$placeholder])
+   }
    $rng.Dispose()
-   -join ($bytes | ForEach-Object { $_.ToString('x2') })
+   Set-Content config\passwords.yaml $template -Encoding ASCII
+   @(
+     "VYAPARSETU_DEV_DB_PASSWORD=$($values['replace-with-development-db-password'])"
+     "VYAPARSETU_DEV_REDIS_PASSWORD=$($values['replace-with-development-redis-password'])"
+     "VYAPARSETU_TEST_DB_PASSWORD=$($values['replace-with-test-db-password'])"
+     "VYAPARSETU_TEST_REDIS_PASSWORD=$($values['replace-with-test-redis-password'])"
+   ) | Set-Content .env -Encoding ASCII
    ```
 
 3. Start Docker Desktop. From `vyaparsetu_ai_server/`, start the development database, then run the app from the workspace root. The setup machine can use its existing `vyaparsetu-ai-quickstart-db` container instead of starting a second database on port 8090.
@@ -76,7 +94,7 @@ The baseline was verified with Flutter 3.50.1, Dart 3.14.0, and Serverpod CLI 4.
    serverpod start --no-docker
    ```
 
-4. Open the Flutter preview URL printed by Serverpod and follow **Check AUTH-01 yourself** above.
+4. Open the **Flutter preview URL** printed by Serverpod. Try **Producer → My Products → New draft → Save draft** using the walkthrough above. On later runs use step 3 with the saved credentials. Run `flutter pub get` again when dependency files change.
 
 Keep `.env` and `config/passwords.yaml` local. Commit the example files and migrations. A Cloud deployment needs its own `serverSideSessionKeyHashPepper`. [Serverpod configuration and secrets](https://docs.serverpod.dev/concepts/authentication/setup#storing-secrets)
 
@@ -86,11 +104,15 @@ A commit saves a snapshot on your laptop. A push uploads that branch to GitHub. 
 
 Use the branch name, file list, tests, and commit message in [whatsapp.md](whatsapp.md). On GitHub, open **Compare & pull request** and choose `main` as the base. After review and merge, the coordinator updates the assignment before the next contributor branches from `main`.
 
-To rerun the Flutter tests from the outer repo folder:
+### Optional automated checks
+
+The browser walkthrough is the quickest way to see the app running. Automated checks are mainly for the contributor before opening a PR. The first run on a machine can take longer while Flutter resolves packages and compiles the test runner or Docker fetches its database image. Start with the test for the feature you changed. Share the slow step or error if a command stalls.
+
+To run just the product-draft widget tests from the outer repo folder:
 
 ```powershell
 cd .\vyaparsetu_ai\vyaparsetu_ai_flutter
-flutter test --no-pub
+flutter test --no-pub test/product_drafts_screen_test.dart
 ```
 
 To rerun the server tests in a separate PowerShell terminal from the outer repo folder on Windows, use the test Compose database. Set up matching test credentials first, as described above.
@@ -101,7 +123,7 @@ docker compose up -d postgres_test
 $env:SERVERPOD_DATABASE_DATA_PATH = ' '
 $env:SERVERPOD_DATABASE_HOST = '127.0.0.1'
 $env:SERVERPOD_DATABASE_PORT = '9090'
-dart test test/integration/product_drafts_test.dart test/integration/profile_test.dart test/integration/greeting_endpoint_test.dart
+dart test test/integration/product_drafts_test.dart
 docker compose stop postgres_test
 ```
 
@@ -113,9 +135,9 @@ Close the test terminal afterward to clear its environment variables.
 | --- | --- | --- |
 | SETUP-00 | Coordinator | Flutter preview could call the local Serverpod backend. On `main`. |
 | AUTH-01 | MEMBER_1 (coordinator) | Sign in, choose a role, and reload the saved profile. On `main`. |
-| PROD-01A | MEMBER_3 | Save and view private product drafts with database persistence and role isolation. On `feat/prod-01a-product-drafts`. |
-| PROD-01B | MEMBER_3 | Add photo upload, publish, and hide in a separate PR. |
-| CAT-01 | MEMBER_2 | A buyer can find the producer's published listing in the real catalog. |
+| PROD-01A | MEMBER_3 | Save and view private product drafts. Merged into `main` in PR #1. |
+| PROD-01B | MEMBER_2 | Add publish and hide controls with server-side owner checks. See [whatsapp.md](whatsapp.md). |
+| CAT-01 / MEDIA-01 | Assigned in the next handoff | Buyer catalog and product photos follow publishing. |
 | TRADE-01 | MEMBER_4 | A buyer requests a quote, a producer responds, and acceptance creates one order. |
 | AI-01 / QA-01 | MEMBER_5 | Draft a listing from speech, verify the phone demo and CI, and prepare approved Cloud deployment. |
 

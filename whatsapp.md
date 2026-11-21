@@ -1,203 +1,131 @@
 # VyaparSetu AI team handoff
 
-This file is the team's single, rotating assignment. **MEMBER_1** coordinates merges and updates it after each completed task. [README.md](README.md) is the guide for running and checking the app.
+This is the current assignment. MEMBER_1 replaces it after review and merge. [README.md](README.md) shows how to start and use the app.
 
-## Current assignment
+## Active task
 
 | Field | Value |
 | --- | --- |
-| Task | PROD-01A ? Private producer product drafts |
-| Assigned contributor | MEMBER_3 |
-| Branch | `feat/prod-01a-product-drafts` |
-| Review | MEMBER_2 reviews, MEMBER_1 coordinates merge |
-| Dependency | AUTH-01 is on `main` at `57ab52537b89a0a22bdf04204da063bf898daaa0` |
-| Suggested commit | `feat: let producers save and view product drafts` |
+| Ticket | PROD-01B. Publish and hide your own products |
+| Contributor | MEMBER_2 |
+| Branch | `feat/prod-01b-publish-hide` |
+| Reviewer | MEMBER_3. MEMBER_1 coordinates merge |
+| Prerequisite | PR #1, merged at `9152e2d371cc56b60a05ccef2a77dac781ae1cff` |
+| Commit message | `feat: let producers publish and hide products` |
 
-**Tell your AI agent:** ?Read `whatsapp.md` from the repository root. I'm MEMBER_3. Implement only the current PROD-01A assignment, run its checks, update README.md and report the results and commit message. I'll review, commit, and push myself.?
+**Tell your AI:** "I'm MEMBER_2. Read whatsapp.md and implement only its current assignment. Show me the working local screen first. Verify the changed behavior, update README.md, and tell me what to commit. I'll review and push myself."
 
-The contributor works through the code with the agent, runs the app and tests, reviews the diff, and commits from their own GitHub account. The agent leaves the work for that contributor to review. Keep this handoff file for the coordinator to update after merge.
+MEMBER_3 built and merged draft creation in PR #1. This handoff goes to MEMBER_2 so another teammate can ship a real feature. Product photos and buyer catalog stay as separate follow-ups.
 
-### 1. Set up your branch
+## 1. Start from updated main
 
-If you haven't cloned the repo, run these from the parent folder where you want it:
-
-```powershell
-git clone https://github.com/heytarshitgupta/VyaparSetu-TBT-.git
-cd VyaparSetu-TBT-
-```
-
-From the outer repo folder, check for local work before switching. If the branch already exists for this task, continue on it after inspecting its status. For a new branch on a clean clone:
+In an outer clone folder with a clean worktree:
 
 ```powershell
 git status --short --branch
 git fetch origin
 git switch main
 git pull --ff-only origin main
+git merge-base --is-ancestor 9152e2d371cc56b60a05ccef2a77dac781ae1cff HEAD
 git rev-parse HEAD
-git merge-base --is-ancestor 57ab52537b89a0a22bdf04204da063bf898daaa0 HEAD
-git switch -c feat/prod-01a-product-drafts
+git switch -c feat/prod-01b-publish-hide
 ```
 
-The ancestor check must succeed before creating the branch. Record the full SHA from `git rev-parse HEAD` in the PR. Open the outer clone in your AI editor so it can see both README and the app. The Flutter and Serverpod workspace inside it is `vyaparsetu_ai/`. Check `flutter --version`, `dart --version` and `serverpod version`, and use README for local database and secret setup.
+Check that the ancestor command succeeded before creating the branch. Record the base SHA. If you are new, clone using the README first. Open the outer clone in your editor, and run Flutter/Serverpod commands from the package directory stated below. Preserve unrelated local changes. Do not commit SDK-only lockfile changes unless this task actually needs a dependency change.
 
-### 2. Build this feature
+## 2. Build the feature
 
-Producer ? **My Products** ? **New draft** ? enter a name and optional description ? **Save draft**. The list and form must read and write the real database through Serverpod. The producer can see their own saved drafts after reloading. Other producers, buyers and signed-out sessions cannot see them. Photos, publish, hide and buyer catalog are follow-up tasks.
+A Producer opens **My Products**, saves a draft, and clicks **Publish**. The product stays in the list, marked **Published**. They can click **Hide**, reload and see **Hidden**. They can republish a hidden product. A Buyer or a second Producer cannot manage it. The Buyer catalog arrives in CAT-01.
 
-Start with the four backend files below. Inspect `ProfileEndpoint` and the existing auth/profile tests first. The starter uses the verified AUTH-01 model and still needs generation, compilation and tests on your branch. Future-facing status values reserve names for the next task. Only draft creation and draft listing are exposed in this task. The server derives the owner from the authenticated Producer profile and validates the fields.
+| Action | Path | Expected change |
+| --- | --- | --- |
+| Modify | `vyaparsetu_ai/vyaparsetu_ai_server/lib/src/endpoints/product_endpoint.dart` | Keep `createDraft` and `listMyDrafts`. Add `listMyProducts`, `publish` and `hide`. Guard all three through the existing `_requireProducer`. |
+| Modify | `vyaparsetu_ai/vyaparsetu_ai_flutter/lib/providers/product_drafts_provider.dart` | Read `listMyProducts` for the existing screen. Keep the account dependency. Add publish/hide calls and refresh after each successful change. |
+| Modify | `vyaparsetu_ai/vyaparsetu_ai_flutter/lib/features/producer/product_drafts_screen.dart` | Rename the list to **Saved products** while retaining the **New draft** form. Show friendly status labels and the action allowed for each product. Disable an action while its request runs. Surface failures and keep the list available. |
+| Modify | `vyaparsetu_ai/vyaparsetu_ai_server/test/integration/product_drafts_test.dart` | Add one focused lifecycle test for Producer A and denial for Producer B/Buyer. Keep the existing draft coverage. |
+| Modify | `README.md` | Add the new visual check and record what passed. Keep the clone and run instructions. |
 
-#### `vyaparsetu_ai/vyaparsetu_ai_server/lib/src/models/product_status.spy.yaml`
+The `ProductStatus` enum and table already exist. This task should require only protocol regeneration. Do not create a migration unless you can explain a genuine schema change.
 
-```yaml
-enum: ProductStatus
-serialized: byName
-values:
-  - draft
-  - published
-  - hidden
-```
+### Backend starter
 
-#### `vyaparsetu_ai/vyaparsetu_ai_server/lib/src/models/product.spy.yaml`
-
-```yaml
-class: Product
-table: product
-fields:
-  producerProfileId: int, relation(parent=account_profile, onDelete=Cascade)
-  name: String
-  description: String
-  status: ProductStatus, default=draft
-indexes:
-  product_producer_profile_idx:
-    fields: producerProfileId
-```
-
-#### `vyaparsetu_ai/vyaparsetu_ai_server/lib/src/models/product_draft_exception.spy.yaml`
-
-```yaml
-exception: ProductDraftException
-fields:
-  message: String
-```
-
-#### `vyaparsetu_ai/vyaparsetu_ai_server/lib/src/endpoints/product_endpoint.dart`
+Read the current endpoint before editing. Add these methods inside `ProductEndpoint`. They rely on the existing `_requireProducer`, generated `Product.db.updateWhere` and `ProductStatus` enum.
 
 ```dart
-import 'package:serverpod/serverpod.dart';
-import 'package:serverpod_auth_idp_server/core.dart';
+Future<List<Product>> listMyProducts(Session session) async {
+  final producer = await _requireProducer(session);
+  return Product.db.find(
+    session,
+    where: (product) => product.producerProfileId.equals(producer.id!),
+    orderBy: (product) => product.id.desc(),
+    limit: 50,
+  );
+}
 
-import '../generated/protocol.dart';
+Future<Product> publish(Session session, {required int productId}) =>
+    _changeStatus(session, productId, ProductStatus.published);
 
-class ProductEndpoint extends Endpoint {
-  @override
-  bool get requireLogin => true;
+Future<Product> hide(Session session, {required int productId}) =>
+    _changeStatus(session, productId, ProductStatus.hidden);
 
-  Future<Product> createDraft(
-    Session session, {
-    required String name,
-    required String description,
-  }) async {
-    final producer = await _requireProducer(session);
-    final cleanName = name.trim();
-    final cleanDescription = description.trim();
-    if (cleanName.isEmpty || cleanName.runes.length > 120) {
-      throw ProductDraftException(message: 'Enter a name of 1 to 120 characters.');
-    }
-    if (cleanDescription.runes.length > 2000) {
-      throw ProductDraftException(message: 'Use at most 2000 description characters.');
-    }
-
-    return Product.db.insertRow(
-      session,
-      Product(
-        producerProfileId: producer.id!,
-        name: cleanName,
-        description: cleanDescription,
-        status: ProductStatus.draft,
-      ),
+Future<Product> _changeStatus(
+  Session session,
+  int productId,
+  ProductStatus status,
+) async {
+  final producer = await _requireProducer(session);
+  final updated = await Product.db.updateWhere(
+    session,
+    columnValues: (product) => [product.status(status)],
+    where: (product) {
+      final ownerAndId =
+          product.id.equals(productId) &
+          product.producerProfileId.equals(producer.id!);
+      if (status == ProductStatus.hidden) {
+        return ownerAndId &
+            (product.status.equals(ProductStatus.published) |
+                product.status.equals(ProductStatus.hidden));
+      }
+      return ownerAndId;
+    },
+  );
+  if (updated.isEmpty) {
+    throw ProductDraftException(
+      message: 'This product is unavailable for that action.',
     );
   }
-
-  Future<List<Product>> listMyDrafts(Session session) async {
-    final producer = await _requireProducer(session);
-    return Product.db.find(
-      session,
-      where: (product) =>
-          product.producerProfileId.equals(producer.id!) &
-          product.status.equals(ProductStatus.draft),
-      orderBy: (product) => product.id,
-      orderDescending: true,
-      limit: 50,
-    );
-  }
-
-  Future<AccountProfile> _requireProducer(Session session) async {
-    final authUserId = session.authenticated!.authUserId;
-    final profile = await AccountProfile.db.findFirstRow(
-      session,
-      where: (row) => row.authUserId.equals(authUserId),
-    );
-    if (profile == null || profile.role != MarketplaceRole.producer) {
-      throw ProductDraftException(message: 'A Producer profile is required.');
-    }
-    return profile;
-  }
+  return updated.single;
 }
 ```
 
-Then make these changes:
+Use the new typed client methods after generation. The starter was checked against the merged code signatures. Build and test on your branch.
 
-| Action | Exact path | What to implement |
-| --- | --- | --- |
-| Create | `vyaparsetu_ai/vyaparsetu_ai_flutter/lib/features/producer/product_drafts_screen.dart` | Draft list and form with displayable loading, empty, error/retry and save states. Name is required and at most 120 characters. Description is optional and at most 2,000. Disable repeat submission while saving. Keep input available on error. |
-| Create | `vyaparsetu_ai/vyaparsetu_ai_flutter/lib/providers/product_drafts_provider.dart` | Follow `session_provider.dart`. Read via `client.product.listMyDrafts()`, use the signed-in user as a dependency, and clear cached draft state when the account changes or signs out. Save through `client.product.createDraft(name: ..., description: ...)` and refresh after success. |
-| Modify | `vyaparsetu_ai/vyaparsetu_ai_flutter/lib/features/auth/sign_in_screen.dart` | Read latest content before editing. Add a **My Products** button only for a Producer and open the draft screen. Keep Buyer navigation and sign-out working. |
-| Create | `vyaparsetu_ai/vyaparsetu_ai_server/test/integration/product_drafts_test.dart` | Follow the generated `withServerpod` tooling and the existing `profile_test.dart`. Cover signed-out denial, Buyer denial, invalid input, successful persistence, and isolation between two Producer accounts. |
-| Modify | `README.md` | Record what you actually verified, the startup commands, and a short click-through check for PROD-01A. Keep AUTH-01 checks. Update `.gitignore` only if your changes introduce a new local-only artifact. |
+## 3. See it working, then run focused checks
 
-### 3. Generate, run, and verify
+From `vyaparsetu_ai/vyaparsetu_ai_server` run `serverpod generate`. Start PostgreSQL using README. From `vyaparsetu_ai` run `serverpod start --no-docker` and open the **Flutter preview URL** printed in the terminal. Browser smoke check first:
 
-From the outer repo folder:
+1. Producer creates **Copper Bottle**, clicks Publish, and sees **Published**.
+2. Reload the page and check it is still published. Click Hide, reload, and check **Hidden**. Republish once.
+3. A second producer's list excludes the first producer's item. A Buyer has no My Products button.
+
+Before opening the PR, run `dart analyze` from `vyaparsetu_ai`. From `vyaparsetu_ai/vyaparsetu_ai_server` run only:
 
 ```powershell
-cd .\vyaparsetu_ai
-flutter pub get
-cd .\vyaparsetu_ai_server
-serverpod generate
-serverpod create-migration --tag prod-01a
-```
-
-Create one migration and review it for the new table, index and foreign key. Regenerate rather than editing protocol files by hand. If the migration already exists on your task branch, inspect it and skip creating another one. Start the configured development PostgreSQL using README, then from the workspace root:
-
-```powershell
-serverpod start --no-docker
-```
-
-Check the server applies the migration. Open the printed Flutter preview URL. Sign in to a test Producer account, save **Copper Bottle** with an optional description, reload and confirm the record remains. Sign into another test Producer account and confirm it does not appear there. Sign into a Buyer account and confirm there is no **My Products** button. A server test must independently confirm Buyer access is denied. For a new test account, read development verification codes in your local Serverpod terminal.
-
-From the workspace root in a second PowerShell terminal:
-
-```powershell
-dart analyze
-cd .\vyaparsetu_ai_flutter
-flutter test --no-pub
-cd ..\vyaparsetu_ai_server
 dart test test/integration/product_drafts_test.dart
 ```
 
-If embedded PostgreSQL fails on Windows, follow the README's separate test-database commands and substitute the product test path. For missing client methods, check you ran `serverpod generate` in the server package. For a missing table, check the running database and migration. Report any failed checks accurately. Keep credentials, verification codes and raw logs out of reports and Git.
+If you add or modify widget tests, run `flutter test --no-pub test/product_drafts_screen_test.dart` from `vyaparsetu_ai/vyaparsetu_ai_flutter`. On Windows, use README's isolated Docker test database if embedded PostgreSQL fails. Don't run the entire suite repeatedly for this ticket. If waiting, record which phase is slow: dependency resolution, database startup, compilation, or a specific test. Keep verification codes, credentials, and raw logs private.
 
-### 4. Review and commit your work
+## 4. Commit and hand off
 
-From the outer clone, run `git status --short`, `git config user.name` and `git config user.email` to verify your own Git identity. Stage the task files and checked-in generated output only. Inspect `git diff --cached --check`, `git diff --cached --stat` and the staged diff locally. Then commit and push from your GitHub account:
+Review your own diff, including generated protocol files, and verify your own Git identity. Stage only this ticket's source, tests, generated files and README. Keep local config, secrets and unrelated lockfile changes out. Commit and push yourself:
 
 ```powershell
-git commit -m "feat: let producers save and view product drafts"
-git push -u origin feat/prod-01a-product-drafts
+git diff --cached --check
+git commit -m "feat: let producers publish and hide products"
+git push -u origin feat/prod-01b-publish-hide
 ```
 
-Open a PR targeting `main` and request MEMBER_2 review. Include base SHA, commit SHA, tests actually run, and any remaining issue. The coordinator updates this handoff after review and merge. The next product task is PROD-01B (photo upload and publish), then MEMBER_2's live buyer catalog task.
+Open a PR into `main`, request MEMBER_3 review, and include base SHA, commit SHA, browser results and actual test outcomes. MEMBER_1 updates this file after merge.
 
-**Send when ready:** `TASK PROD-01A PASS - PR <URL>`
-
-**If blocked:** `ERROR TASK PROD-01A <first error line>`
+Send `TASK PROD-01B PASS - PR <URL>` or `ERROR TASK PROD-01B <first error line>`.
