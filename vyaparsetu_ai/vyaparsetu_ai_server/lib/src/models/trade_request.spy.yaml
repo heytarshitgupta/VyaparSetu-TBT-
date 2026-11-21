@@ -1,0 +1,17 @@
+class: TradeRequest
+table: trade_request
+fields:
+  productId: int, relation(parent=product)
+  buyerProfileId: int, relation(parent=account_profile)
+  producerProfileId: int, relation(parent=account_profile)
+  productName: String
+  quantity: int
+  requirements: String
+  status: TradeStatus, default=requested
+  totalPaise: int?
+  createdAt: DateTime
+indexes:
+  trade_request_buyer_idx:
+    fields: buyerProfileId
+  trade_request_producer_idx:
+    fields: producerProfileId

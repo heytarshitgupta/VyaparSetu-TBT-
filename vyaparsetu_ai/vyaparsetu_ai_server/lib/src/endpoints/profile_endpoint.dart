@@ -52,3 +52,18 @@ class ProfileEndpoint extends Endpoint {
     return profile;
   }
 }
+
+Future<AccountProfile> requireMarketplaceProfile(
+  Session session,
+  MarketplaceRole role,
+) async {
+  final profile = await ProfileEndpoint().getMine(session);
+  if (profile == null || profile.role != role) {
+    throw ProductDraftException(
+      message: role == MarketplaceRole.producer
+          ? 'A Producer profile is required.'
+          : 'A Buyer profile is required.',
+    );
+  }
+  return profile;
+}

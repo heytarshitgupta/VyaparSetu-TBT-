@@ -5,6 +5,8 @@ import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 import '../../providers/session_provider.dart';
 import '../producer/product_drafts_screen.dart';
+import '../marketplace/marketplace_screen.dart';
+import '../marketplace/trades_screen.dart';
 import 'profile_setup_form.dart';
 
 class SignInScreen extends ConsumerWidget {
@@ -95,26 +97,36 @@ class _AccountPageState extends ConsumerState<_AccountPage> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      switch (value.role) {
-                        MarketplaceRole.buyer => 'Buyer workspace',
-                        MarketplaceRole.producer => 'Producer workspace',
-                      },
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
+                    Text(switch (value.role) {
+                      MarketplaceRole.buyer => 'Buyer workspace',
+                      MarketplaceRole.producer => 'Producer workspace',
+                    }, style: Theme.of(context).textTheme.headlineSmall),
                     const SizedBox(height: 8),
                     Text('Welcome, ${value.displayName}.'),
-                    if (value.role == MarketplaceRole.producer) ...[
-                      const SizedBox(height: 24),
-                      FilledButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const ProductDraftsScreen(),
-                          ),
+                    const SizedBox(height: 24),
+                    FilledButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => value.role == MarketplaceRole.producer
+                              ? const ProductDraftsScreen()
+                              : const MarketplaceScreen(),
                         ),
-                        child: const Text('My Products'),
                       ),
-                    ],
+                      child: Text(
+                        value.role == MarketplaceRole.producer
+                            ? 'My Products'
+                            : 'Browse marketplace',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    OutlinedButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => TradesScreen(role: value.role),
+                        ),
+                      ),
+                      child: const Text('Quotes and orders'),
+                    ),
                   ],
                 ),
         ),

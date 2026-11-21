@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:serverpod_auth_idp_server/core.dart';
 import 'package:test/test.dart';
 import 'package:vyaparsetu_ai_server/src/generated/protocol.dart';
@@ -17,7 +20,9 @@ void main() {
       );
     }
 
-    Future<TestSessionBuilder> newProducer({String name = 'Test Producer'}) async {
+    Future<TestSessionBuilder> newProducer({
+      String name = 'Test Producer',
+    }) async {
       final session = await newUser();
       await endpoints.profile.completeOnboarding(
         session,
@@ -216,5 +221,123 @@ void main() {
       expect(list2.map((p) => p.id), contains(draft2.id));
       expect(list2.map((p) => p.id), isNot(contains(draft1.id)));
     });
+    test(
+      'publishes a photo listing and matches a buyer quote to one order',
+      () async {
+        final producer = await newProducer();
+        final otherProducer = await newProducer(name: 'Unrelated producer');
+        final buyer = await newBuyer();
+        final otherBuyer = await newBuyer(name: 'Unrelated buyer');
+        final photo = ByteData.sublistView(
+          base64Decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1sAAAAASUVORK5CYII=',
+          ),
+        );
+        final draft = await endpoints.product.createDraft(
+          producer,
+          name: 'Handmade Phulkari Bag',
+          description: 'Available in two colours',
+          photo: photo,
+        );
+        final productId = draft.id!;
+        expect(
+          await endpoints.product.catalog(buyer, query: 'phulkari'),
+          isEmpty,
+        );
+        expect(
+          await endpoints.product.getPhoto(buyer, productId: productId),
+          isNull,
+        );
+        expect(
+          await endpoints.product.getPhoto(producer, productId: productId),
+          isNotNull,
+        );
+        await expectLater(
+          endpoints.product.publish(otherProducer, productId: productId),
+          throwsA(isA<ProductDraftException>()),
+        );
+        await expectLater(
+          endpoints.product.publish(buyer, productId: productId),
+          throwsA(isA<ProductDraftException>()),
+        );
+        await endpoints.product.publish(producer, productId: productId);
+        final published = await endpoints.product.catalog(
+          buyer,
+          query: 'PHULKARI',
+        );
+        expect(published.single.id, productId);
+        expect(await endpoints.product.catalog(buyer, query: '%'), isEmpty);
+        expect(
+          await endpoints.product.getPhoto(buyer, productId: productId),
+          isNotNull,
+        );
+
+        final request = await endpoints.trade.requestQuote(
+          buyer,
+          productId: productId,
+          quantity: 50,
+          requirements: 'Two colours',
+        );
+        final requestId = request.id!;
+        expect((await endpoints.trade.listMine(producer)).single.id, requestId);
+        expect(await endpoints.trade.listMine(otherBuyer), isEmpty);
+        expect(await endpoints.trade.listMine(otherProducer), isEmpty);
+        await expectLater(
+          endpoints.trade.quote(
+            otherProducer,
+            requestId: requestId,
+            totalPaise: 500000,
+          ),
+          throwsA(isA<ProductDraftException>()),
+        );
+        await endpoints.trade.quote(
+          producer,
+          requestId: requestId,
+          totalPaise: 500000,
+        );
+        await expectLater(
+          endpoints.trade.accept(otherBuyer, requestId: requestId),
+          throwsA(isA<ProductDraftException>()),
+        );
+        final accepted = await endpoints.trade.accept(
+          buyer,
+          requestId: requestId,
+        );
+        final retry = await endpoints.trade.accept(buyer, requestId: requestId);
+        expect(accepted.id, requestId);
+        expect(retry.id, requestId);
+        final order = (await endpoints.trade.listMine(buyer)).single;
+        expect(order.status, TradeStatus.accepted);
+        expect(order.totalPaise, 500000);
+
+        await endpoints.product.hide(producer, productId: productId);
+        expect(
+          await endpoints.product.catalog(buyer, query: 'phulkari'),
+          isEmpty,
+        );
+        expect(
+          await endpoints.product.getPhoto(buyer, productId: productId),
+          isNull,
+        );
+        expect(
+          (await endpoints.product.listMyProducts(producer)).single.status,
+          ProductStatus.hidden,
+        );
+        await expectLater(
+          endpoints.trade.requestQuote(
+            buyer,
+            productId: productId,
+            quantity: 1,
+            requirements: '',
+          ),
+          throwsA(isA<ProductDraftException>()),
+        );
+        await endpoints.product.publish(producer, productId: productId);
+        expect(
+          (await endpoints.product.catalog(buyer, query: 'phulkari')).single.id,
+          productId,
+        );
+      },
+    );
   });
 }

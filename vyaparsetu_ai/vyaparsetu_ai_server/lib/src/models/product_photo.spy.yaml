@@ -1,0 +1,9 @@
+class: ProductPhoto
+table: product_photo
+fields:
+  productId: int, relation(parent=product, onDelete=Cascade)
+  bytes: ByteData
+indexes:
+  product_photo_product_idx:
+    fields: productId
+    unique: true

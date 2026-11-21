@@ -1,5 +1,5 @@
 name: vyaparsetu_ai
-description: A new Flutter project with Serverpod.
+description: VyaparSetu marketplace for producers and buyers.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -31,6 +31,8 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^3.5.0
   google_fonts: ^8.1.0
+  image_picker: ^1.2.0
+  speech_to_text: ^7.4.0
   vyaparsetu_ai_client:
     path: ../vyaparsetu_ai_client
   serverpod_flutter: 4.1.2

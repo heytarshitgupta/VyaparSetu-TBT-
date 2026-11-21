@@ -13,6 +13,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _ida;
 import 'dart:io' as _idi;
+import 'dart:typed_data' as _idt;
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
@@ -26,6 +27,8 @@ import 'package:vyaparsetu_ai_server/src/generated/greetings/greeting.dart'
 import 'package:vyaparsetu_ai_server/src/generated/marketplace_role.dart'
     as _i2pxwtoh;
 import 'package:vyaparsetu_ai_server/src/generated/product.dart' as _iiz32gqo;
+import 'package:vyaparsetu_ai_server/src/generated/trade_request.dart'
+    as _ij7yvnp4;
 import 'package:vyaparsetu_ai_server/src/generated/protocol.dart';
 import 'package:vyaparsetu_ai_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -165,6 +168,8 @@ class TestEndpoints {
 
   late final _ProfileEndpoint profile;
 
+  late final _TradeEndpoint trade;
+
   late final _GreetingEndpoint greeting;
 }
 
@@ -184,6 +189,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     profile = _ProfileEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    trade = _TradeEndpoint(
       endpoints,
       serializationManager,
     );
@@ -616,6 +625,7 @@ class _ProductEndpoint {
     _ist.TestSessionBuilder sessionBuilder, {
     required String name,
     required String description,
+    _idt.ByteData? photo,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -631,6 +641,7 @@ class _ProductEndpoint {
           parameters: _ist.testObjectToJson({
             'name': name,
             'description': description,
+            'photo': photo,
           }),
           serializationManager: _serializationManager,
         );
@@ -640,6 +651,37 @@ class _ProductEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_iiz32gqo.Product>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_idt.ByteData?> getPhoto(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required int productId,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'product',
+            method: 'getPhoto',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'product',
+          methodName: 'getPhoto',
+          parameters: _ist.testObjectToJson({'productId': productId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_idt.ByteData?>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -670,6 +712,129 @@ class _ProductEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<List<_iiz32gqo.Product>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_iiz32gqo.Product>> listMyProducts(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'product',
+            method: 'listMyProducts',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'product',
+          methodName: 'listMyProducts',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iiz32gqo.Product>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_iiz32gqo.Product>> catalog(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required String query,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'product',
+            method: 'catalog',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'product',
+          methodName: 'catalog',
+          parameters: _ist.testObjectToJson({'query': query}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iiz32gqo.Product>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iiz32gqo.Product> publish(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required int productId,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'product',
+            method: 'publish',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'product',
+          methodName: 'publish',
+          parameters: _ist.testObjectToJson({'productId': productId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iiz32gqo.Product>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iiz32gqo.Product> hide(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required int productId,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'product',
+            method: 'hide',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'product',
+          methodName: 'hide',
+          parameters: _ist.testObjectToJson({'productId': productId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iiz32gqo.Product>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -746,6 +911,150 @@ class _ProfileEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_ircimpdt.AccountProfile>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _TradeEndpoint {
+  _TradeEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_ij7yvnp4.TradeRequest>> listMine(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'trade',
+            method: 'listMine',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'trade',
+          methodName: 'listMine',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ij7yvnp4.TradeRequest>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ij7yvnp4.TradeRequest> requestQuote(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required int productId,
+    required int quantity,
+    required String requirements,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'trade',
+            method: 'requestQuote',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'trade',
+          methodName: 'requestQuote',
+          parameters: _ist.testObjectToJson({
+            'productId': productId,
+            'quantity': quantity,
+            'requirements': requirements,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ij7yvnp4.TradeRequest>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ij7yvnp4.TradeRequest> quote(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required int requestId,
+    required int totalPaise,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'trade',
+            method: 'quote',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'trade',
+          methodName: 'quote',
+          parameters: _ist.testObjectToJson({
+            'requestId': requestId,
+            'totalPaise': totalPaise,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ij7yvnp4.TradeRequest>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ij7yvnp4.TradeRequest> accept(
+    _ist.TestSessionBuilder sessionBuilder, {
+    required int requestId,
+  }) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'trade',
+            method: 'accept',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'trade',
+          methodName: 'accept',
+          parameters: _ist.testObjectToJson({'requestId': requestId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ij7yvnp4.TradeRequest>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

@@ -1,6 +1,6 @@
 {
-    "name": "vyaparsetu_ai",
-    "short_name": "vyaparsetu_ai",
+    "name": "VyaparSetu AI",
+    "short_name": "VyaparSetu AI",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

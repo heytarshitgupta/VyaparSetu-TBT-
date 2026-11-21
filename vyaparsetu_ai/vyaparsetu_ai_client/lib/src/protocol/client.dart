@@ -11,6 +11,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _ida;
+import 'dart:typed_data' as _idt;
 import 'package:http/http.dart' as _i85jenna;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _iacc;
@@ -24,6 +25,8 @@ import 'package:vyaparsetu_ai_client/src/protocol/greetings/greeting.dart'
 import 'package:vyaparsetu_ai_client/src/protocol/marketplace_role.dart'
     as _ibpr19yd;
 import 'package:vyaparsetu_ai_client/src/protocol/product.dart' as _idm7l56a;
+import 'package:vyaparsetu_ai_client/src/protocol/trade_request.dart'
+    as _ir66x6wy;
 import 'protocol.dart' as _il2as5qe;
 
 /// By extending [EmailOtpIdpBaseEndpoint], the email identity provider
@@ -320,20 +323,57 @@ class EndpointProduct extends _isc.EndpointRef {
   _ida.Future<_idm7l56a.Product> createDraft({
     required String name,
     required String description,
+    _idt.ByteData? photo,
   }) => caller.callServerEndpoint<_idm7l56a.Product>(
     'product',
     'createDraft',
     {
       'name': name,
       'description': description,
+      'photo': photo,
     },
   );
+
+  _ida.Future<_idt.ByteData?> getPhoto({required int productId}) =>
+      caller.callServerEndpoint<_idt.ByteData?>(
+        'product',
+        'getPhoto',
+        {'productId': productId},
+      );
 
   _ida.Future<List<_idm7l56a.Product>> listMyDrafts() =>
       caller.callServerEndpoint<List<_idm7l56a.Product>>(
         'product',
         'listMyDrafts',
         {},
+      );
+
+  _ida.Future<List<_idm7l56a.Product>> listMyProducts() =>
+      caller.callServerEndpoint<List<_idm7l56a.Product>>(
+        'product',
+        'listMyProducts',
+        {},
+      );
+
+  _ida.Future<List<_idm7l56a.Product>> catalog({required String query}) =>
+      caller.callServerEndpoint<List<_idm7l56a.Product>>(
+        'product',
+        'catalog',
+        {'query': query},
+      );
+
+  _ida.Future<_idm7l56a.Product> publish({required int productId}) =>
+      caller.callServerEndpoint<_idm7l56a.Product>(
+        'product',
+        'publish',
+        {'productId': productId},
+      );
+
+  _ida.Future<_idm7l56a.Product> hide({required int productId}) =>
+      caller.callServerEndpoint<_idm7l56a.Product>(
+        'product',
+        'hide',
+        {'productId': productId},
       );
 }
 
@@ -362,6 +402,54 @@ class EndpointProfile extends _isc.EndpointRef {
       'role': role,
     },
   );
+}
+
+/// {@category Endpoint}
+class EndpointTrade extends _isc.EndpointRef {
+  EndpointTrade(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'trade';
+
+  _ida.Future<List<_ir66x6wy.TradeRequest>> listMine() =>
+      caller.callServerEndpoint<List<_ir66x6wy.TradeRequest>>(
+        'trade',
+        'listMine',
+        {},
+      );
+
+  _ida.Future<_ir66x6wy.TradeRequest> requestQuote({
+    required int productId,
+    required int quantity,
+    required String requirements,
+  }) => caller.callServerEndpoint<_ir66x6wy.TradeRequest>(
+    'trade',
+    'requestQuote',
+    {
+      'productId': productId,
+      'quantity': quantity,
+      'requirements': requirements,
+    },
+  );
+
+  _ida.Future<_ir66x6wy.TradeRequest> quote({
+    required int requestId,
+    required int totalPaise,
+  }) => caller.callServerEndpoint<_ir66x6wy.TradeRequest>(
+    'trade',
+    'quote',
+    {
+      'requestId': requestId,
+      'totalPaise': totalPaise,
+    },
+  );
+
+  _ida.Future<_ir66x6wy.TradeRequest> accept({required int requestId}) =>
+      caller.callServerEndpoint<_ir66x6wy.TradeRequest>(
+        'trade',
+        'accept',
+        {'requestId': requestId},
+      );
 }
 
 /// This is an example endpoint that returns a greeting message through
@@ -423,6 +511,7 @@ class Client extends _isc.ServerpodClientShared {
     emailIdp = EndpointEmailIdp(this);
     product = EndpointProduct(this);
     profile = EndpointProfile(this);
+    trade = EndpointTrade(this);
     greeting = EndpointGreeting(this);
     modules = Modules(this);
   }
@@ -433,6 +522,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointProfile profile;
 
+  late final EndpointTrade trade;
+
   late final EndpointGreeting greeting;
 
   late final Modules modules;
@@ -442,6 +533,7 @@ class Client extends _isc.ServerpodClientShared {
     'emailIdp': emailIdp,
     'product': product,
     'profile': profile,
+    'trade': trade,
     'greeting': greeting,
   };
 
