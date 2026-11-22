@@ -626,6 +626,12 @@ class _ProductEndpoint {
     required String name,
     required String description,
     _idt.ByteData? photo,
+    int? pricePaise,
+    String? category,
+    String? unit,
+    String? city,
+    String? state,
+    String? craft,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -642,6 +648,12 @@ class _ProductEndpoint {
             'name': name,
             'description': description,
             'photo': photo,
+            'pricePaise': pricePaise,
+            'category': category,
+            'unit': unit,
+            'city': city,
+            'state': state,
+            'craft': craft,
           }),
           serializationManager: _serializationManager,
         );
@@ -887,6 +899,11 @@ class _ProfileEndpoint {
     _ist.TestSessionBuilder sessionBuilder, {
     required String displayName,
     required _i2pxwtoh.MarketplaceRole role,
+    String? businessName,
+    String? craftCategory,
+    String? city,
+    String? state,
+    String? address,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -902,6 +919,11 @@ class _ProfileEndpoint {
           parameters: _ist.testObjectToJson({
             'displayName': displayName,
             'role': role,
+            'businessName': businessName,
+            'craftCategory': craftCategory,
+            'city': city,
+            'state': state,
+            'address': address,
           }),
           serializationManager: _serializationManager,
         );

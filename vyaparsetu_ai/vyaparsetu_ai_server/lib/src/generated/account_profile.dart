@@ -21,13 +21,25 @@ abstract class AccountProfile
     required this.authUserId,
     required this.displayName,
     required this.role,
-  });
+    this.businessName,
+    this.craftCategory,
+    this.city,
+    this.state,
+    this.address,
+    bool? verified,
+  }) : verified = verified ?? true;
 
   factory AccountProfile({
     int? id,
     required _is.UuidValue authUserId,
     required String displayName,
     required _i1ko12if.MarketplaceRole role,
+    String? businessName,
+    String? craftCategory,
+    String? city,
+    String? state,
+    String? address,
+    bool? verified,
   }) = _AccountProfileImpl;
 
   factory AccountProfile.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -40,6 +52,14 @@ abstract class AccountProfile
       role: _i1ko12if.MarketplaceRole.fromJson(
         (jsonSerialization['role'] as String),
       ),
+      businessName: jsonSerialization['businessName'] as String?,
+      craftCategory: jsonSerialization['craftCategory'] as String?,
+      city: jsonSerialization['city'] as String?,
+      state: jsonSerialization['state'] as String?,
+      address: jsonSerialization['address'] as String?,
+      verified: jsonSerialization['verified'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['verified']),
     );
   }
 
@@ -56,6 +76,18 @@ abstract class AccountProfile
 
   _i1ko12if.MarketplaceRole role;
 
+  String? businessName;
+
+  String? craftCategory;
+
+  String? city;
+
+  String? state;
+
+  String? address;
+
+  bool verified;
+
   @override
   _is.Table<int?> get table => t;
 
@@ -67,6 +99,12 @@ abstract class AccountProfile
     _is.UuidValue? authUserId,
     String? displayName,
     _i1ko12if.MarketplaceRole? role,
+    String? businessName,
+    String? craftCategory,
+    String? city,
+    String? state,
+    String? address,
+    bool? verified,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -76,6 +114,12 @@ abstract class AccountProfile
       'authUserId': authUserId.toJson(),
       'displayName': displayName,
       'role': role.toJson(),
+      if (businessName != null) 'businessName': businessName,
+      if (craftCategory != null) 'craftCategory': craftCategory,
+      if (city != null) 'city': city,
+      if (state != null) 'state': state,
+      if (address != null) 'address': address,
+      'verified': verified,
     };
   }
 
@@ -87,6 +131,12 @@ abstract class AccountProfile
       'authUserId': authUserId.toJson(),
       'displayName': displayName,
       'role': role.toJson(),
+      if (businessName != null) 'businessName': businessName,
+      if (craftCategory != null) 'craftCategory': craftCategory,
+      if (city != null) 'city': city,
+      if (state != null) 'state': state,
+      if (address != null) 'address': address,
+      'verified': verified,
     };
   }
 
@@ -126,11 +176,23 @@ class _AccountProfileImpl extends AccountProfile {
     required _is.UuidValue authUserId,
     required String displayName,
     required _i1ko12if.MarketplaceRole role,
+    String? businessName,
+    String? craftCategory,
+    String? city,
+    String? state,
+    String? address,
+    bool? verified,
   }) : super._(
          id: id,
          authUserId: authUserId,
          displayName: displayName,
          role: role,
+         businessName: businessName,
+         craftCategory: craftCategory,
+         city: city,
+         state: state,
+         address: address,
+         verified: verified,
        );
 
   /// Returns a shallow copy of this [AccountProfile]
@@ -142,12 +204,26 @@ class _AccountProfileImpl extends AccountProfile {
     _is.UuidValue? authUserId,
     String? displayName,
     _i1ko12if.MarketplaceRole? role,
+    Object? businessName = _Undefined,
+    Object? craftCategory = _Undefined,
+    Object? city = _Undefined,
+    Object? state = _Undefined,
+    Object? address = _Undefined,
+    bool? verified,
   }) {
     return AccountProfile(
       id: id is int? ? id : this.id,
       authUserId: authUserId ?? this.authUserId,
       displayName: displayName ?? this.displayName,
       role: role ?? this.role,
+      businessName: businessName is String? ? businessName : this.businessName,
+      craftCategory: craftCategory is String?
+          ? craftCategory
+          : this.craftCategory,
+      city: city is String? ? city : this.city,
+      state: state is String? ? state : this.state,
+      address: address is String? ? address : this.address,
+      verified: verified ?? this.verified,
     );
   }
 }
@@ -173,6 +249,38 @@ class AccountProfileUpdateTable extends _is.UpdateTable<AccountProfileTable> {
     table.role,
     value,
   );
+
+  _is.ColumnValue<String, String> businessName(String? value) =>
+      _is.ColumnValue(
+        table.businessName,
+        value,
+      );
+
+  _is.ColumnValue<String, String> craftCategory(String? value) =>
+      _is.ColumnValue(
+        table.craftCategory,
+        value,
+      );
+
+  _is.ColumnValue<String, String> city(String? value) => _is.ColumnValue(
+    table.city,
+    value,
+  );
+
+  _is.ColumnValue<String, String> state(String? value) => _is.ColumnValue(
+    table.state,
+    value,
+  );
+
+  _is.ColumnValue<String, String> address(String? value) => _is.ColumnValue(
+    table.address,
+    value,
+  );
+
+  _is.ColumnValue<bool, bool> verified(bool value) => _is.ColumnValue(
+    table.verified,
+    value,
+  );
 }
 
 class AccountProfileTable extends _is.Table<int?> {
@@ -192,6 +300,31 @@ class AccountProfileTable extends _is.Table<int?> {
       this,
       _is.EnumSerialization.byName,
     );
+    businessName = _is.ColumnString(
+      'businessName',
+      this,
+    );
+    craftCategory = _is.ColumnString(
+      'craftCategory',
+      this,
+    );
+    city = _is.ColumnString(
+      'city',
+      this,
+    );
+    state = _is.ColumnString(
+      'state',
+      this,
+    );
+    address = _is.ColumnString(
+      'address',
+      this,
+    );
+    verified = _is.ColumnBool(
+      'verified',
+      this,
+      hasDefault: true,
+    );
   }
 
   late final AccountProfileUpdateTable updateTable;
@@ -202,12 +335,30 @@ class AccountProfileTable extends _is.Table<int?> {
 
   late final _is.ColumnEnum<_i1ko12if.MarketplaceRole> role;
 
+  late final _is.ColumnString businessName;
+
+  late final _is.ColumnString craftCategory;
+
+  late final _is.ColumnString city;
+
+  late final _is.ColumnString state;
+
+  late final _is.ColumnString address;
+
+  late final _is.ColumnBool verified;
+
   @override
   List<_is.Column> get columns => [
     id,
     authUserId,
     displayName,
     role,
+    businessName,
+    craftCategory,
+    city,
+    state,
+    address,
+    verified,
   ];
 }
 

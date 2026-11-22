@@ -4,6 +4,13 @@ fields:
   producerProfileId: int, relation(parent=account_profile, onDelete=Cascade)
   name: String
   description: String
+  pricePaise: int?
+  category: String?
+  unit: String, default="piece"
+  minimumOrderQuantity: int, default=1
+  city: String?
+  state: String?
+  craft: String?
   status: ProductStatus, default=draft
 indexes:
   product_producer_profile_idx:

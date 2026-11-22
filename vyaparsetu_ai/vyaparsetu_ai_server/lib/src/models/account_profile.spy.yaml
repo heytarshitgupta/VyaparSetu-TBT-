@@ -4,6 +4,12 @@ fields:
   authUserId: UuidValue, relation(parent=serverpod_auth_core_user, onDelete=Cascade)
   displayName: String
   role: MarketplaceRole
+  businessName: String?
+  craftCategory: String?
+  city: String?
+  state: String?
+  address: String?
+  verified: bool, default=true
 indexes:
   account_profile_auth_user_idx:
     fields: authUserId

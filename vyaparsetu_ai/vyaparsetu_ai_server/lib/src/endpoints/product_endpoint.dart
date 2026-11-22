@@ -14,6 +14,12 @@ class ProductEndpoint extends Endpoint {
     required String name,
     required String description,
     ByteData? photo,
+    int? pricePaise,
+    String? category,
+    String? unit,
+    String? city,
+    String? state,
+    String? craft,
   }) async {
     final producer = await _requireProducer(session);
     final cleanName = name.trim();
@@ -36,6 +42,13 @@ class ProductEndpoint extends Endpoint {
       producerProfileId: producer.id!,
       name: cleanName,
       description: cleanDescription,
+      pricePaise: pricePaise,
+      category: category?.trim(),
+      unit: unit?.trim().isNotEmpty == true ? unit!.trim() : 'piece',
+      minimumOrderQuantity: 1,
+      city: city?.trim(),
+      state: state?.trim(),
+      craft: craft?.trim(),
       status: ProductStatus.draft,
     );
     if (photo == null) return Product.db.insertRow(session, draft);

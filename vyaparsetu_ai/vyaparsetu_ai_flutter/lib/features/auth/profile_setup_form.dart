@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 class ProfileSetupForm extends StatefulWidget {
-  const ProfileSetupForm({super.key, required this.onSave});
+  const ProfileSetupForm({super.key, required this.onSave, this.initialRole});
 
   final Future<void> Function(String name, MarketplaceRole role) onSave;
+  final MarketplaceRole? initialRole;
 
   @override
   State<ProfileSetupForm> createState() => _ProfileSetupFormState();
@@ -21,6 +22,12 @@ class _ProfileSetupFormState extends State<ProfileSetupForm> {
   void dispose() {
     _name.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _role = widget.initialRole;
   }
 
   Future<void> _save() async {
@@ -68,6 +75,7 @@ class _ProfileSetupFormState extends State<ProfileSetupForm> {
         const SizedBox(height: 16),
         DropdownButtonFormField<MarketplaceRole>(
           decoration: const InputDecoration(labelText: 'Marketplace role'),
+          initialValue: _role,
           items: const [
             DropdownMenuItem(
               value: MarketplaceRole.buyer,

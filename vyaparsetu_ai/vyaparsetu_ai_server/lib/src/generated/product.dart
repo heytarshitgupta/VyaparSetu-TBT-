@@ -21,14 +21,30 @@ abstract class Product
     required this.producerProfileId,
     required this.name,
     required this.description,
+    this.pricePaise,
+    this.category,
+    String? unit,
+    int? minimumOrderQuantity,
+    this.city,
+    this.state,
+    this.craft,
     _izdy7rp7.ProductStatus? status,
-  }) : status = status ?? _izdy7rp7.ProductStatus.draft;
+  }) : unit = unit ?? 'piece',
+       minimumOrderQuantity = minimumOrderQuantity ?? 1,
+       status = status ?? _izdy7rp7.ProductStatus.draft;
 
   factory Product({
     int? id,
     required int producerProfileId,
     required String name,
     required String description,
+    int? pricePaise,
+    String? category,
+    String? unit,
+    int? minimumOrderQuantity,
+    String? city,
+    String? state,
+    String? craft,
     _izdy7rp7.ProductStatus? status,
   }) = _ProductImpl;
 
@@ -38,6 +54,13 @@ abstract class Product
       producerProfileId: jsonSerialization['producerProfileId'] as int,
       name: jsonSerialization['name'] as String,
       description: jsonSerialization['description'] as String,
+      pricePaise: jsonSerialization['pricePaise'] as int?,
+      category: jsonSerialization['category'] as String?,
+      unit: jsonSerialization['unit'] as String?,
+      minimumOrderQuantity: jsonSerialization['minimumOrderQuantity'] as int?,
+      city: jsonSerialization['city'] as String?,
+      state: jsonSerialization['state'] as String?,
+      craft: jsonSerialization['craft'] as String?,
       status: jsonSerialization['status'] == null
           ? null
           : _izdy7rp7.ProductStatus.fromJson(
@@ -59,6 +82,20 @@ abstract class Product
 
   String description;
 
+  int? pricePaise;
+
+  String? category;
+
+  String unit;
+
+  int minimumOrderQuantity;
+
+  String? city;
+
+  String? state;
+
+  String? craft;
+
   _izdy7rp7.ProductStatus status;
 
   @override
@@ -72,6 +109,13 @@ abstract class Product
     int? producerProfileId,
     String? name,
     String? description,
+    int? pricePaise,
+    String? category,
+    String? unit,
+    int? minimumOrderQuantity,
+    String? city,
+    String? state,
+    String? craft,
     _izdy7rp7.ProductStatus? status,
   });
   @override
@@ -82,6 +126,13 @@ abstract class Product
       'producerProfileId': producerProfileId,
       'name': name,
       'description': description,
+      if (pricePaise != null) 'pricePaise': pricePaise,
+      if (category != null) 'category': category,
+      'unit': unit,
+      'minimumOrderQuantity': minimumOrderQuantity,
+      if (city != null) 'city': city,
+      if (state != null) 'state': state,
+      if (craft != null) 'craft': craft,
       'status': status.toJson(),
     };
   }
@@ -94,6 +145,13 @@ abstract class Product
       'producerProfileId': producerProfileId,
       'name': name,
       'description': description,
+      if (pricePaise != null) 'pricePaise': pricePaise,
+      if (category != null) 'category': category,
+      'unit': unit,
+      'minimumOrderQuantity': minimumOrderQuantity,
+      if (city != null) 'city': city,
+      if (state != null) 'state': state,
+      if (craft != null) 'craft': craft,
       'status': status.toJson(),
     };
   }
@@ -134,12 +192,26 @@ class _ProductImpl extends Product {
     required int producerProfileId,
     required String name,
     required String description,
+    int? pricePaise,
+    String? category,
+    String? unit,
+    int? minimumOrderQuantity,
+    String? city,
+    String? state,
+    String? craft,
     _izdy7rp7.ProductStatus? status,
   }) : super._(
          id: id,
          producerProfileId: producerProfileId,
          name: name,
          description: description,
+         pricePaise: pricePaise,
+         category: category,
+         unit: unit,
+         minimumOrderQuantity: minimumOrderQuantity,
+         city: city,
+         state: state,
+         craft: craft,
          status: status,
        );
 
@@ -152,6 +224,13 @@ class _ProductImpl extends Product {
     int? producerProfileId,
     String? name,
     String? description,
+    Object? pricePaise = _Undefined,
+    Object? category = _Undefined,
+    String? unit,
+    int? minimumOrderQuantity,
+    Object? city = _Undefined,
+    Object? state = _Undefined,
+    Object? craft = _Undefined,
     _izdy7rp7.ProductStatus? status,
   }) {
     return Product(
@@ -159,6 +238,13 @@ class _ProductImpl extends Product {
       producerProfileId: producerProfileId ?? this.producerProfileId,
       name: name ?? this.name,
       description: description ?? this.description,
+      pricePaise: pricePaise is int? ? pricePaise : this.pricePaise,
+      category: category is String? ? category : this.category,
+      unit: unit ?? this.unit,
+      minimumOrderQuantity: minimumOrderQuantity ?? this.minimumOrderQuantity,
+      city: city is String? ? city : this.city,
+      state: state is String? ? state : this.state,
+      craft: craft is String? ? craft : this.craft,
       status: status ?? this.status,
     );
   }
@@ -179,6 +265,41 @@ class ProductUpdateTable extends _is.UpdateTable<ProductTable> {
 
   _is.ColumnValue<String, String> description(String value) => _is.ColumnValue(
     table.description,
+    value,
+  );
+
+  _is.ColumnValue<int, int> pricePaise(int? value) => _is.ColumnValue(
+    table.pricePaise,
+    value,
+  );
+
+  _is.ColumnValue<String, String> category(String? value) => _is.ColumnValue(
+    table.category,
+    value,
+  );
+
+  _is.ColumnValue<String, String> unit(String value) => _is.ColumnValue(
+    table.unit,
+    value,
+  );
+
+  _is.ColumnValue<int, int> minimumOrderQuantity(int value) => _is.ColumnValue(
+    table.minimumOrderQuantity,
+    value,
+  );
+
+  _is.ColumnValue<String, String> city(String? value) => _is.ColumnValue(
+    table.city,
+    value,
+  );
+
+  _is.ColumnValue<String, String> state(String? value) => _is.ColumnValue(
+    table.state,
+    value,
+  );
+
+  _is.ColumnValue<String, String> craft(String? value) => _is.ColumnValue(
+    table.craft,
     value,
   );
 
@@ -205,6 +326,36 @@ class ProductTable extends _is.Table<int?> {
       'description',
       this,
     );
+    pricePaise = _is.ColumnInt(
+      'pricePaise',
+      this,
+    );
+    category = _is.ColumnString(
+      'category',
+      this,
+    );
+    unit = _is.ColumnString(
+      'unit',
+      this,
+      hasDefault: true,
+    );
+    minimumOrderQuantity = _is.ColumnInt(
+      'minimumOrderQuantity',
+      this,
+      hasDefault: true,
+    );
+    city = _is.ColumnString(
+      'city',
+      this,
+    );
+    state = _is.ColumnString(
+      'state',
+      this,
+    );
+    craft = _is.ColumnString(
+      'craft',
+      this,
+    );
     status = _is.ColumnEnum(
       'status',
       this,
@@ -221,6 +372,20 @@ class ProductTable extends _is.Table<int?> {
 
   late final _is.ColumnString description;
 
+  late final _is.ColumnInt pricePaise;
+
+  late final _is.ColumnString category;
+
+  late final _is.ColumnString unit;
+
+  late final _is.ColumnInt minimumOrderQuantity;
+
+  late final _is.ColumnString city;
+
+  late final _is.ColumnString state;
+
+  late final _is.ColumnString craft;
+
   late final _is.ColumnEnum<_izdy7rp7.ProductStatus> status;
 
   @override
@@ -229,6 +394,13 @@ class ProductTable extends _is.Table<int?> {
     producerProfileId,
     name,
     description,
+    pricePaise,
+    category,
+    unit,
+    minimumOrderQuantity,
+    city,
+    state,
+    craft,
     status,
   ];
 }

@@ -324,6 +324,12 @@ class EndpointProduct extends _isc.EndpointRef {
     required String name,
     required String description,
     _idt.ByteData? photo,
+    int? pricePaise,
+    String? category,
+    String? unit,
+    String? city,
+    String? state,
+    String? craft,
   }) => caller.callServerEndpoint<_idm7l56a.Product>(
     'product',
     'createDraft',
@@ -331,6 +337,12 @@ class EndpointProduct extends _isc.EndpointRef {
       'name': name,
       'description': description,
       'photo': photo,
+      'pricePaise': pricePaise,
+      'category': category,
+      'unit': unit,
+      'city': city,
+      'state': state,
+      'craft': craft,
     },
   );
 
@@ -394,12 +406,22 @@ class EndpointProfile extends _isc.EndpointRef {
   _ida.Future<_i8viowtb.AccountProfile> completeOnboarding({
     required String displayName,
     required _ibpr19yd.MarketplaceRole role,
+    String? businessName,
+    String? craftCategory,
+    String? city,
+    String? state,
+    String? address,
   }) => caller.callServerEndpoint<_i8viowtb.AccountProfile>(
     'profile',
     'completeOnboarding',
     {
       'displayName': displayName,
       'role': role,
+      'businessName': businessName,
+      'craftCategory': craftCategory,
+      'city': city,
+      'state': state,
+      'address': address,
     },
   );
 }

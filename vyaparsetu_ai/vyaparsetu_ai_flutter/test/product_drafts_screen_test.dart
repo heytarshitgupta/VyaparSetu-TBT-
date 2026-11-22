@@ -20,6 +20,9 @@ class _FakeProductDraftsNotifier extends ProductDraftsNotifier {
     required String name,
     required String description,
     ByteData? photo,
+    int? pricePaise,
+    String? category,
+    String? unit,
   }) async {
     final draft = Product(
       id: 99,

@@ -10,7 +10,9 @@ import '../marketplace/trades_screen.dart';
 import 'profile_setup_form.dart';
 
 class SignInScreen extends ConsumerWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({super.key, this.initialRole});
+
+  final MarketplaceRole? initialRole;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,18 +31,37 @@ class SignInScreen extends ConsumerWidget {
           return Scaffold(
             appBar: AppBar(title: const Text('VyaparSetu AI')),
             body: _PageContent(
-              child: SignInWidget(client: ref.watch(serverClientProvider)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/images/vyapar_setu_banner.jpg',
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SignInWidget(client: ref.watch(serverClientProvider)),
+                ],
+              ),
             ),
           );
         }
-        return _AccountPage(key: ValueKey(authUserId));
+        return _AccountPage(
+          key: ValueKey(authUserId),
+          initialRole: initialRole,
+        );
       },
     );
   }
 }
 
 class _AccountPage extends ConsumerStatefulWidget {
-  const _AccountPage({super.key});
+  const _AccountPage({super.key, this.initialRole});
+  final MarketplaceRole? initialRole;
 
   @override
   ConsumerState<_AccountPage> createState() => _AccountPageState();
@@ -86,6 +107,7 @@ class _AccountPageState extends ConsumerState<_AccountPage> {
         data: (value) => _PageContent(
           child: value == null
               ? ProfileSetupForm(
+                  initialRole: widget.initialRole,
                   onSave: (name, role) async {
                     await ref
                         .read(serverClientProvider)

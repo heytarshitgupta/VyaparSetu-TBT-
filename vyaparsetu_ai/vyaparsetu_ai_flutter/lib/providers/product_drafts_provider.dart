@@ -35,12 +35,18 @@ class ProductDraftsNotifier extends AsyncNotifier<List<Product>> {
     required String name,
     required String description,
     ByteData? photo,
+    int? pricePaise,
+    String? category,
+    String? unit,
   }) async {
     final client = ref.read(serverClientProvider);
     final product = await client.product.createDraft(
       name: name,
       description: description,
       photo: photo,
+      pricePaise: pricePaise,
+      category: category,
+      unit: unit,
     );
     ref.invalidateSelf();
     return product;

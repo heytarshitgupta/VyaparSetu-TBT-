@@ -1,0 +1,1865 @@
+{
+  "@@locale": "en",
+  "appTitle": "VyaparSetu",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "appSubtitle": "Connecting artisan producers directly with commercial buyers across India",
+  "@appSubtitle": {
+    "description": "Brand subtitle describing purpose"
+  },
+  "chooseHowToContinue": "Choose how you want to continue:",
+  "@chooseHowToContinue": {
+    "description": "Role selection prompt"
+  },
+  "roleBuyerTitle": "I Want to Buy Products",
+  "@roleBuyerTitle": {
+    "description": "Role option for buyers"
+  },
+  "roleBuyerDescription": "Discover products and connect with producers",
+  "@roleBuyerDescription": {
+    "description": "Description for buyer role"
+  },
+  "roleProducerTitle": "I Make & Sell Products",
+  "@roleProducerTitle": {
+    "description": "Role option for artisan producers"
+  },
+  "roleProducerDescription": "Create your profile and reach more buyers",
+  "@roleProducerDescription": {
+    "description": "Description for producer role"
+  },
+  "roleSelectionFooter": "You can switch or register anytime with your phone or email.",
+  "@roleSelectionFooter": {
+    "description": "Footer note on role selection"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Navigation item for home"
+  },
+  "myProducts": "My Products",
+  "@myProducts": {
+    "description": "Navigation item or header for producer products"
+  },
+  "addProduct": "Add Product",
+  "@addProduct": {
+    "description": "Button to add a new product"
+  },
+  "buyerNeeds": "Buyer Needs",
+  "@buyerNeeds": {
+    "description": "Navigation item for incoming buyer requirements and orders"
+  },
+  "whatBuyersWant": "What Buyers Want",
+  "@whatBuyersWant": {
+    "description": "Navigation item for market demand and high-selling craft insights"
+  },
+  "myProfile": "My Profile",
+  "@myProfile": {
+    "description": "Navigation item or header for producer profile"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Navigation item or header for app settings"
+  },
+  "welcome": "Welcome",
+  "@welcome": {
+    "description": "Greeting on dashboard or home"
+  },
+  "continueButton": "Continue",
+  "@continueButton": {
+    "description": "Generic continue action button"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Generic back action button"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Generic save action button"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Generic cancel action button"
+  },
+  "verify": "Verify",
+  "@verify": {
+    "description": "Generic verify action button"
+  },
+  "verified": "Verified",
+  "@verified": {
+    "description": "Badge or status label for verified status"
+  },
+  "notVerified": "Not Verified",
+  "@notVerified": {
+    "description": "Badge or status label for unverified status"
+  },
+  "signInTitle": "Sign In",
+  "@signInTitle": {
+    "description": "Header for sign in screen"
+  },
+  "signInSubtitle": "Sign in to manage your products, view buyer needs, and track orders.",
+  "@signInSubtitle": {
+    "description": "Subtitle on sign in screen"
+  },
+  "createAccountTitle": "Create Account",
+  "@createAccountTitle": {
+    "description": "Header for create account screen"
+  },
+  "createAccountSubtitle": "Start your journey as an artisan producer and reach direct commercial buyers.",
+  "@createAccountSubtitle": {
+    "description": "Subtitle on create account screen"
+  },
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Full name field label"
+  },
+  "fullNameHint": "e.g. Ramesh Kumar",
+  "@fullNameHint": {
+    "description": "Hint for full name input"
+  },
+  "emailAddress": "Email Address",
+  "@emailAddress": {
+    "description": "Email address label"
+  },
+  "emailHint": "producer@example.com",
+  "@emailHint": {
+    "description": "Hint for email address input"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password label"
+  },
+  "passwordHint": "Enter your password",
+  "@passwordHint": {
+    "description": "Hint for password input"
+  },
+  "createPasswordHint": "Create a password (min 6 characters)",
+  "@createPasswordHint": {
+    "description": "Hint when creating new password"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password label"
+  },
+  "confirmPasswordHint": "Re-enter your password",
+  "@confirmPasswordHint": {
+    "description": "Hint for confirm password input"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "signInWithPhone": "Sign in with Phone OTP",
+  "@signInWithPhone": {
+    "description": "Button for alternate phone sign in"
+  },
+  "signUpWithPhone": "Sign up with Phone OTP",
+  "@signUpWithPhone": {
+    "description": "Button for alternate phone sign up"
+  },
+  "newHere": "New here? ",
+  "@newHere": {
+    "description": "Prompt for new users without account"
+  },
+  "alreadyHaveAccount": "Already have an account? ",
+  "@alreadyHaveAccount": {
+    "description": "Prompt for users with existing account"
+  },
+  "enterFullName": "Please enter your full name",
+  "@enterFullName": {
+    "description": "Validation error for missing full name"
+  },
+  "nameTooShort": "Name must be at least 2 characters",
+  "@nameTooShort": {
+    "description": "Validation error for short name"
+  },
+  "enterEmail": "Please enter your email address",
+  "@enterEmail": {
+    "description": "Validation error for missing email"
+  },
+  "enterValidEmail": "Please enter a valid email address",
+  "@enterValidEmail": {
+    "description": "Validation error for invalid email"
+  },
+  "enterPassword": "Please enter your password",
+  "@enterPassword": {
+    "description": "Validation error for missing password"
+  },
+  "createPassword": "Please create a password",
+  "@createPassword": {
+    "description": "Validation error when creating password"
+  },
+  "passwordTooShort": "Password must be at least 6 characters",
+  "@passwordTooShort": {
+    "description": "Validation error for short password"
+  },
+  "confirmYourPassword": "Please confirm your password",
+  "@confirmYourPassword": {
+    "description": "Validation error for missing confirm password"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Validation error when passwords differ"
+  },
+  "phoneFeatureUpcoming": "Phone login will be available in the next update.",
+  "@phoneFeatureUpcoming": {
+    "description": "Notice for upcoming phone login feature"
+  },
+  "forgotPasswordUpcoming": "Password recovery will be available in a future update.",
+  "@forgotPasswordUpcoming": {
+    "description": "Notice for upcoming password recovery"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Label for language selector"
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Label for appearance or theme selector"
+  },
+  "chooseAppearance": "Choose appearance",
+  "@chooseAppearance": {
+    "description": "Title for appearance selection sheet"
+  },
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Light appearance mode"
+  },
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Dark appearance mode"
+  },
+  "themeSystem": "Use phone setting",
+  "@themeSystem": {
+    "description": "Appearance mode following system/phone setting"
+  },
+  "producerSetup": "Producer Setup",
+  "@producerSetup": {
+    "description": "Screen title for producer onboarding"
+  },
+  "exit": "Exit",
+  "@exit": {
+    "description": "Exit button label"
+  },
+  "stepOf": "Step {current} of {total}",
+  "@stepOf": {
+    "description": "Progress step indicator",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "percentCompleted": "{percent}% Completed",
+  "@percentCompleted": {
+    "description": "Progress percentage indicator",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "submitApplication": "Submit Application",
+  "@submitApplication": {
+    "description": "Final submit button on onboarding"
+  },
+  "onboardingReviewSubmitted": "Onboarding review submitted. Full submission will be finalized in upcoming steps.",
+  "@onboardingReviewSubmitted": {
+    "description": "Snackbar shown upon onboarding completion"
+  },
+  "step1Title": "About You",
+  "@step1Title": {
+    "description": "Step 1 simplified title"
+  },
+  "step1Subtitle": "Your name and contact info",
+  "@step1Subtitle": {
+    "description": "Step 1 simplified subtitle"
+  },
+  "step2Title": "Your Work",
+  "@step2Title": {
+    "description": "Step 2 simplified title"
+  },
+  "step2Subtitle": "What you make and sell",
+  "@step2Subtitle": {
+    "description": "Step 2 simplified subtitle"
+  },
+  "step3Title": "Your Address",
+  "@step3Title": {
+    "description": "Step 3 simplified title"
+  },
+  "step3Subtitle": "Where your workshop is based",
+  "@step3Subtitle": {
+    "description": "Step 3 simplified subtitle"
+  },
+  "step4Title": "Verification",
+  "@step4Title": {
+    "description": "Step 4 simplified title"
+  },
+  "step4Subtitle": "Identity and business details",
+  "@step4Subtitle": {
+    "description": "Step 4 simplified subtitle"
+  },
+  "step5Title": "Check & Submit",
+  "@step5Title": {
+    "description": "Step 5 simplified title"
+  },
+  "step5Subtitle": "Confirm and start selling",
+  "@step5Subtitle": {
+    "description": "Step 5 simplified subtitle"
+  },
+  "step1Header": "Artisan Basic Details",
+  "@step1Header": {
+    "description": "Header inside Step 1 card"
+  },
+  "step1Description": "Confirm your primary name and contact information for buyer communications.",
+  "@step1Description": {
+    "description": "Description inside Step 1 card"
+  },
+  "fullNameLabel": "Full Name *",
+  "@fullNameLabel": {
+    "description": "Full name input label with required star"
+  },
+  "enterFullNameHint": "Enter your full name",
+  "@enterFullNameHint": {
+    "description": "Full name input hint"
+  },
+  "fullNameHelper": "Your name as you want it shown on VyaparSetu",
+  "@fullNameHelper": {
+    "description": "Full name helper text"
+  },
+  "emailAddressLogin": "Email Address (Login)",
+  "@emailAddressLogin": {
+    "description": "Email address label showing login association"
+  },
+  "notProvided": "Not provided",
+  "@notProvided": {
+    "description": "Placeholder when an optional profile field was not provided"
+  },
+  "readOnly": "Read Only",
+  "@readOnly": {
+    "description": "Badge indicating non-editable field"
+  },
+  "emailHelper": "Your login email is managed through your account",
+  "@emailHelper": {
+    "description": "Helper explaining read-only email"
+  },
+  "verifiedLoginPhone": "Verified Login Phone",
+  "@verifiedLoginPhone": {
+    "description": "Label when phone was verified at auth"
+  },
+  "contactPhoneNumber": "Contact Phone Number",
+  "@contactPhoneNumber": {
+    "description": "Label for contact phone"
+  },
+  "verifiedAuth": "Verified Auth",
+  "@verifiedAuth": {
+    "description": "Badge for auth-verified phone"
+  },
+  "verifiedPhoneHelper": "This phone number is verified and tied to your login credentials",
+  "@verifiedPhoneHelper": {
+    "description": "Helper for verified phone"
+  },
+  "enter10DigitPhoneHint": "Enter 10-digit mobile number",
+  "@enter10DigitPhoneHint": {
+    "description": "Hint for contact phone"
+  },
+  "contactPhoneHelper": "Used to contact you about your business (Contact phone only)",
+  "@contactPhoneHelper": {
+    "description": "Helper for contact phone"
+  },
+  "step2Header": "Business & Craft Details",
+  "@step2Header": {
+    "description": "Header inside Step 2 card"
+  },
+  "step2Description": "Tell buyers about your enterprise, workshop, or home-based artisanal work.",
+  "@step2Description": {
+    "description": "Description inside Step 2 card"
+  },
+  "businessNameLabel": "Business / Workshop Name *",
+  "@businessNameLabel": {
+    "description": "Business name input label with required star"
+  },
+  "businessNameHint": "e.g. Sharma Pickles, Punjab Phulkari Works",
+  "@businessNameHint": {
+    "description": "Business name input hint"
+  },
+  "businessNameHelper": "Name of your business, workshop, or home-based work",
+  "@businessNameHelper": {
+    "description": "Business name helper text"
+  },
+  "craftCategoryLabel": "Craft / Product Category *",
+  "@craftCategoryLabel": {
+    "description": "Craft category label with star"
+  },
+  "craftCategoryHelper": "Select your main product category so commercial buyers can find you easily",
+  "@craftCategoryHelper": {
+    "description": "Craft category helper"
+  },
+  "specifyCategory": "Specify Your Category *",
+  "@specifyCategory": {
+    "description": "Custom category label with star"
+  },
+  "specifyCategoryHint": "e.g. Bamboo Crafts, Clay Pottery, Stone Carving",
+  "@specifyCategoryHint": {
+    "description": "Custom category hint"
+  },
+  "specifyCategoryHelper": "Enter your custom artisanal or product category",
+  "@specifyCategoryHelper": {
+    "description": "Custom category helper"
+  },
+  "shortDescriptionLabel": "Short Description (Optional)",
+  "@shortDescriptionLabel": {
+    "description": "Bio description label"
+  },
+  "shortDescriptionHint": "Tell buyers what you make in a few words (e.g. handwoven cotton stoles using organic natural dyes)",
+  "@shortDescriptionHint": {
+    "description": "Bio description hint"
+  },
+  "shortDescriptionHelper": "Tell buyers what you make in a few words",
+  "@shortDescriptionHelper": {
+    "description": "Bio description helper"
+  },
+  "catFood": "Food & Homemade Products",
+  "@catFood": {
+    "description": "Category: Food"
+  },
+  "catHandicrafts": "Handicrafts",
+  "@catHandicrafts": {
+    "description": "Category: Handicrafts"
+  },
+  "catHandloom": "Handloom & Textiles",
+  "@catHandloom": {
+    "description": "Category: Handloom"
+  },
+  "catClothing": "Clothing & Embroidery",
+  "@catClothing": {
+    "description": "Category: Clothing"
+  },
+  "catJewellery": "Jewellery & Accessories",
+  "@catJewellery": {
+    "description": "Category: Jewellery"
+  },
+  "catWoodwork": "Woodwork",
+  "@catWoodwork": {
+    "description": "Category: Woodwork"
+  },
+  "catMetalCraft": "Metal Craft",
+  "@catMetalCraft": {
+    "description": "Category: Metal"
+  },
+  "catHomeDecor": "Home Decor",
+  "@catHomeDecor": {
+    "description": "Category: Home Decor"
+  },
+  "catBeauty": "Beauty / Personal Care",
+  "@catBeauty": {
+    "description": "Category: Beauty"
+  },
+  "catOther": "Other",
+  "@catOther": {
+    "description": "Category: Other"
+  },
+  "step3Header": "Workshop Location",
+  "@step3Header": {
+    "description": "Header inside Step 3 card"
+  },
+  "step3Description": "Provide your workshop or home production address so commercial buyers can calculate logistics and pickup.",
+  "@step3Description": {
+    "description": "Description inside Step 3 card"
+  },
+  "stateLabel": "State / Union Territory *",
+  "@stateLabel": {
+    "description": "State dropdown label with required star"
+  },
+  "selectStateHint": "Select your state or union territory",
+  "@selectStateHint": {
+    "description": "State dropdown hint"
+  },
+  "districtLabel": "District *",
+  "@districtLabel": {
+    "description": "District label with star"
+  },
+  "districtHint": "e.g. Jaipur, Ludhiana",
+  "@districtHint": {
+    "description": "District hint"
+  },
+  "districtHelper": "District where you make your products",
+  "@districtHelper": {
+    "description": "District helper text"
+  },
+  "cityVillageLabel": "City / Village *",
+  "@cityVillageLabel": {
+    "description": "City or village label with star"
+  },
+  "cityVillageHint": "e.g. Sanganer, Khanna",
+  "@cityVillageHint": {
+    "description": "City or village hint"
+  },
+  "cityVillageHelper": "Your city, town, or village",
+  "@cityVillageHelper": {
+    "description": "City or village helper"
+  },
+  "pincodeLabel": "Pincode *",
+  "@pincodeLabel": {
+    "description": "Pincode label with star"
+  },
+  "pincodeHint": "e.g. 302029",
+  "@pincodeHint": {
+    "description": "Pincode hint"
+  },
+  "pincodeHelper": "6-digit postal PIN code (cannot start with 0)",
+  "@pincodeHelper": {
+    "description": "Pincode helper"
+  },
+  "addressLabel": "Workshop / Business Address *",
+  "@addressLabel": {
+    "description": "Address label with star"
+  },
+  "addressHint": "Street, landmark, lane, or house/unit details...",
+  "@addressHint": {
+    "description": "Address hint"
+  },
+  "addressHelper": "Where you make or manage your products",
+  "@addressHelper": {
+    "description": "Address helper"
+  },
+  "step4Header": "Identity & Compliance",
+  "@step4Header": {
+    "description": "Header inside Step 4 card"
+  },
+  "step4Description": "Verify your details to build trust with buyers.",
+  "@step4Description": {
+    "description": "Description inside Step 4 card"
+  },
+  "demoDisclosure": "Demo verification environment • Verification is simulated in this prototype.",
+  "@demoDisclosure": {
+    "description": "Disclosure banner in Step 4"
+  },
+  "panVerification": "PAN Verification",
+  "@panVerification": {
+    "description": "Title for PAN card in unverified state"
+  },
+  "panVerified": "Verified",
+  "@panVerified": {
+    "description": "Badge when PAN is verified"
+  },
+  "secureIdentityVerification": "Secure identity verification",
+  "@secureIdentityVerification": {
+    "description": "Subtitle for PAN card unverified"
+  },
+  "verifiedInDemoEnvironment": "Verified in demo verification environment",
+  "@verifiedInDemoEnvironment": {
+    "description": "Subtitle for PAN card verified"
+  },
+  "verifiedPan": "Verified PAN",
+  "@verifiedPan": {
+    "description": "Label for verified PAN box"
+  },
+  "editDetails": "Edit Details",
+  "@editDetails": {
+    "description": "Action to reset and re-enter PAN"
+  },
+  "panSecurityNote": "Your PAN details are securely verified. Plaintext PAN is never stored.",
+  "@panSecurityNote": {
+    "description": "Security note under verified PAN"
+  },
+  "panNumberLabel": "PAN Number *",
+  "@panNumberLabel": {
+    "description": "PAN number input label with star"
+  },
+  "panNumberHint": "ABCDE1234F",
+  "@panNumberHint": {
+    "description": "PAN number input hint"
+  },
+  "panNumberHelper": "10-character alphanumeric PAN",
+  "@panNumberHelper": {
+    "description": "PAN number helper"
+  },
+  "nameAsPerPanLabel": "Name as per PAN *",
+  "@nameAsPerPanLabel": {
+    "description": "Name as per PAN label with star"
+  },
+  "nameAsPerPanHint": "Enter name as shown on PAN card",
+  "@nameAsPerPanHint": {
+    "description": "Name as per PAN hint"
+  },
+  "nameAsPerPanHelper": "Must match official PAN records",
+  "@nameAsPerPanHelper": {
+    "description": "Name as per PAN helper"
+  },
+  "dobLabel": "Date of Birth *",
+  "@dobLabel": {
+    "description": "Date of birth label with star"
+  },
+  "selectDobHint": "Select Date of Birth (DD/MM/YYYY)",
+  "@selectDobHint": {
+    "description": "Date of birth picker hint"
+  },
+  "panPrivacyShield": "Your PAN number is used only for verification and is not stored in plain text.",
+  "@panPrivacyShield": {
+    "description": "Privacy shield note above PAN verify button"
+  },
+  "verifyPan": "Verify PAN",
+  "@verifyPan": {
+    "description": "PAN verify button label"
+  },
+  "checkingDetails": "Checking Details...",
+  "@checkingDetails": {
+    "description": "Button label during verification"
+  },
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Button label when verification failed"
+  },
+  "aadhaarVerification": "Aadhaar Verification",
+  "@aadhaarVerification": {
+    "description": "Title for Aadhaar card"
+  },
+  "aadhaarSubtitle": "Identity verification via authorized service",
+  "@aadhaarSubtitle": {
+    "description": "Subtitle for Aadhaar card"
+  },
+  "aadhaarDescription": "Verify your identity using Aadhaar. Fast, secure, and helps build trust with commercial buyers.",
+  "@aadhaarDescription": {
+    "description": "Description on Aadhaar card"
+  },
+  "verifyAadhaar": "Verify Aadhaar",
+  "@verifyAadhaar": {
+    "description": "Button label to open Aadhaar dialog"
+  },
+  "aadhaarDialogContent": "Aadhaar verification will be available through an authorized verification service. It is not enabled in this prototype.",
+  "@aadhaarDialogContent": {
+    "description": "Content of Aadhaar dialog"
+  },
+  "gotIt": "Got It",
+  "@gotIt": {
+    "description": "Action button on Aadhaar dialog"
+  },
+  "gstRegistration": "GST Registration",
+  "@gstRegistration": {
+    "description": "Title for GST card"
+  },
+  "gstDeclared": "Declared GST registration",
+  "@gstDeclared": {
+    "description": "Subtitle when GST registered is declared"
+  },
+  "gstStatusSubtitle": "Business tax registration status",
+  "@gstStatusSubtitle": {
+    "description": "Subtitle when GST is not declared"
+  },
+  "areYouGstRegistered": "Are you registered for GST? *",
+  "@areYouGstRegistered": {
+    "description": "Question for GST registration"
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes choice"
+  },
+  "no": "No",
+  "@no": {
+    "description": "No choice"
+  },
+  "gstNotRegisteredNotice": "GST not registered. Micro-producers below registration thresholds can continue without GST.",
+  "@gstNotRegisteredNotice": {
+    "description": "Information box when No is chosen for GST"
+  },
+  "gstinNumberLabel": "GSTIN Number *",
+  "@gstinNumberLabel": {
+    "description": "GSTIN number label with star"
+  },
+  "gstinHint": "07AAAAA0000A1Z5",
+  "@gstinHint": {
+    "description": "GSTIN input hint"
+  },
+  "gstinHelper": "15-character alphanumeric GSTIN",
+  "@gstinHelper": {
+    "description": "GSTIN helper text"
+  },
+  "verifyGstin": "Verify GSTIN",
+  "@verifyGstin": {
+    "description": "Button to format-check GSTIN"
+  },
+  "gstUpcomingNotice": "GST verification integration will be added next.",
+  "@gstUpcomingNotice": {
+    "description": "Information message after format-checking GSTIN"
+  },
+  "badgeNotVerified": "Not Verified",
+  "@badgeNotVerified": {
+    "description": "Verification badge: not verified"
+  },
+  "badgeChecking": "Checking...",
+  "@badgeChecking": {
+    "description": "Verification badge: checking"
+  },
+  "badgeVerified": "Verified",
+  "@badgeVerified": {
+    "description": "Verification badge: verified"
+  },
+  "badgeCouldNotVerify": "Could Not Verify",
+  "@badgeCouldNotVerify": {
+    "description": "Verification badge: could not verify"
+  },
+  "badgeComingSoon": "Coming Soon",
+  "@badgeComingSoon": {
+    "description": "Verification badge: coming soon"
+  },
+  "badgeNotRegistered": "Not Registered",
+  "@badgeNotRegistered": {
+    "description": "Verification badge: not registered"
+  },
+  "step5CardTitle": "Review & Submit Onboarding",
+  "@step5CardTitle": {
+    "description": "Title on Step 5 review card"
+  },
+  "step5CardDescription": "Review your profile setup before submitting. You can edit your craft catalog anytime from your dashboard.",
+  "@step5CardDescription": {
+    "description": "Description on Step 5 review card"
+  },
+  "profileStatus": "Profile Status",
+  "@profileStatus": {
+    "description": "Label for profile status in review"
+  },
+  "readyForSubmission": "Ready for Submission",
+  "@readyForSubmission": {
+    "description": "Value for ready for submission"
+  },
+  "nextStage": "Next Stage",
+  "@nextStage": {
+    "description": "Label for next stage in review"
+  },
+  "nextStageDescription": "Direct access to Buyer Needs & Products",
+  "@nextStageDescription": {
+    "description": "Value describing direct access after onboarding"
+  },
+  "welcomeProducer": "Welcome, {name}",
+  "@welcomeProducer": {
+    "description": "Greeting with producer name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "producerDefaultName": "Producer",
+  "@producerDefaultName": {
+    "description": "Default fallback name for producer"
+  },
+  "producerHomeSubtitle": "Manage your craft and connect with buyers",
+  "@producerHomeSubtitle": {
+    "description": "Subtitle below producer greeting on Home"
+  },
+  "addProductActionSubtitle": "Show buyers what you make",
+  "@addProductActionSubtitle": {
+    "description": "Subtitle on the primary Add Product action card"
+  },
+  "myProductsShortcutSubtitle": "See the products you have added",
+  "@myProductsShortcutSubtitle": {
+    "description": "Subtitle for My Products shortcut"
+  },
+  "buyerNeedsShortcutSubtitle": "See what buyers are looking for",
+  "@buyerNeedsShortcutSubtitle": {
+    "description": "Subtitle for Buyer Needs shortcut"
+  },
+  "whatBuyersWantShortcutSubtitle": "See what products people want",
+  "@whatBuyersWantShortcutSubtitle": {
+    "description": "Subtitle for What Buyers Want shortcut"
+  },
+  "noProductsListedTitle": "No products added yet",
+  "@noProductsListedTitle": {
+    "description": "Title for empty products status card"
+  },
+  "noProductsListedSubtitle": "Add your first product so buyers can discover your craft",
+  "@noProductsListedSubtitle": {
+    "description": "Subtitle for empty products status card"
+  },
+  "buyerNeedsWaitingTitle": "Buyer needs will appear here",
+  "@buyerNeedsWaitingTitle": {
+    "description": "Title for waiting buyer needs status card"
+  },
+  "buyerNeedsWaitingSubtitle": "Buyer requests will be listed here when available",
+  "@buyerNeedsWaitingSubtitle": {
+    "description": "Subtitle for waiting buyer needs status card"
+  },
+  "featureComingSoon": "This feature will be available in the next update",
+  "@featureComingSoon": {
+    "description": "Description on placeholder destinations"
+  },
+  "signOutAction": "Sign Out",
+  "@signOutAction": {
+    "description": "Sign out button label"
+  },
+  "myProductsSubtitle": "Manage the products you make and sell",
+  "@myProductsSubtitle": {
+    "description": "Subtitle for My Products header"
+  },
+  "filterAll": "All",
+  "@filterAll": {
+    "description": "Filter tab for all products"
+  },
+  "filterActive": "Active",
+  "@filterActive": {
+    "description": "Filter tab for active products"
+  },
+  "filterDraft": "Draft",
+  "@filterDraft": {
+    "description": "Filter tab for draft products"
+  },
+  "filterHidden": "Inactive",
+  "@filterHidden": {
+    "description": "Filter tab for inactive products"
+  },
+  "statusActive": "Active",
+  "@statusActive": {
+    "description": "Status badge for active products"
+  },
+  "statusDraft": "Draft",
+  "@statusDraft": {
+    "description": "Status badge for draft products"
+  },
+  "statusHidden": "Inactive",
+  "@statusHidden": {
+    "description": "Status badge for hidden/inactive products"
+  },
+  "priceNotSet": "Price not set",
+  "@priceNotSet": {
+    "description": "Label when product price is not specified"
+  },
+  "draftNeedsCompletion": "Needs price or details",
+  "@draftNeedsCompletion": {
+    "description": "Indicator on draft cards that product details are incomplete"
+  },
+  "noActiveProductsTitle": "No active products",
+  "@noActiveProductsTitle": {
+    "description": "Title when active filter has zero results"
+  },
+  "noActiveProductsSubtitle": "Products ready for listing will appear here",
+  "@noActiveProductsSubtitle": {
+    "description": "Subtitle when active filter has zero results"
+  },
+  "noDraftProductsTitle": "No draft products",
+  "@noDraftProductsTitle": {
+    "description": "Title when draft filter has zero results"
+  },
+  "noDraftProductsSubtitle": "Products that still need details will appear here",
+  "@noDraftProductsSubtitle": {
+    "description": "Subtitle when draft filter has zero results"
+  },
+  "noHiddenProductsTitle": "No inactive products",
+  "@noHiddenProductsTitle": {
+    "description": "Title when hidden/inactive filter has zero results"
+  },
+  "noHiddenProductsSubtitle": "Products you temporarily hide will appear here",
+  "@noHiddenProductsSubtitle": {
+    "description": "Subtitle when hidden/inactive filter has zero results"
+  },
+  "showAllProducts": "Show All Products",
+  "@showAllProducts": {
+    "description": "Button to clear filters and view all products"
+  },
+  "unableToLoadProducts": "We couldn't load your products",
+  "@unableToLoadProducts": {
+    "description": "Error title when product loading fails"
+  },
+  "unableToLoadSubtitle": "Please check your connection and try again",
+  "@unableToLoadSubtitle": {
+    "description": "Error subtitle when product loading fails"
+  },
+  "notAuthenticatedMessage": "Please sign in to view your products",
+  "@notAuthenticatedMessage": {
+    "description": "Error message when user is not authenticated"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button label"
+  },
+  "hideAction": "Hide",
+  "@hideAction": {
+    "description": "Action button to hide a product"
+  },
+  "showAction": "Show",
+  "@showAction": {
+    "description": "Action button to activate/show a product"
+  },
+  "deleteAction": "Delete",
+  "@deleteAction": {
+    "description": "Action button to delete a product"
+  },
+  "deleteProductTitle": "Delete Product?",
+  "@deleteProductTitle": {
+    "description": "Title of delete confirmation dialog"
+  },
+  "deleteProductConfirmation": "Are you sure you want to delete this product? This action cannot be undone.",
+  "@deleteProductConfirmation": {
+    "description": "Body message of delete confirmation dialog"
+  },
+  "productHiddenSuccess": "Product hidden",
+  "@productHiddenSuccess": {
+    "description": "Feedback message when product is hidden"
+  },
+  "productActivatedSuccess": "Product marked active",
+  "@productActivatedSuccess": {
+    "description": "Feedback message when product is activated"
+  },
+  "productDeletedSuccess": "Product deleted",
+  "@productDeletedSuccess": {
+    "description": "Feedback message when product is deleted"
+  },
+  "productActionFailed": "Unable to update product. Please try again.",
+  "@productActionFailed": {
+    "description": "Error feedback when updating product status fails"
+  },
+  "productDeleteFailed": "Unable to delete product. Please try again.",
+  "@productDeleteFailed": {
+    "description": "Error feedback when deleting product fails"
+  },
+  "stepCount": "Step {current} of {total}",
+  "@stepCount": {
+    "description": "Progress step indicator text",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "addProductStep1Title": "What do you make?",
+  "@addProductStep1Title": {
+    "description": "Title for Add Product Step 1"
+  },
+  "addProductStep2Title": "Price & Details",
+  "@addProductStep2Title": {
+    "description": "Title for Add Product Step 2"
+  },
+  "addProductStep3Title": "Add Photos & Save",
+  "@addProductStep3Title": {
+    "description": "Title for Add Product Step 3"
+  },
+  "productNameLabel": "Product name",
+  "@productNameLabel": {
+    "description": "Label for product name input field"
+  },
+  "productNameHint": "e.g. Homemade Mango Pickle",
+  "@productNameHint": {
+    "description": "Placeholder hint for product name"
+  },
+  "productNameRequired": "Please enter a product name first",
+  "@productNameRequired": {
+    "description": "Validation error when continuing with empty product name"
+  },
+  "categoryLabel": "Category",
+  "@categoryLabel": {
+    "description": "Label for category selector"
+  },
+  "categoryFood": "Food",
+  "@categoryFood": {
+    "description": "Category option: Food"
+  },
+  "categoryHandicraft": "Handicraft",
+  "@categoryHandicraft": {
+    "description": "Category option: Handicraft"
+  },
+  "categoryClothing": "Clothing",
+  "@categoryClothing": {
+    "description": "Category option: Clothing"
+  },
+  "categoryHome": "Home Products",
+  "@categoryHome": {
+    "description": "Category option: Home Products"
+  },
+  "categoryBeauty": "Beauty & Care",
+  "@categoryBeauty": {
+    "description": "Category option: Beauty & Care"
+  },
+  "categoryJewellery": "Jewellery",
+  "@categoryJewellery": {
+    "description": "Category option: Jewellery"
+  },
+  "categoryOther": "Other",
+  "@categoryOther": {
+    "description": "Category option: Other"
+  },
+  "customCategoryLabel": "Describe category",
+  "@customCategoryLabel": {
+    "description": "Label for custom category text input"
+  },
+  "unitLabel": "Unit",
+  "@unitLabel": {
+    "description": "Label for measurement unit selector"
+  },
+  "unitPiece": "Piece",
+  "@unitPiece": {
+    "description": "Unit option: Piece"
+  },
+  "unitKg": "Kilogram (kg)",
+  "@unitKg": {
+    "description": "Unit option: Kilogram"
+  },
+  "unitGram": "Gram (g)",
+  "@unitGram": {
+    "description": "Unit option: Gram"
+  },
+  "unitLitre": "Litre (L)",
+  "@unitLitre": {
+    "description": "Unit option: Litre"
+  },
+  "unitMl": "Millilitre (ml)",
+  "@unitMl": {
+    "description": "Unit option: Millilitre"
+  },
+  "unitPack": "Pack",
+  "@unitPack": {
+    "description": "Unit option: Pack"
+  },
+  "unitDozen": "Dozen",
+  "@unitDozen": {
+    "description": "Unit option: Dozen"
+  },
+  "priceLabel": "Price",
+  "@priceLabel": {
+    "description": "Label for price input field"
+  },
+  "priceHelper": "Enter the price for one unit",
+  "@priceHelper": {
+    "description": "Helper text for price input"
+  },
+  "priceInvalidError": "Please enter a valid price (e.g. 250 or 250.50)",
+  "@priceInvalidError": {
+    "description": "Error text for invalid price input"
+  },
+  "descriptionLabel": "Tell buyers about your product",
+  "@descriptionLabel": {
+    "description": "Label for description field"
+  },
+  "descriptionHelper": "What is it made from? What makes it special?",
+  "@descriptionHelper": {
+    "description": "Helper text for description field"
+  },
+  "addPhotosHeading": "Add Photos",
+  "@addPhotosHeading": {
+    "description": "Heading for photos step"
+  },
+  "addPhotosSubtitle": "Photos help buyers see the quality of your craft",
+  "@addPhotosSubtitle": {
+    "description": "Subtitle for photos step"
+  },
+  "photoUploadComingNext": "Photo selection will be added next",
+  "@photoUploadComingNext": {
+    "description": "Temporary message indicating photo picker arrives in next step"
+  },
+  "saveDraftAction": "Save Draft",
+  "@saveDraftAction": {
+    "description": "Action button to save current product as a draft"
+  },
+  "markReadyAction": "Mark Ready",
+  "@markReadyAction": {
+    "description": "Action button to mark product ready/active"
+  },
+  "markReadyGuidance": "Add name, category, and price to mark ready",
+  "@markReadyGuidance": {
+    "description": "Guidance message explaining what is missing to mark product ready"
+  },
+  "draftSavedMessage": "Draft saved",
+  "@draftSavedMessage": {
+    "description": "Feedback message when draft is saved"
+  },
+  "productMarkedReadyMessage": "Product marked ready",
+  "@productMarkedReadyMessage": {
+    "description": "Feedback message when product is marked active/ready"
+  },
+  "saveDraftFailed": "Could not save draft. Please try again.",
+  "@saveDraftFailed": {
+    "description": "Error feedback when saving draft fails"
+  },
+  "markReadyFailed": "Could not mark ready. Please try again.",
+  "@markReadyFailed": {
+    "description": "Error feedback when marking ready fails"
+  },
+  "myOrders": "My Orders",
+  "@myOrders": {
+    "description": "Added for profile screen"
+  },
+  "wishlist": "Wishlist",
+  "@wishlist": {
+    "description": "Added for profile screen"
+  },
+  "myRequirements": "My Requirements",
+  "@myRequirements": {
+    "description": "Added for profile screen"
+  },
+  "businessInformation": "Business Information",
+  "@businessInformation": {
+    "description": "Added for profile screen"
+  },
+  "businessName": "Business Name",
+  "@businessName": {
+    "description": "Label for business name"
+  },
+  "category": "Category",
+  "@category": {
+    "description": "Added for profile screen"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Label for email"
+  },
+  "phone": "Phone",
+  "@phone": {
+    "description": "Added for profile screen"
+  },
+  "address": "Address",
+  "@address": {
+    "description": "Added for profile screen"
+  },
+  "recentActivity": "Recent Activity",
+  "@recentActivity": {
+    "description": "Added for profile screen"
+  },
+  "quickLinks": "Quick Links",
+  "@quickLinks": {
+    "description": "Added for profile screen"
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Added for profile screen"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Added for profile screen"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Added for profile screen"
+  },
+  "navDiscover": "Discover",
+  "@navDiscover": {
+    "description": "Bottom navigation bar item"
+  },
+  "navSearch": "Search",
+  "@navSearch": {
+    "description": "Bottom navigation bar item"
+  },
+  "navOrders": "Orders",
+  "@navOrders": {
+    "description": "Bottom navigation bar item"
+  },
+  "navAccount": "Account",
+  "@navAccount": {
+    "description": "Bottom navigation bar item"
+  },
+  "searchHint": "Search for Products, Brands and More",
+  "@searchHint": {
+    "description": "Added for Home tab"
+  },
+  "allCategories": "All Categories",
+  "@allCategories": {
+    "description": "Added for Home tab"
+  },
+  "handlooms": "Handlooms",
+  "@handlooms": {
+    "description": "Added for Home tab"
+  },
+  "spices": "Spices",
+  "@spices": {
+    "description": "Added for Home tab"
+  },
+  "handicrafts": "Handicrafts",
+  "@handicrafts": {
+    "description": "Added for Home tab"
+  },
+  "food": "Food",
+  "@food": {
+    "description": "Added for Home tab"
+  },
+  "gifting": "Gifting",
+  "@gifting": {
+    "description": "Added for Home tab"
+  },
+  "forYou": "For You",
+  "@forYou": {
+    "description": "Added for Home tab"
+  },
+  "textiles": "Textiles",
+  "@textiles": {
+    "description": "Added for Home tab"
+  },
+  "recommendedForYou": "Recommended For You",
+  "@recommendedForYou": {
+    "description": "Added for Home tab"
+  },
+  "viewAll": "VIEW ALL",
+  "@viewAll": {
+    "description": "Added for Home tab"
+  },
+  "noProductsFound": "No products found.",
+  "@noProductsFound": {
+    "description": "Added for Home tab"
+  },
+  "orderNow": "Order Now",
+  "@orderNow": {
+    "description": "Added for Home tab"
+  },
+  "addedToWishlist": "Added to wishlist",
+  "@addedToWishlist": {
+    "description": "Added for Home tab"
+  },
+  "removedFromWishlist": "Removed from wishlist",
+  "@removedFromWishlist": {
+    "description": "Added for Home tab"
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Added for Home tab"
+  },
+  "filterByCategory": "Filter by Category",
+  "@filterByCategory": {
+    "description": "Added for Home tab"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Added for Home tab"
+  },
+  "searchProducts": "Search products...",
+  "@searchProducts": {
+    "description": "Added for search and requests screen"
+  },
+  "myCart": "My Cart",
+  "@myCart": {
+    "description": "Added for search and requests screen"
+  },
+  "noProducts": "No Products",
+  "@noProducts": {
+    "description": "Added for search and requests screen"
+  },
+  "noProductsCategory": "No products available in this category yet.",
+  "@noProductsCategory": {
+    "description": "Added for search and requests screen"
+  },
+  "noRequests": "No requests yet",
+  "@noRequests": {
+    "description": "Added for search and requests screen"
+  },
+  "noRequestsSub": "Post a custom requirement to start receiving quotes from verified producers.",
+  "@noRequestsSub": {
+    "description": "Added for search and requests screen"
+  },
+  "responsesText": "Responses",
+  "@responsesText": {
+    "description": "Added for search and requests screen"
+  },
+  "receivingQuotes": "Receiving Quotes",
+  "@receivingQuotes": {
+    "description": "Added for search and requests screen"
+  },
+  "closed": "Closed",
+  "@closed": {
+    "description": "Added for search and requests screen"
+  },
+  "createYourAccountTitle": "Create Your Account",
+  "@createYourAccountTitle": {
+    "description": "Header for Step 1 producer signup"
+  },
+  "createAccountSupportingCopy": "Start setting up your business on VyaparSetu.",
+  "@createAccountSupportingCopy": {
+    "description": "Supporting copy for Step 1 producer signup"
+  },
+  "verifyYourEmailTitle": "Verify Your Email",
+  "@verifyYourEmailTitle": {
+    "description": "Header for email OTP verification screen"
+  },
+  "verifyYourEmailSubtitle": "We sent a 6-digit code to {email}",
+  "@verifyYourEmailSubtitle": {
+    "description": "Subtitle on email OTP screen showing masked email",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "enterOtpPrompt": "Enter 6-digit verification code",
+  "@enterOtpPrompt": {
+    "description": "Label above 6-digit OTP input"
+  },
+  "verifyAndContinue": "Verify & Continue",
+  "@verifyAndContinue": {
+    "description": "Primary action button to verify OTP"
+  },
+  "resendCode": "Resend Code",
+  "@resendCode": {
+    "description": "Button to resend email verification code"
+  },
+  "resendCodeIn": "Resend Code in {seconds}s",
+  "@resendCodeIn": {
+    "description": "Cooldown indicator on resend button",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "changeEmail": "Change Email",
+  "@changeEmail": {
+    "description": "Button to go back and change email address"
+  },
+  "otpInvalidLength": "Please enter a valid 6-digit code",
+  "@otpInvalidLength": {
+    "description": "Error shown when OTP is fewer than 6 digits"
+  },
+  "otpIncorrectOrExpired": "That code is incorrect or has expired.",
+  "@otpIncorrectOrExpired": {
+    "description": "Error shown when OTP verification fails"
+  },
+  "otpSentSuccess": "A new 6-digit code has been sent to your email.",
+  "@otpSentSuccess": {
+    "description": "Success message when OTP is resent"
+  },
+  "filterInactive": "Inactive",
+  "@filterInactive": {
+    "description": "Filter tab for inactive products"
+  },
+  "statusInactive": "Inactive",
+  "@statusInactive": {
+    "description": "Status badge for inactive products"
+  },
+  "editAction": "Edit",
+  "@editAction": {
+    "description": "Action button to edit a product"
+  },
+  "continueEditingAction": "Continue Editing",
+  "@continueEditingAction": {
+    "description": "Action button to continue editing a draft product"
+  },
+  "saveChangesAction": "Save Changes",
+  "@saveChangesAction": {
+    "description": "Action button to save edits to an existing product"
+  },
+  "makeActiveAction": "Make Active",
+  "@makeActiveAction": {
+    "description": "Action button to make an inactive product active"
+  },
+  "makeInactiveAction": "Make Inactive",
+  "@makeInactiveAction": {
+    "description": "Action button to make an active product inactive"
+  },
+  "editProductTitle": "Edit Product",
+  "@editProductTitle": {
+    "description": "Modal title when editing an existing product"
+  },
+  "editProductHelper": "Update your product details and photos",
+  "@editProductHelper": {
+    "description": "Modal subtitle when editing an existing product"
+  },
+  "deleteProductConfirmTitle": "Delete product?",
+  "@deleteProductConfirmTitle": {
+    "description": "Confirmation title when deleting a product"
+  },
+  "deleteProductConfirmBody": "This will permanently remove this product and its photos.",
+  "@deleteProductConfirmBody": {
+    "description": "Confirmation body when deleting a product"
+  },
+  "productUpdatedSuccess": "Product updated",
+  "@productUpdatedSuccess": {
+    "description": "Toast message when product details are updated"
+  },
+  "productMadeActiveSuccess": "Product made active",
+  "@productMadeActiveSuccess": {
+    "description": "Toast message when product is made active"
+  },
+  "productMadeInactiveSuccess": "Product made inactive",
+  "@productMadeInactiveSuccess": {
+    "description": "Toast message when product is made inactive"
+  },
+  "couldNotUpdateProduct": "Could not update product",
+  "@couldNotUpdateProduct": {
+    "description": "Error toast when product update fails"
+  },
+  "couldNotLoadProductPhoto": "Could not load product photo",
+  "@couldNotLoadProductPhoto": {
+    "description": "Error toast when product photo fails to load"
+  },
+  "incompleteProductCannotActivate": "Please edit product to fill name, category, and price before making it active.",
+  "@incompleteProductCannotActivate": {
+    "description": "Guidance toast when trying to activate an incomplete product"
+  },
+  "noInactiveProductsTitle": "No inactive products",
+  "@noInactiveProductsTitle": {
+    "description": "Title when inactive filter has zero results"
+  },
+  "noInactiveProductsSubtitle": "Products you mark as inactive will appear here",
+  "@noInactiveProductsSubtitle": {
+    "description": "Subtitle when inactive filter has zero results"
+  },
+  "whatBuyersWantSubtitle": "See sample market demand trends from different places.",
+  "@whatBuyersWantSubtitle": {
+    "description": "Subtitle for What Buyers Want screen"
+  },
+  "sampleMarketInsightsBadge": "Sample market insights",
+  "@sampleMarketInsightsBadge": {
+    "description": "Badge indicating market intelligence signals are sample data"
+  },
+  "sampleMarketInsightsNote": "These regional trends are based on sample market activity to help you understand buyer interest.",
+  "@sampleMarketInsightsNote": {
+    "description": "Note clarifying that market trends are sample data"
+  },
+  "demandHigh": "High demand",
+  "@demandHigh": {
+    "description": "High market demand label"
+  },
+  "demandMedium": "Medium demand",
+  "@demandMedium": {
+    "description": "Medium market demand label"
+  },
+  "demandLow": "Low demand",
+  "@demandLow": {
+    "description": "Low market demand label"
+  },
+  "demandScoreOutOf": "{score}/100",
+  "@demandScoreOutOf": {
+    "description": "Demand score out of 100",
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "signalDistrictLabel": "District: {district}",
+  "@signalDistrictLabel": {
+    "description": "Label for product district in market intelligence",
+    "placeholders": {
+      "district": {
+        "type": "String"
+      }
+    }
+  },
+  "topBuyingCityLabel": "Top buying city: {city}",
+  "@topBuyingCityLabel": {
+    "description": "Label for top purchasing city",
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "estimatedMonthlyDemandLabel": "Estimated monthly demand",
+  "@estimatedMonthlyDemandLabel": {
+    "description": "Label for estimated monthly demand"
+  },
+  "estimatedUnitsValue": "{count} units",
+  "@estimatedUnitsValue": {
+    "description": "Formatted units count",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "typicalOrderValueLabel": "Typical order value",
+  "@typicalOrderValueLabel": {
+    "description": "Label for typical order value"
+  },
+  "categoryAgriculture": "Agriculture",
+  "@categoryAgriculture": {
+    "description": "Category: Agriculture"
+  },
+  "categoryTextile": "Textile",
+  "@categoryTextile": {
+    "description": "Category: Textile"
+  },
+  "categoryFoodProcessing": "Food processing",
+  "@categoryFoodProcessing": {
+    "description": "Category: Food processing"
+  },
+  "categoryManufacturing": "Manufacturing",
+  "@categoryManufacturing": {
+    "description": "Category: Manufacturing"
+  },
+  "noMarketInsights": "No market insights available yet.",
+  "@noMarketInsights": {
+    "description": "Empty state message when no market signals are present"
+  },
+  "takePhotoAction": "Take Photo",
+  "@takePhotoAction": {
+    "description": "Option to take a photo using the device camera"
+  },
+  "chooseFromGalleryAction": "Choose from Gallery",
+  "@chooseFromGalleryAction": {
+    "description": "Option to select a photo from device photo library"
+  },
+  "uploadingPhotoProgress": "Uploading photo...",
+  "@uploadingPhotoProgress": {
+    "description": "Progress message while image is uploading"
+  },
+  "removePhotoAction": "Remove photo",
+  "@removePhotoAction": {
+    "description": "Tooltip/button to remove a photo"
+  },
+  "photoUploadFailed": "Photo could not be uploaded. Please try again.",
+  "@photoUploadFailed": {
+    "description": "Error message when image upload fails"
+  },
+  "unsupportedPhotoFormat": "Unsupported photo format. Please select a JPEG, PNG, or WebP photo.",
+  "@unsupportedPhotoFormat": {
+    "description": "Error message when chosen photo format is unsupported"
+  },
+  "photoTooLarge": "Photo exceeds 5 MB limit. Please select a smaller photo.",
+  "@photoTooLarge": {
+    "description": "Error message when chosen photo exceeds 5 MB"
+  },
+  "maxPhotosReached": "Maximum 4 photos reached",
+  "@maxPhotosReached": {
+    "description": "Notice when 4 photos have been added"
+  },
+  "tryAnotherPhoto": "Please choose another photo",
+  "@tryAnotherPhoto": {
+    "description": "Prompt asking the user to choose another image"
+  },
+  "removePhotoConfirmation": "Do you want to remove this photo?",
+  "@removePhotoConfirmation": {
+    "description": "Confirmation prompt before deleting a photo"
+  },
+  "photoRemovedMessage": "Photo removed",
+  "@photoRemovedMessage": {
+    "description": "Snackbar message when a photo is removed"
+  },
+  "choosePhotoSource": "Add Product Photo",
+  "@choosePhotoSource": {
+    "description": "Title of the photo source selection bottom sheet"
+  },
+  "deletePhoto": "Delete",
+  "@deletePhoto": {
+    "description": "Confirm button text to delete a photo"
+  },
+  "productMustBeSavedBeforePhotos": "Please save product draft before adding photos",
+  "@productMustBeSavedBeforePhotos": {
+    "description": "Error message when product must be saved before uploading photos"
+  },
+  "improvePhotoAction": "Improve Photo",
+  "@improvePhotoAction": {
+    "description": "Button label to improve a photo using AI"
+  },
+  "improvingPhotoProgress": "Improving photo...",
+  "@improvingPhotoProgress": {
+    "description": "Loading message when AI is processing photo"
+  },
+  "originalPhotoLabel": "Original",
+  "@originalPhotoLabel": {
+    "description": "Label for the original product photo"
+  },
+  "improvedPhotoLabel": "Improved",
+  "@improvedPhotoLabel": {
+    "description": "Label for the AI-improved product photo"
+  },
+  "keepOriginalAction": "Keep Original",
+  "@keepOriginalAction": {
+    "description": "Action to discard AI changes and keep original photo"
+  },
+  "useImprovedAction": "Use Improved Photo",
+  "@useImprovedAction": {
+    "description": "Action to accept AI improved photo"
+  },
+  "photoImprovedTitle": "Photo Improved",
+  "@photoImprovedTitle": {
+    "description": "Dialog or section title when photo has been improved by AI"
+  },
+  "photoImproveFailed": "Could not improve photo. Please try again.",
+  "@photoImproveFailed": {
+    "description": "Error message when AI photo improvement fails"
+  },
+  "aiImproveDisclaimer": "AI improves only the presentation, not your product.",
+  "@aiImproveDisclaimer": {
+    "description": "Truthfulness disclaimer for AI photo improvement"
+  },
+  "aiImproveHelpText": "Cleans background, improves lighting, and centers the product.",
+  "@aiImproveHelpText": {
+    "description": "Explanation of what AI photo improvement accomplishes"
+  },
+  "comparePhotosTitle": "Compare Photos",
+  "@comparePhotosTitle": {
+    "description": "Title for the photo comparison screen or dialog"
+  },
+  "photoImproveSuccessMessage": "Improved photo applied",
+  "@photoImproveSuccessMessage": {
+    "description": "Confirmation message when improved photo is selected"
+  },
+  "productPhotosTitle": "Product Photos",
+  "@productPhotosTitle": {
+    "description": "Title for product photos section in Add Product sheet"
+  },
+  "addPhotosNameFirst": "Add a product name before adding photos.",
+  "@addPhotosNameFirst": {
+    "description": "Validation message when attempting to add photos without a product name"
+  },
+  "choosePhotoAction": "Choose Photo",
+  "@choosePhotoAction": {
+    "description": "Action label to choose a photo on web or single-source platforms"
+  },
+  "addProductHelper": "Enter product details, price, and optional photos.",
+  "@addProductHelper": {
+    "description": "Friendly subtitle helper for Add Product sheet"
+  },
+  "discardChangesTitle": "Discard changes?",
+  "@discardChangesTitle": {
+    "description": "Title for confirmation dialog when closing form with unsaved changes"
+  },
+  "discardChangesMessage": "Your unsaved product details will be lost.",
+  "@discardChangesMessage": {
+    "description": "Message for confirmation dialog when closing form with unsaved changes"
+  },
+  "keepEditingAction": "Keep Editing",
+  "@keepEditingAction": {
+    "description": "Action button to keep editing when prompted to discard changes"
+  },
+  "discardAction": "Discard",
+  "@discardAction": {
+    "description": "Action button to discard changes and close modal"
+  },
+  "pickerUnavailableError": "Photo picker is not available on this device. Please restart the application.",
+  "@pickerUnavailableError": {
+    "description": "Error message when device/platform photo picker is not available"
+  },
+  "storageUnavailableError": "Image storage service is not available.",
+  "@storageUnavailableError": {
+    "description": "Error message when product image storage service is unavailable"
+  },
+  "productDetailsTitle": "Product Details",
+  "@productDetailsTitle": {
+    "description": "Title for product details view"
+  },
+  "noDescriptionAdded": "No description added",
+  "@noDescriptionAdded": {
+    "description": "Placeholder text when product description is empty"
+  },
+  "deleteProductAction": "Delete Product",
+  "@deleteProductAction": {
+    "description": "Menu action to delete a product"
+  },
+  "verificationAndCompliance": "Verification & Compliance",
+  "@verificationAndCompliance": {
+    "description": "Header for verification and compliance section"
+  },
+  "businessProducerInfo": "Business & Producer Details",
+  "@businessProducerInfo": {
+    "description": "Header for business and producer info section"
+  },
+  "accountAndSecurity": "Account & Security",
+  "@accountAndSecurity": {
+    "description": "Header for account and security section"
+  },
+  "helpAndAbout": "Help & About",
+  "@helpAndAbout": {
+    "description": "Header for help and about section"
+  },
+  "voiceGuidanceLanguage": "Voice Guidance Language",
+  "@voiceGuidanceLanguage": {
+    "description": "Label for voice guidance language setting"
+  },
+  "voiceGuidanceSameAsApp": "Same as App Language",
+  "@voiceGuidanceSameAsApp": {
+    "description": "Voice guidance option matching app language"
+  },
+  "verifiedProducer": "Verified Producer",
+  "@verifiedProducer": {
+    "description": "Badge for verified producer"
+  },
+  "unverifiedProducer": "Producer",
+  "@unverifiedProducer": {
+    "description": "Badge for unverified producer"
+  },
+  "panNotVerified": "Not Verified",
+  "@panNotVerified": {
+    "description": "Badge when PAN is not verified"
+  },
+  "identityVerified": "Completed",
+  "@identityVerified": {
+    "description": "Status when identity verification is complete"
+  },
+  "identityNotVerified": "Pending",
+  "@identityNotVerified": {
+    "description": "Status when identity verification is pending"
+  },
+  "gstRegisteredBadge": "Registered",
+  "@gstRegisteredBadge": {
+    "description": "Badge when GST is registered"
+  },
+  "gstNotRegisteredBadge": "Not Registered",
+  "@gstNotRegisteredBadge": {
+    "description": "Badge when GST is not registered"
+  },
+  "aadhaarStatusLabel": "Aadhaar Identity",
+  "@aadhaarStatusLabel": {
+    "description": "Label for Aadhaar status row"
+  },
+  "panIdentityLabel": "PAN Identity",
+  "@panIdentityLabel": {
+    "description": "Label for PAN identity row"
+  },
+  "gstComplianceLabel": "GST",
+  "@gstComplianceLabel": {
+    "description": "Label for GST compliance row"
+  },
+  "workshopLocationLabel": "Workshop Location",
+  "@workshopLocationLabel": {
+    "description": "Label for workshop location"
+  },
+  "resetPassword": "Reset Password",
+  "@resetPassword": {
+    "description": "Action to reset account password"
+  },
+  "resetPasswordDesc": "Send password reset instructions to your registered email",
+  "@resetPasswordDesc": {
+    "description": "Description for reset password action"
+  },
+  "resetPasswordSuccess": "Password reset link sent to your email",
+  "@resetPasswordSuccess": {
+    "description": "Confirmation when reset password email is dispatched"
+  },
+  "activeSession": "Current Session",
+  "@activeSession": {
+    "description": "Label for current session"
+  },
+  "activeSessionTruthful": "Signed in",
+  "@activeSessionTruthful": {
+    "description": "Description for signed in session status"
+  },
+  "signOutConfirmTitle": "Sign out of VyaparSetu?",
+  "@signOutConfirmTitle": {
+    "description": "Title of sign out confirmation dialog"
+  },
+  "signOutConfirmMessage": "Are you sure you want to sign out?",
+  "@signOutConfirmMessage": {
+    "description": "Body message of sign out confirmation dialog"
+  },
+  "howVyaparSetuWorks": "How VyaparSetu Works",
+  "@howVyaparSetuWorks": {
+    "description": "Title for how vyaparsetu works info dialog"
+  },
+  "howVyaparSetuWorksContent": "VyaparSetu connects artisan producers directly with verified bulk and retail buyers. Add your products, share photos, and respond to buyer inquiries with complete transparency.",
+  "@howVyaparSetuWorksContent": {
+    "description": "Description text for how vyaparsetu works"
+  },
+  "privacyAndData": "Privacy & Data",
+  "@privacyAndData": {
+    "description": "Title for privacy and data info dialog"
+  },
+  "privacyAndDataContent": "Sensitive identity information is minimized. Raw PAN is not displayed in the app. Aadhaar numbers are not displayed or carried in the Profile UI. Access to producer data is protected by authentication and database ownership policies.",
+  "@privacyAndDataContent": {
+    "description": "Description text for privacy and data"
+  },
+  "aboutVyaparSetu": "About VyaparSetu",
+  "@aboutVyaparSetu": {
+    "description": "Title for about vyaparsetu info dialog"
+  },
+  "aboutVyaparSetuContent": "VyaparSetu v1.0 — Empowering Indian artisan producers and manufacturers through direct commerce, localization, and trusted verification.",
+  "@aboutVyaparSetuContent": {
+    "description": "Description text for about vyaparsetu"
+  },
+  "phoneLabel": "Contact Phone",
+  "@phoneLabel": {
+    "description": "Label for contact phone"
+  },
+  "quickMenuTitle": "Quick Actions",
+  "@quickMenuTitle": {
+    "description": "Accessibility and tooltip for quick action menu"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "Button label for OK"
+  },
+  "craftCategory": "Craft Category",
+  "@craftCategory": {
+    "description": "Label for craft category"
+  },
+  "identityVerification": "Identity Verification",
+  "@identityVerification": {
+    "description": "Label for identity verification"
+  },
+  "producerRoleBadge": "Producer",
+  "@producerRoleBadge": {
+    "description": "Role badge for producer"
+  },
+  "signInWithEmailOtp": "Sign in with OTP",
+  "@signInWithEmailOtp": {
+    "description": "Button to sign in using email OTP"
+  },
+  "orDivider": "OR",
+  "@orDivider": {
+    "description": "Divider text between login methods"
+  },
+  "checkYourEmailTitle": "Check Your Email",
+  "@checkYourEmailTitle": {
+    "description": "Title for OTP sign-in verification stage"
+  },
+  "checkYourEmailSubtitle": "We sent a verification code to {email}",
+  "@checkYourEmailSubtitle": {
+    "description": "Subtitle for OTP sign-in showing masked email",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyAndSignIn": "Verify & Sign In",
+  "@verifyAndSignIn": {
+    "description": "Primary action button for OTP sign-in"
+  },
+  "forgotPasswordTitle": "Reset Your Password",
+  "@forgotPasswordTitle": {
+    "description": "Title for password recovery email entry"
+  },
+  "forgotPasswordSubtitle": "Enter your email address to receive a recovery code.",
+  "@forgotPasswordSubtitle": {
+    "description": "Subtitle for password recovery email entry"
+  },
+  "sendRecoveryCode": "Send Recovery Code",
+  "@sendRecoveryCode": {
+    "description": "Button to request password recovery code"
+  },
+  "recoveryEmailSentNeutralNotice": "If an account exists for this email, we've sent a verification code.",
+  "@recoveryEmailSentNeutralNotice": {
+    "description": "Account enumeration safe notice after requesting recovery"
+  },
+  "enterRecoveryCodeSubtitle": "Enter the verification code sent to {email}",
+  "@enterRecoveryCodeSubtitle": {
+    "description": "Subtitle for recovery OTP verification showing masked email",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyCode": "Verify Code",
+  "@verifyCode": {
+    "description": "Button to verify recovery OTP code"
+  },
+  "createNewPasswordTitle": "Create New Password",
+  "@createNewPasswordTitle": {
+    "description": "Title for set new password stage"
+  },
+  "createNewPasswordSubtitle": "Create a new strong password for your account.",
+  "@createNewPasswordSubtitle": {
+    "description": "Subtitle for set new password stage"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "Label for new password input"
+  },
+  "newPasswordHint": "Enter new password (min 6 characters)",
+  "@newPasswordHint": {
+    "description": "Hint for new password input"
+  },
+  "updatePassword": "Update Password",
+  "@updatePassword": {
+    "description": "Primary action button to update password"
+  },
+  "passwordUpdatedSuccess": "Your password has been updated.",
+  "@passwordUpdatedSuccess": {
+    "description": "Success message after password is updated"
+  },
+  "noAccountFoundWithEmail": "No account found with this email. Try signing up.",
+  "@noAccountFoundWithEmail": {
+    "description": "Error message when trying to sign in with OTP for an unregistered email"
+  }
+}

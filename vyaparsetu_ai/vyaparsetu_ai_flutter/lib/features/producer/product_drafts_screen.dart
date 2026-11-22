@@ -11,6 +11,14 @@ import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 import '../../providers/product_drafts_provider.dart';
 
+int? _paise(String text) {
+  final value = text.trim();
+  if (value.isEmpty) return null;
+  final number = double.tryParse(value);
+  if (number == null || number <= 0) return null;
+  return (number * 100).round();
+}
+
 class ProductDraftsScreen extends ConsumerStatefulWidget {
   const ProductDraftsScreen({super.key});
 
@@ -23,6 +31,9 @@ class _ProductDraftsScreenState extends ConsumerState<ProductDraftsScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _categoryController = TextEditingController();
+  final _unitController = TextEditingController(text: 'piece');
   final _speech = SpeechToText();
   Uint8List? _photo;
   bool _listening = false;
@@ -37,6 +48,9 @@ class _ProductDraftsScreenState extends ConsumerState<ProductDraftsScreen> {
     _speech.cancel();
     _nameController.dispose();
     _descriptionController.dispose();
+    _priceController.dispose();
+    _categoryController.dispose();
+    _unitController.dispose();
     super.dispose();
   }
 
@@ -54,10 +68,15 @@ class _ProductDraftsScreenState extends ConsumerState<ProductDraftsScreen> {
             name: _nameController.text.trim(),
             description: _descriptionController.text.trim(),
             photo: _photo == null ? null : ByteData.sublistView(_photo!),
+            pricePaise: _paise(_priceController.text),
+            category: _categoryController.text.trim(),
+            unit: _unitController.text.trim(),
           );
       if (!mounted) return;
       _nameController.clear();
       _descriptionController.clear();
+      _priceController.clear();
+      _categoryController.clear();
       setState(() => _photo = null);
       _formKey.currentState?.reset();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -255,6 +274,42 @@ class _ProductDraftsScreenState extends ConsumerState<ProductDraftsScreen> {
                             }
                             return null;
                           },
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _priceController,
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                      decimal: true,
+                                    ),
+                                decoration: const InputDecoration(
+                                  labelText: 'Price (₹)',
+                                  hintText: '499',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _categoryController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Category',
+                                  hintText: 'Pottery',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _unitController,
+                          decoration: const InputDecoration(
+                            labelText: 'Unit',
+                            hintText: 'piece / kg',
+                          ),
                         ),
                         Wrap(
                           children: [

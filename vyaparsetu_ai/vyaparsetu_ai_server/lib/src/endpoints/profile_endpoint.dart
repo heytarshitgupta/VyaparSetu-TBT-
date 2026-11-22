@@ -19,6 +19,11 @@ class ProfileEndpoint extends Endpoint {
     Session session, {
     required String displayName,
     required MarketplaceRole role,
+    String? businessName,
+    String? craftCategory,
+    String? city,
+    String? state,
+    String? address,
   }) async {
     final name = displayName.trim();
     if (name.isEmpty || name.runes.length > 80) {
@@ -26,7 +31,19 @@ class ProfileEndpoint extends Endpoint {
     }
 
     final existing = await getMine(session);
-    if (existing != null) return _checkRole(existing, role);
+    if (existing != null) {
+      final checked = _checkRole(existing, role);
+      if (role == MarketplaceRole.producer) {
+        checked.businessName = businessName?.trim();
+        checked.craftCategory = craftCategory?.trim();
+        checked.city = city?.trim();
+        checked.state = state?.trim();
+        checked.address = address?.trim();
+        checked.verified = true;
+        return AccountProfile.db.updateRow(session, checked);
+      }
+      return checked;
+    }
 
     try {
       return await AccountProfile.db.insertRow(
@@ -35,6 +52,12 @@ class ProfileEndpoint extends Endpoint {
           authUserId: session.authenticated!.authUserId,
           displayName: name,
           role: role,
+          businessName: businessName?.trim(),
+          craftCategory: craftCategory?.trim(),
+          city: city?.trim(),
+          state: state?.trim(),
+          address: address?.trim(),
+          verified: true,
         ),
       );
     } on DatabaseUniqueViolationException {

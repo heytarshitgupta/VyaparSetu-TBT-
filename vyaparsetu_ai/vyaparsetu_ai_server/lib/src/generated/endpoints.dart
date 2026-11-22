@@ -358,6 +358,36 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<_idt.ByteData?>(),
               nullable: true,
             ),
+            'pricePaise': _is.ParameterDescription(
+              name: 'pricePaise',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'category': _is.ParameterDescription(
+              name: 'category',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'unit': _is.ParameterDescription(
+              name: 'unit',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'city': _is.ParameterDescription(
+              name: 'city',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'state': _is.ParameterDescription(
+              name: 'state',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'craft': _is.ParameterDescription(
+              name: 'craft',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -369,6 +399,12 @@ class Endpoints extends _is.EndpointDispatch {
                     name: params['name'],
                     description: params['description'],
                     photo: params['photo'],
+                    pricePaise: params['pricePaise'],
+                    category: params['category'],
+                    unit: params['unit'],
+                    city: params['city'],
+                    state: params['state'],
+                    craft: params['craft'],
                   ),
         ),
         'getPhoto': _is.MethodConnector(
@@ -496,6 +532,31 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<_i2pxwtoh.MarketplaceRole>(),
               nullable: false,
             ),
+            'businessName': _is.ParameterDescription(
+              name: 'businessName',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'craftCategory': _is.ParameterDescription(
+              name: 'craftCategory',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'city': _is.ParameterDescription(
+              name: 'city',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'state': _is.ParameterDescription(
+              name: 'state',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'address': _is.ParameterDescription(
+              name: 'address',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -506,6 +567,11 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     displayName: params['displayName'],
                     role: params['role'],
+                    businessName: params['businessName'],
+                    craftCategory: params['craftCategory'],
+                    city: params['city'],
+                    state: params['state'],
+                    address: params['address'],
                   ),
         ),
       },
