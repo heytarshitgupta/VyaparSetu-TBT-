@@ -8,6 +8,14 @@ import 'profile_setup_form.dart';
 import '../../buyer_section/home/buyer_main_screen.dart';
 import '../../producer_section/home/producer_main_screen.dart';
 
+/// The server generates six digit codes that may contain any digit, including
+/// zero, while the sign-in widget defaults to allowing only `1-9`. Accepting
+/// every digit keeps those codes enterable.
+final _otpCodeConfig = VerificationCodeConfig(
+  length: 6,
+  allowedCharactersPattern: RegExp(r'[0-9]'),
+);
+
 class SignInScreen extends ConsumerWidget {
   const SignInScreen({super.key, this.initialRole});
 
@@ -43,7 +51,14 @@ class SignInScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  SignInWidget(client: ref.watch(serverClientProvider)),
+                  SignInWidget(
+                    client: ref.watch(serverClientProvider),
+                    emailOtpSignInWidget: EmailOtpSignInWidget(
+                      client: ref.watch(serverClientProvider),
+                      otpVerificationCodeConfig: _otpCodeConfig,
+                      verificationCodeConfig: _otpCodeConfig,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -86,40 +101,47 @@ class _AccountPageState extends ConsumerState<_AccountPage> {
   @override
   Widget build(BuildContext context) {
     final profile = ref.watch(accountProfileProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('VyaparSetu AI'),
-        actions: [
-          TextButton(
-            onPressed: _signingOut ? null : _signOut,
-            child: Text(_signingOut ? 'Signing out…' : 'Sign out'),
-          ),
-        ],
-      ),
-      body: profile.when(
-        skipLoadingOnRefresh: false,
-        loading: () => const _Loading(),
-        error: (_, _) => _Retry(
+    return profile.when(
+      skipLoadingOnRefresh: false,
+      loading: () => const Scaffold(body: _Loading()),
+      error: (_, _) => Scaffold(
+        body: _Retry(
           message: 'Could not load your profile.',
           onRetry: () => ref.invalidate(accountProfileProvider),
         ),
-        data: (value) => _PageContent(
-          child: value == null
-              ? ProfileSetupForm(
-                  initialRole: widget.initialRole,
-                  onSave: (name, role) async {
-                    await ref
-                        .read(serverClientProvider)
-                        .profile
-                        .completeOnboarding(displayName: name, role: role);
-                    if (mounted) ref.invalidate(accountProfileProvider);
-                  },
-                )
-              : value.role == MarketplaceRole.buyer
-              ? const BuyerMainScreen()
-              : const ProducerMainScreen(),
-        ),
       ),
+      data: (value) {
+        if (value == null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('VyaparSetu AI'),
+              actions: [
+                TextButton(
+                  onPressed: _signingOut ? null : _signOut,
+                  child: Text(_signingOut ? 'Signing out…' : 'Sign out'),
+                ),
+              ],
+            ),
+            body: _PageContent(
+              child: ProfileSetupForm(
+                initialRole: widget.initialRole,
+                onSave: (name, role) async {
+                  await ref
+                      .read(serverClientProvider)
+                      .profile
+                      .completeOnboarding(displayName: name, role: role);
+                  if (mounted) ref.invalidate(accountProfileProvider);
+                },
+              ),
+            ),
+          );
+        }
+        // The role home screens bring their own Scaffold and navigation bar,
+        // so they must not be nested inside the scrollable setup page.
+        return value.role == MarketplaceRole.buyer
+            ? const BuyerMainScreen()
+            : const ProducerMainScreen();
+      },
     );
   }
 }

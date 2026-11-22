@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Consumer;
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import '../theme/buyer_colors.dart';
 import '../../../core/routes/app_router.dart';
 import '../../../core/localization/generated/app_localizations.dart';
 import '../onboarding/buyer_profile_provider.dart';
 import '../../../producer_section/localization/widgets/language_switcher_widget.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../providers/session_provider.dart';
+import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
-class BuyerProfileScreen extends StatelessWidget {
+class BuyerProfileScreen extends ConsumerWidget {
   const BuyerProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final profile = context.watch<BuyerProfileProvider>().profile;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mockProfile = context.watch<BuyerProfileProvider>().profile;
+    final account = ref.watch(accountProfileProvider).value;
+    final profile = mockProfile ?? _fromAccount(account);
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
@@ -100,6 +106,28 @@ class BuyerProfileScreen extends StatelessWidget {
                       l10n?.myRequirements ?? 'My Requirements',
                       '/my_requests',
                       BuyerColors.of(context).badgeGreen,
+                    ),
+                    Divider(
+                      height: 1,
+                      color: BuyerColors.of(context).borderLight,
+                    ),
+                    _buildListTile(
+                      context,
+                      Icons.add_circle_outline,
+                      'Post Requirement',
+                      '/post_requirement',
+                      BuyerColors.of(context).primary,
+                    ),
+                    Divider(
+                      height: 1,
+                      color: BuyerColors.of(context).borderLight,
+                    ),
+                    _buildListTile(
+                      context,
+                      Icons.notifications_outlined,
+                      l10n?.notifications ?? 'Notifications',
+                      '/notifications',
+                      BuyerColors.of(context).orangeAccent,
                     ),
                   ],
                 ),
@@ -379,34 +407,7 @@ class BuyerProfileScreen extends StatelessWidget {
             const SizedBox(height: 32),
 
             // Logout Button
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    AppRouter.buyerAuthRoute,
-                  );
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: BuyerColors.of(context).badgePinkText,
-                  side: BorderSide(
-                    color: BuyerColors.of(context).badgePinkText,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  'Log out',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            const _LogoutButton(),
             const SizedBox(height: 40),
           ],
         ),
@@ -439,7 +440,7 @@ class BuyerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader(BuildContext context, dynamic profile) {
+  Widget _buildProfileHeader(BuildContext context, BuyerProfile? profile) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -452,8 +453,8 @@ class BuyerProfileScreen extends StatelessWidget {
             radius: 32,
             backgroundColor: Colors.white,
             child: Text(
-              (profile?.fullName.isNotEmpty ?? false)
-                  ? profile!.fullName[0].toUpperCase()
+              (profile?.name.isNotEmpty ?? false)
+                  ? profile!.name[0].toUpperCase()
                   : 'B',
               style: GoogleFonts.inter(
                 fontSize: 24,
@@ -468,7 +469,7 @@ class BuyerProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  profile?.fullName ?? 'Guest Buyer',
+                  profile?.name ?? 'Guest Buyer',
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -477,7 +478,13 @@ class BuyerProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  profile?.mobile ?? '+91 - Not provided',
+                  (profile?.mobile.isNotEmpty ?? false)
+                      ? profile!.mobile
+                      : (profile?.email.isNotEmpty ?? false)
+                      ? profile!.email
+                      : (profile?.businessName?.isNotEmpty ?? false)
+                      ? profile!.businessName!
+                      : 'VyaparSetu Buyer',
                   style: GoogleFonts.inter(fontSize: 14, color: Colors.white70),
                 ),
               ],
@@ -485,6 +492,23 @@ class BuyerProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  BuyerProfile? _fromAccount(AccountProfile? account) {
+    if (account == null) return null;
+    return BuyerProfile(
+      name: account.displayName,
+      businessName: account.businessName,
+      mobile: '',
+      email: '',
+      buyerType: 'buyer',
+      businessCategory: account.craftCategory,
+      address: account.address ?? '',
+      city: account.city ?? '',
+      state: account.state ?? '',
+      pincode: '',
+      isBusinessVerified: account.verified,
     );
   }
 
@@ -553,6 +577,68 @@ class BuyerProfileScreen extends StatelessWidget {
           fontSize: 11,
           color: BuyerColors.of(context).textSecondary,
         ),
+      ),
+    );
+  }
+}
+
+class _LogoutButton extends ConsumerStatefulWidget {
+  const _LogoutButton();
+
+  @override
+  ConsumerState<_LogoutButton> createState() => _LogoutButtonState();
+}
+
+class _LogoutButtonState extends ConsumerState<_LogoutButton> {
+  bool _signingOut = false;
+
+  Future<void> _signOut() async {
+    if (_signingOut) return;
+    setState(() => _signingOut = true);
+    try {
+      await ref.read(serverClientProvider).auth.signOutDevice();
+      if (!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRouter.initialRoute,
+        (route) => false,
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not sign out. Try again.')),
+      );
+      setState(() => _signingOut = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: OutlinedButton(
+        onPressed: _signingOut ? null : _signOut,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: BuyerColors.of(context).badgePinkText,
+          side: BorderSide(color: BuyerColors.of(context).badgePinkText),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: _signingOut
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : Text(
+                'Log out',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ),
     );
   }

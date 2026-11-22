@@ -20,7 +20,7 @@ class _BuyerMainScreenState extends State<BuyerMainScreen> {
   final List<Widget> _tabs = [
     const MarketplaceScreen(),
     const MarketplaceScreen(),
-    const TradesScreen(role: MarketplaceRole.buyer),
+    const TradesScreen(role: MarketplaceRole.buyer, embedded: true),
     const BuyerProfileScreen(),
   ];
 

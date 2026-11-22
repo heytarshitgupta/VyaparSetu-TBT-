@@ -4,6 +4,7 @@ import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 import '../../buyer_section/home/buyer_main_screen.dart';
 import '../../buyer_section/notifications/notifications_screen.dart';
 import '../../buyer_section/post_requirement/post_requirement_screen.dart';
+import '../../buyer_section/requirements/my_requirements_screen.dart';
 import '../../buyer_section/wishlist/wishlist_screen.dart';
 import '../../features/auth/sign_in_screen.dart';
 import '../../features/marketplace/marketplace_screen.dart';
@@ -84,6 +85,7 @@ class AppRouter {
           ),
         );
       case myRequestsRoute:
+        return _route(settings, const MyRequirementsScreen());
       case buyerOrdersRoute:
       case orderDetailsRoute:
         return _route(

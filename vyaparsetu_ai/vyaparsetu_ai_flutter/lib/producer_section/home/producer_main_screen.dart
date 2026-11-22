@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
+import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart'
+    show MarketplaceRole;
 import '../../client.dart' as app_client;
 import '../../core/localization/generated/app_localizations.dart';
 import '../../core/routes/app_router.dart';
@@ -10,6 +12,7 @@ import '../products/services/producer_product_service.dart';
 import '../products/producer_products_tab.dart';
 import '../profile/producer_profile_tab.dart';
 import '../widgets/producer_quick_action_menu.dart';
+import '../../features/marketplace/trades_screen.dart';
 import 'models/producer_shell_profile.dart';
 import 'tabs/producer_home_tab.dart';
 import 'tabs/what_buyers_want_screen.dart';
@@ -118,6 +121,8 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
       case 2:
         return l10n.buyerNeeds;
       case 3:
+        return 'Quotes & Orders';
+      case 4:
         return l10n.myProfile;
       default:
         return l10n.appTitle;
@@ -129,7 +134,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
   // Future voice intent handlers will call these exact methods.
   // --------------------------------------------------------------------------
   void selectDestination(int index) {
-    if (index >= 0 && index < 4 && _currentIndex != index) {
+    if (index >= 0 && index < 5 && _currentIndex != index) {
       setState(() {
         _currentIndex = index;
       });
@@ -175,6 +180,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
         onAddProduct: openAddProduct,
       ),
       const BuyerNeedsTab(),
+      const TradesScreen(role: MarketplaceRole.producer, embedded: true),
       ProducerProfileTab(
         profile: _profile,
         onSignOut: _handleSignOut,
@@ -196,7 +202,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
               scrolledUnderElevation: 1,
               actions: [
                 ProducerQuickActionMenu(
-                  onNavigateToProfile: () => selectDestination(3),
+                  onNavigateToProfile: () => selectDestination(4),
                   onSignOut: _handleSignOut,
                 ),
               ],
@@ -237,6 +243,14 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
                   label: l10n.buyerNeeds,
                 ),
                 NavigationDestination(
+                  icon: const Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(
+                    Icons.receipt_long,
+                    color: colorScheme.onPrimaryContainer,
+                  ),
+                  label: 'Quotes',
+                ),
+                NavigationDestination(
                   icon: const Icon(Icons.person_outline),
                   selectedIcon: Icon(
                     Icons.person,
@@ -260,7 +274,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
               scrolledUnderElevation: 1,
               actions: [
                 ProducerQuickActionMenu(
-                  onNavigateToProfile: () => selectDestination(3),
+                  onNavigateToProfile: () => selectDestination(4),
                   onSignOut: _handleSignOut,
                 ),
               ],
@@ -343,6 +357,14 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
                         color: colorScheme.onPrimaryContainer,
                       ),
                       label: Text(l10n.buyerNeeds),
+                    ),
+                    NavigationRailDestination(
+                      icon: const Icon(Icons.receipt_long_outlined),
+                      selectedIcon: Icon(
+                        Icons.receipt_long,
+                        color: colorScheme.onPrimaryContainer,
+                      ),
+                      label: const Text('Quotes'),
                     ),
                     NavigationRailDestination(
                       icon: const Icon(Icons.person_outline),
@@ -503,6 +525,14 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
               _buildSidebarItem(
                 context,
                 index: 3,
+                icon: Icons.receipt_long_outlined,
+                selectedIcon: Icons.receipt_long,
+                label: 'Quotes & Orders',
+              ),
+              const SizedBox(height: 6),
+              _buildSidebarItem(
+                context,
+                index: 4,
                 icon: Icons.person_outline,
                 selectedIcon: Icons.person,
                 label: l10n.myProfile,
@@ -542,7 +572,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: InkWell(
-                        onTap: () => selectDestination(3),
+                        onTap: () => selectDestination(4),
                         borderRadius: BorderRadius.circular(6),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,7 +602,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
                       ),
                     ),
                     ProducerQuickActionMenu(
-                      onNavigateToProfile: () => selectDestination(3),
+                      onNavigateToProfile: () => selectDestination(4),
                       onSignOut: _handleSignOut,
                     ),
                   ],

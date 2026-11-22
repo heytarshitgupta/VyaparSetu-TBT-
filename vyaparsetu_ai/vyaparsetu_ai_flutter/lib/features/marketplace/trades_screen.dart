@@ -24,8 +24,16 @@ int? _paise(String text) {
 }
 
 class TradesScreen extends ConsumerStatefulWidget {
-  const TradesScreen({required this.role, super.key});
+  const TradesScreen({
+    required this.role,
+    this.embedded = false,
+    super.key,
+  });
   final MarketplaceRole role;
+
+  /// When true the screen is rendered inside another shell, which owns the
+  /// app bar, so this screen only renders its content.
+  final bool embedded;
 
   @override
   ConsumerState<TradesScreen> createState() => _TradesScreenState();
@@ -88,68 +96,98 @@ class _TradesScreenState extends ConsumerState<TradesScreen> {
   Widget build(BuildContext context) {
     final trades = ref.watch(tradesProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Quotes and orders'),
-        actions: [
-          IconButton(
-            tooltip: 'Refresh',
-            onPressed: () => ref.invalidate(tradesProvider),
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: trades.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Center(
-            child: Text(
-              marketplaceError(error, 'Could not load quotes and orders.'),
+      appBar: widget.embedded
+          ? null
+          : AppBar(
+              title: const Text('Quotes and orders'),
+              actions: [
+                IconButton(
+                  tooltip: 'Refresh',
+                  onPressed: () => ref.invalidate(tradesProvider),
+                  icon: const Icon(Icons.refresh),
+                ),
+              ],
             ),
-          ),
-          data: (rows) => ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              if (rows.isEmpty) const Text('No quotes or orders yet.'),
-              for (final trade in rows)
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          trade.productName,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text('Quantity: ${trade.quantity}'),
-                        if (trade.requirements.isNotEmpty)
-                          Text(trade.requirements),
-                        Text(switch (trade.status) {
-                          TradeStatus.requested => 'Awaiting quote',
-                          TradeStatus.quoted => 'Quoted',
-                          TradeStatus.accepted =>
-                            'Order #${trade.id} confirmed',
-                        }),
-                        if (trade.totalPaise case final total?)
-                          Text(_rupees(total)),
-                        if (widget.role == MarketplaceRole.producer &&
-                            trade.status == TradeStatus.requested)
-                          TextButton(
-                            onPressed: _busy ? null : () => _act(trade),
-                            child: const Text('Send quote'),
-                          ),
-                        if (widget.role == MarketplaceRole.buyer &&
-                            trade.status == TradeStatus.quoted)
-                          TextButton(
-                            onPressed: _busy ? null : () => _act(trade),
-                            child: const Text('Accept quote'),
-                          ),
-                      ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            if (widget.embedded)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 12, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Quotes and orders',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Refresh',
+                      onPressed: () => ref.invalidate(tradesProvider),
+                      icon: const Icon(Icons.refresh),
+                    ),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: trades.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, _) => Center(
+                  child: Text(
+                    marketplaceError(
+                      error,
+                      'Could not load quotes and orders.',
                     ),
                   ),
                 ),
-            ],
-          ),
+                data: (rows) => ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    if (rows.isEmpty) const Text('No quotes or orders yet.'),
+                    for (final trade in rows)
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                trade.productName,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Text('Quantity: ${trade.quantity}'),
+                              if (trade.requirements.isNotEmpty)
+                                Text(trade.requirements),
+                              Text(switch (trade.status) {
+                                TradeStatus.requested => 'Awaiting quote',
+                                TradeStatus.quoted => 'Quoted',
+                                TradeStatus.accepted =>
+                                  'Order #${trade.id} confirmed',
+                              }),
+                              if (trade.totalPaise case final total?)
+                                Text(_rupees(total)),
+                              if (widget.role == MarketplaceRole.producer &&
+                                  trade.status == TradeStatus.requested)
+                                TextButton(
+                                  onPressed: _busy ? null : () => _act(trade),
+                                  child: const Text('Send quote'),
+                                ),
+                              if (widget.role == MarketplaceRole.buyer &&
+                                  trade.status == TradeStatus.quoted)
+                                TextButton(
+                                  onPressed: _busy ? null : () => _act(trade),
+                                  child: const Text('Accept quote'),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

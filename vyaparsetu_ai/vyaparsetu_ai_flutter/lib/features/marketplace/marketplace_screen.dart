@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
+import '../../core/routes/app_router.dart';
 import '../../providers/session_provider.dart';
 import 'trades_screen.dart';
 import 'product_photo.dart';
@@ -11,6 +12,14 @@ final _catalogProvider = FutureProvider.autoDispose
       (ref, query) =>
           ref.watch(serverClientProvider).product.catalog(query: query),
     );
+
+final _wishlistIdsProvider = FutureProvider.autoDispose<Set<int>>((ref) async {
+  final rows = await ref
+      .watch(serverClientProvider)
+      .marketplaceExtra
+      .wishlist();
+  return rows.map((row) => row.productId).toSet();
+});
 
 class MarketplaceScreen extends ConsumerStatefulWidget {
   const MarketplaceScreen({super.key});
@@ -34,11 +43,47 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
     ref.invalidate(_catalogProvider(_query));
   }
 
+  Future<void> _toggleWishlist(Product product) async {
+    try {
+      await ref
+          .read(serverClientProvider)
+          .marketplaceExtra
+          .toggleWishlist(productId: product.id!);
+      ref.invalidate(_wishlistIdsProvider);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            marketplaceError(error, 'Could not update your wishlist.'),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final catalog = ref.watch(_catalogProvider(_query));
+    final wishlistIds = ref.watch(_wishlistIdsProvider).value ?? const <int>{};
     return Scaffold(
-      appBar: AppBar(title: const Text('Marketplace')),
+      appBar: AppBar(
+        title: const Text('Marketplace'),
+        actions: [
+          IconButton(
+            tooltip: 'Post requirement',
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRouter.postRequirementRoute),
+            icon: const Icon(Icons.post_add),
+          ),
+          IconButton(
+            tooltip: 'Notifications',
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRouter.notificationsRoute),
+            icon: const Icon(Icons.notifications_outlined),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
@@ -77,7 +122,26 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
                       subtitle: product.description.isEmpty
                           ? null
                           : Text(product.description),
-                      trailing: const Icon(Icons.chevron_right),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            tooltip: wishlistIds.contains(product.id)
+                                ? 'Remove from wishlist'
+                                : 'Add to wishlist',
+                            onPressed: () => _toggleWishlist(product),
+                            icon: Icon(
+                              wishlistIds.contains(product.id)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: wishlistIds.contains(product.id)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right),
+                        ],
+                      ),
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => _QuoteRequestScreen(product: product),
