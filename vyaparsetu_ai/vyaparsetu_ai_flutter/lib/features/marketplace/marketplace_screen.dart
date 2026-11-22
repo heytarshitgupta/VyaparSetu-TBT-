@@ -228,8 +228,8 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
                   return GridView.builder(
                     padding: const EdgeInsets.all(8),
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 220,
                           mainAxisSpacing: 8,
                           crossAxisSpacing: 8,
                           childAspectRatio: 0.65,

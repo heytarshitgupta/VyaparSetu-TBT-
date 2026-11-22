@@ -183,6 +183,7 @@ class _BuyerHomeTabState extends ConsumerState<BuyerHomeTab> {
           backgroundColor: colors.surface,
           floating: true,
           pinned: false,
+          automaticallyImplyLeading: false,
           elevation: 2,
           shadowColor: Colors.black12,
           toolbarHeight: 60,
@@ -414,8 +415,8 @@ class _BuyerHomeTabState extends ConsumerState<BuyerHomeTab> {
               SliverPadding(
                 padding: const EdgeInsets.all(8),
                 sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 220,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
                     childAspectRatio: 0.65,
