@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../../core/localization/generated/app_localizations.dart';
 import '../models/producer_product.dart';
@@ -13,6 +10,7 @@ import '../services/producer_image_picker_service.dart';
 import '../services/producer_product_enhancement_service.dart';
 import '../services/producer_product_image_service.dart';
 import '../services/producer_product_service.dart';
+import '../../../../client.dart';
 
 /// The responsive single-sheet Add Product modal for artisan producers.
 ///
@@ -227,71 +225,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Future<void> _generateCatalog() async {
     final transcript = _spokenText.trim();
     if (transcript.isEmpty) return;
-
     setState(() => _isLoading = true);
     try {
-      final response = await http
-          .post(
-            Uri.parse(
-              'http://${kIsWeb || defaultTargetPlatform != TargetPlatform.android ? 'localhost' : '10.0.2.2'}:8000/api/generate-catalog',
-            ),
-            headers: const {'Content-Type': 'application/json'},
-            body: jsonEncode({'transcript': transcript}),
-          )
-          .timeout(const Duration(seconds: 30));
-
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw Exception(
-          'Catalog service returned HTTP ${response.statusCode}.',
-        );
-      }
-
-      final body = jsonDecode(response.body);
-      if (body is! Map<String, dynamic>) {
-        throw const FormatException('Invalid catalog response.');
-      }
-      final data = body['data'];
-      if (data is! Map<String, dynamic>) {
-        throw const FormatException('Catalog data is missing.');
-      }
-
-      final english = data['english'];
-      final hindi = data['hindi'];
-      final englishTitle = english is Map
-          ? english['title']?.toString().trim()
-          : null;
-      final englishDescription = english is Map
-          ? english['description']?.toString().trim()
-          : null;
-      final hindiTitle = hindi is Map
-          ? hindi['title']?.toString().trim()
-          : null;
-      final hindiDescription = hindi is Map
-          ? hindi['description']?.toString().trim()
-          : null;
-
-      if (englishTitle == null ||
-          englishTitle.isEmpty ||
-          englishDescription == null ||
-          englishDescription.isEmpty) {
-        throw const FormatException('English catalog fields are missing.');
-      }
-
+      final name = _nameController.text.trim().isEmpty
+          ? 'Artisan product'
+          : _nameController.text.trim();
+      final category = _provider.draft.category.isEmpty
+          ? 'Handicrafts'
+          : _provider.draft.category;
+      final description = await client.utility.generateCatalogDescription(
+        name: name,
+        category: category,
+        voiceText: transcript,
+      );
       if (!mounted) return;
       _nameController
-        ..text = englishTitle
-        ..selection = TextSelection.collapsed(offset: englishTitle.length);
+        ..text = name
+        ..selection = TextSelection.collapsed(offset: name.length);
       _descriptionController
-        ..text = englishDescription
-        ..selection = TextSelection.collapsed(
-          offset: englishDescription.length,
-        );
-      _provider.setName(englishTitle);
-      _provider.setDescription(englishDescription);
-      setState(() {
-        _hindiTitle = hindiTitle;
-        _hindiDescription = hindiDescription;
-      });
+        ..text = description
+        ..selection = TextSelection.collapsed(offset: description.length);
+      _provider.setName(name);
+      _provider.setDescription(description);
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

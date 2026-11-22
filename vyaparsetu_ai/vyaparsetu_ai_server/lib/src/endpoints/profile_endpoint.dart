@@ -74,6 +74,21 @@ class ProfileEndpoint extends Endpoint {
     }
     return profile;
   }
+
+  Future<bool> verifyProducerPan(
+    Session session, {
+    required String panNumber,
+  }) async {
+    final cleanPan = panNumber.trim().toUpperCase();
+    final isValid = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$').hasMatch(cleanPan);
+    if (!isValid) {
+      throw ProfileException(message: 'Invalid PAN format. Example format: ABCDE1234F');
+    }
+    final profile = await requireMarketplaceProfile(session, MarketplaceRole.producer);
+    profile.verified = true;
+    await AccountProfile.db.updateRow(session, profile);
+    return true;
+  }
 }
 
 Future<AccountProfile> requireMarketplaceProfile(

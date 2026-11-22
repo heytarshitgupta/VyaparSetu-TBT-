@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../core/localization/generated/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/buyer_colors.dart';
-import '../screens/shared/placeholder_screen.dart';
-import '../marketplace/marketplace_search_screen.dart';
-import '../my_requests/buyer_requests_screen.dart';
 import '../profile/buyer_profile_screen.dart';
-import 'tabs/buyer_home_tab.dart';
+import '../../../features/marketplace/marketplace_screen.dart';
+import '../../../features/marketplace/trades_screen.dart';
+import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 class BuyerMainScreen extends StatefulWidget {
   const BuyerMainScreen({super.key});
@@ -19,9 +18,9 @@ class _BuyerMainScreenState extends State<BuyerMainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _tabs = [
-    const BuyerHomeTab(),
-    const MarketplaceSearchScreen(),
-    const BuyerRequestsScreen(),
+    const MarketplaceScreen(),
+    const MarketplaceScreen(),
+    const TradesScreen(role: MarketplaceRole.buyer),
     const BuyerProfileScreen(),
   ];
 

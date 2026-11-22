@@ -7,6 +7,8 @@ import 'package:serverpod_cloud_storage/serverpod_cloud_storage.dart';
 import 'src/cache_busting.dart';
 import 'src/generated/serverpod.dart';
 import 'src/web/routes/app_config_route.dart';
+import 'src/auth/gmail_email_sender.dart';
+import 'src/seed/seed_data.dart';
 
 /// The starting point of the Serverpod server.
 void run(List<String> args) async {
@@ -25,14 +27,26 @@ void run(List<String> args) async {
       ),
     ],
     identityProviderBuilders: [
-      // Configure the email identity provider for email/password authentication.
-      // The default setup works with Serverpod Cloud without configuration. In
-      // development the verification codes are logged to the console, and in
-      // staging and production they are sent through the Serverpod Cloud email
-      // service. If you want to use a custom provider for sending emails, use
-      // `EmailIdpConfigFromPasswords`.
-      ServerpodCloudEmailIdpConfig(
-        appDisplayName: 'VyaparSetu AI',
+      EmailIdpConfigFromPasswords(
+        registrationVerificationCodeGenerator: sixDigitCode,
+        passwordResetVerificationCodeGenerator: sixDigitCode,
+        otpLoginVerificationCodeGenerator: sixDigitCode,
+        sendRegistrationVerificationCode: sendVyaparSetuEmailCode,
+        sendPasswordResetVerificationCode: sendVyaparSetuEmailCode,
+        sendOtpLoginVerificationCode:
+            (
+              session, {
+              required email,
+              required otpLoginRequestId,
+              required verificationCode,
+              required transaction,
+            }) => sendVyaparSetuEmailCode(
+              session,
+              email: email,
+              accountRequestId: otpLoginRequestId,
+              verificationCode: verificationCode,
+              transaction: transaction,
+            ),
       ),
     ],
   );
@@ -104,4 +118,9 @@ void run(List<String> args) async {
 
   // Start the server.
   await pod.start();
+
+  // Seed demo catalog in development
+  if (pod.runMode == 'development') {
+    await seedDevelopmentData(pod);
+  }
 }

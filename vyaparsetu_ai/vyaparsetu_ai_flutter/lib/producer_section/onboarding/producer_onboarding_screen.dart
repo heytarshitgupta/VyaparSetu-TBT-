@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/auth/auth_service.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
+import '../../client.dart' as app_client;
 import '../../core/routes/app_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/localization/generated/app_localizations.dart';
 import '../../core/widgets/app_top_bar_controls.dart';
-import '../auth/services/producer_auth_service.dart';
 import '../verification/producer_verification_service.dart';
 import 'producer_onboarding_provider.dart';
 import 'steps/basic_details_step.dart';
@@ -79,15 +79,13 @@ class _ProducerOnboardingScreenState extends State<ProducerOnboardingScreen> {
 
   Future<void> _loadInitialData() async {
     try {
-      final user = AuthService.instance.currentUser;
-      final profile = await ProducerAuthService.instance.fetchProfile();
-      final producerProfile = await ProducerAuthService.instance
-          .fetchProducerProfile();
-      if (mounted) {
+      final accountProfile = await app_client.client.profile.getMine();
+      if (mounted && accountProfile != null) {
         _provider.initializeFromProfile(
-          profile: profile,
-          producerProfile: producerProfile,
-          user: user,
+          profile: null,
+          producerProfile: null,
+          displayName: accountProfile.displayName,
+          email: null,
         );
       }
     } catch (_) {
@@ -216,7 +214,7 @@ class _ProducerOnboardingScreenState extends State<ProducerOnboardingScreen> {
           if (isNarrow)
             IconButton(
               onPressed: () async {
-                await AuthService.instance.signOut();
+                await app_client.client.auth.signOutDevice();
                 if (context.mounted) {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
@@ -235,7 +233,7 @@ class _ProducerOnboardingScreenState extends State<ProducerOnboardingScreen> {
           else
             TextButton.icon(
               onPressed: () async {
-                await AuthService.instance.signOut();
+                await app_client.client.auth.signOutDevice();
                 if (context.mounted) {
                   Navigator.pushNamedAndRemoveUntil(
                     context,

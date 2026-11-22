@@ -1,0 +1,13 @@
+class: BuyerRequirement
+table: buyer_requirement
+fields:
+  buyerProfileId: int, relation(parent=account_profile, onDelete=Cascade)
+  title: String
+  description: String
+  category: String
+  quantity: int
+  budgetPaise: int?
+  city: String?
+  state: String?
+  status: String, default="open"
+  createdAt: DateTime

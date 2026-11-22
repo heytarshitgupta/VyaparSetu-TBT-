@@ -1,0 +1,10 @@
+class: WishlistItem
+table: wishlist_item
+fields:
+  buyerProfileId: int, relation(parent=account_profile, onDelete=Cascade)
+  productId: int, relation(parent=product, onDelete=Cascade)
+  createdAt: DateTime
+indexes:
+  wishlist_buyer_product_idx:
+    fields: buyerProfileId, productId
+    unique: true

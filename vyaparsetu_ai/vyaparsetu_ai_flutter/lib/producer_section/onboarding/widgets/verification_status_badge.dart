@@ -59,7 +59,7 @@ class VerificationStatusBadge extends StatelessWidget {
         bg = AppColors.primary.withValues(alpha: 0.08);
         fg = AppColors.primary;
         icon = Icons.schedule_outlined;
-        label = customLabel ?? (l10n?.badgeComingSoon ?? 'Coming Soon');
+        label = customLabel ?? 'Pending';
         break;
     }
 

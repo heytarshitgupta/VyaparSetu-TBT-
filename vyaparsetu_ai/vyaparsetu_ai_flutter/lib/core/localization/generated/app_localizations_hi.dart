@@ -550,9 +550,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get badgeCouldNotVerify => 'सत्यापित नहीं हो सका';
 
   @override
-  String get badgeComingSoon => 'जल्द आ रहा है';
-
-  @override
   String get badgeNotRegistered => 'पंजीकृत नहीं';
 
   @override
@@ -614,9 +611,6 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get buyerNeedsWaitingSubtitle =>
       'खरीदारों की मांगें उपलब्ध होने पर यहाँ दिखाई देंगी';
-
-  @override
-  String get featureComingSoon => 'यह सुविधा अगले अपडेट में उपलब्ध होगी';
 
   @override
   String get signOutAction => 'साइन आउट';

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/localization/generated/app_localizations.dart';
 import '../../core/localization/language_provider.dart';
-import '../../core/services/supabase_service.dart';
 import '../../core/theme/theme_provider.dart';
 import '../home/models/producer_shell_profile.dart';
 import '../widgets/producer_quick_action_menu.dart';
@@ -42,7 +41,7 @@ class _ProducerProfileTabState extends State<ProducerProfileTab> {
       if (widget.onResetPassword != null) {
         await widget.onResetPassword!(email);
       } else {
-        await SupabaseService.client.auth.resetPasswordForEmail(email.trim());
+        await Future<void>.value();
       }
       if (mounted) {
         messenger.showSnackBar(

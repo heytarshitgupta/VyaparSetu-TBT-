@@ -64,7 +64,6 @@ class _BuyerSignupScreenState extends State<BuyerSignupScreen> {
 
       if (response.user != null) {
         if (response.session != null) {
-          // "Confirm email" is OFF in Supabase, user is instantly logged in
           Navigator.pushNamedAndRemoveUntil(
             context,
             AppRouter.homeRoute,

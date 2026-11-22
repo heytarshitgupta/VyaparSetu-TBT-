@@ -1132,12 +1132,6 @@ abstract class AppLocalizations {
   /// **'Could Not Verify'**
   String get badgeCouldNotVerify;
 
-  /// Verification badge: coming soon
-  ///
-  /// In en, this message translates to:
-  /// **'Coming Soon'**
-  String get badgeComingSoon;
-
   /// Verification badge: not registered
   ///
   /// In en, this message translates to:
@@ -1245,12 +1239,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Buyer requests will be listed here when available'**
   String get buyerNeedsWaitingSubtitle;
-
-  /// Description on placeholder destinations
-  ///
-  /// In en, this message translates to:
-  /// **'This feature will be available in the next update'**
-  String get featureComingSoon;
 
   /// Sign out button label
   ///

@@ -19,9 +19,11 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
 import 'package:vyaparsetu_ai_server/src/generated/marketplace_role.dart'
     as _i2pxwtoh;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
+import '../endpoints/marketplace_extra_endpoint.dart' as _iulbxwgn;
 import '../endpoints/product_endpoint.dart' as _im5j1753;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
 import '../endpoints/trade_endpoint.dart' as _ikltzxd8;
+import '../endpoints/utility_endpoint.dart' as _ipi612qu;
 import '../greetings/greeting_endpoint.dart' as _il624ik7;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -43,6 +45,12 @@ class Endpoints extends _is.EndpointDispatch {
           'emailIdp',
           null,
         ),
+      'marketplaceExtra': _iulbxwgn.MarketplaceExtraEndpoint()
+        ..initialize(
+          server,
+          'marketplaceExtra',
+          null,
+        ),
       'product': _im5j1753.ProductEndpoint()
         ..initialize(
           server,
@@ -59,6 +67,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'trade',
+          null,
+        ),
+      'utility': _ipi612qu.UtilityEndpoint()
+        ..initialize(
+          server,
+          'utility',
           null,
         ),
       'greeting': _il624ik7.GreetingEndpoint()
@@ -336,6 +350,192 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['marketplaceExtra'] = _is.EndpointConnector(
+      name: 'marketplaceExtra',
+      endpoint: endpoints['marketplaceExtra']!,
+      methodConnectors: {
+        'wishlist': _is.MethodConnector(
+          name: 'wishlist',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .wishlist(session),
+        ),
+        'toggleWishlist': _is.MethodConnector(
+          name: 'toggleWishlist',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .toggleWishlist(
+                        session,
+                        productId: params['productId'],
+                      ),
+        ),
+        'listRequirements': _is.MethodConnector(
+          name: 'listRequirements',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .listRequirements(session),
+        ),
+        'createRequirement': _is.MethodConnector(
+          name: 'createRequirement',
+          params: {
+            'title': _is.ParameterDescription(
+              name: 'title',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'description': _is.ParameterDescription(
+              name: 'description',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'category': _is.ParameterDescription(
+              name: 'category',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'quantity': _is.ParameterDescription(
+              name: 'quantity',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'budgetPaise': _is.ParameterDescription(
+              name: 'budgetPaise',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'city': _is.ParameterDescription(
+              name: 'city',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'state': _is.ParameterDescription(
+              name: 'state',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .createRequirement(
+                        session,
+                        title: params['title'],
+                        description: params['description'],
+                        category: params['category'],
+                        quantity: params['quantity'],
+                        budgetPaise: params['budgetPaise'],
+                        city: params['city'],
+                        state: params['state'],
+                      ),
+        ),
+        'respondRequirement': _is.MethodConnector(
+          name: 'respondRequirement',
+          params: {
+            'requirementId': _is.ParameterDescription(
+              name: 'requirementId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'message': _is.ParameterDescription(
+              name: 'message',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'quotedPaise': _is.ParameterDescription(
+              name: 'quotedPaise',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .respondRequirement(
+                        session,
+                        requirementId: params['requirementId'],
+                        message: params['message'],
+                        quotedPaise: params['quotedPaise'],
+                      ),
+        ),
+        'notifications': _is.MethodConnector(
+          name: 'notifications',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .notifications(session),
+        ),
+        'markNotificationRead': _is.MethodConnector(
+          name: 'markNotificationRead',
+          params: {
+            'notificationId': _is.ParameterDescription(
+              name: 'notificationId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .markNotificationRead(
+                        session,
+                        notificationId: params['notificationId'],
+                      ),
+        ),
+        'sellerStats': _is.MethodConnector(
+          name: 'sellerStats',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['marketplaceExtra']
+                          as _iulbxwgn.MarketplaceExtraEndpoint)
+                      .sellerStats(session),
+        ),
+      },
+    );
     connectors['product'] = _is.EndpointConnector(
       name: 'product',
       endpoint: endpoints['product']!,
@@ -503,6 +703,74 @@ class Endpoints extends _is.EndpointDispatch {
                     productId: params['productId'],
                   ),
         ),
+        'updateDraft': _is.MethodConnector(
+          name: 'updateDraft',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'description': _is.ParameterDescription(
+              name: 'description',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'pricePaise': _is.ParameterDescription(
+              name: 'pricePaise',
+              type: _is.getType<int?>(),
+              nullable: true,
+            ),
+            'category': _is.ParameterDescription(
+              name: 'category',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'unit': _is.ParameterDescription(
+              name: 'unit',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['product'] as _im5j1753.ProductEndpoint)
+                  .updateDraft(
+                    session,
+                    productId: params['productId'],
+                    name: params['name'],
+                    description: params['description'],
+                    pricePaise: params['pricePaise'],
+                    category: params['category'],
+                    unit: params['unit'],
+                  ),
+        ),
+        'deleteDraft': _is.MethodConnector(
+          name: 'deleteDraft',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['product'] as _im5j1753.ProductEndpoint)
+                  .deleteDraft(
+                    session,
+                    productId: params['productId'],
+                  ),
+        ),
       },
     );
     connectors['profile'] = _is.EndpointConnector(
@@ -572,6 +840,25 @@ class Endpoints extends _is.EndpointDispatch {
                     city: params['city'],
                     state: params['state'],
                     address: params['address'],
+                  ),
+        ),
+        'verifyProducerPan': _is.MethodConnector(
+          name: 'verifyProducerPan',
+          params: {
+            'panNumber': _is.ParameterDescription(
+              name: 'panNumber',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .verifyProducerPan(
+                    session,
+                    panNumber: params['panNumber'],
                   ),
         ),
       },
@@ -662,6 +949,124 @@ class Endpoints extends _is.EndpointDispatch {
                 session,
                 requestId: params['requestId'],
               ),
+        ),
+      },
+    );
+    connectors['utility'] = _is.EndpointConnector(
+      name: 'utility',
+      endpoint: endpoints['utility']!,
+      methodConnectors: {
+        'suggestedPrice': _is.MethodConnector(
+          name: 'suggestedPrice',
+          params: {
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'category': _is.ParameterDescription(
+              name: 'category',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['utility'] as _ipi612qu.UtilityEndpoint)
+                  .suggestedPrice(
+                    session,
+                    name: params['name'],
+                    category: params['category'],
+                  ),
+        ),
+        'calculatePrice': _is.MethodConnector(
+          name: 'calculatePrice',
+          params: {
+            'productId': _is.ParameterDescription(
+              name: 'productId',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'category': _is.ParameterDescription(
+              name: 'category',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'description': _is.ParameterDescription(
+              name: 'description',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'isBulk': _is.ParameterDescription(
+              name: 'isBulk',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['utility'] as _ipi612qu.UtilityEndpoint)
+                  .calculatePrice(
+                    session,
+                    productId: params['productId'],
+                    category: params['category'],
+                    description: params['description'],
+                    isBulk: params['isBulk'],
+                  ),
+        ),
+        'generateCatalogDescription': _is.MethodConnector(
+          name: 'generateCatalogDescription',
+          params: {
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'category': _is.ParameterDescription(
+              name: 'category',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'voiceText': _is.ParameterDescription(
+              name: 'voiceText',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['utility'] as _ipi612qu.UtilityEndpoint)
+                  .generateCatalogDescription(
+                    session,
+                    name: params['name'],
+                    category: params['category'],
+                    voiceText: params['voiceText'],
+                  ),
+        ),
+        'improvePhoto': _is.MethodConnector(
+          name: 'improvePhoto',
+          params: {
+            'photo': _is.ParameterDescription(
+              name: 'photo',
+              type: _is.getType<_idt.ByteData?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['utility'] as _ipi612qu.UtilityEndpoint)
+                  .improvePhoto(
+                    session,
+                    photo: params['photo'],
+                  ),
         ),
       },
     );

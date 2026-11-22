@@ -701,10 +701,6 @@
   "@badgeCouldNotVerify": {
     "description": "Verification badge: could not verify"
   },
-  "badgeComingSoon": "Coming Soon",
-  "@badgeComingSoon": {
-    "description": "Verification badge: coming soon"
-  },
   "badgeNotRegistered": "Not Registered",
   "@badgeNotRegistered": {
     "description": "Verification badge: not registered"
@@ -781,10 +777,6 @@
   "buyerNeedsWaitingSubtitle": "Buyer requests will be listed here when available",
   "@buyerNeedsWaitingSubtitle": {
     "description": "Subtitle for waiting buyer needs status card"
-  },
-  "featureComingSoon": "This feature will be available in the next update",
-  "@featureComingSoon": {
-    "description": "Description on placeholder destinations"
   },
   "signOutAction": "Sign Out",
   "@signOutAction": {

@@ -551,9 +551,6 @@ class AppLocalizationsPa extends AppLocalizations {
   String get badgeCouldNotVerify => 'ਤਸਦੀਕ ਨਹੀਂ ਹੋ ਸਕਿਆ';
 
   @override
-  String get badgeComingSoon => 'ਜਲਦੀ ਆ ਰਿਹਾ ਹੈ';
-
-  @override
   String get badgeNotRegistered => 'ਰਜਿਸਟਰਡ ਨਹੀਂ';
 
   @override
@@ -616,9 +613,6 @@ class AppLocalizationsPa extends AppLocalizations {
   @override
   String get buyerNeedsWaitingSubtitle =>
       'ਖਰੀਦਦਾਰਾਂ ਦੀਆਂ ਮੰਗਾਂ ਉਪਲਬਧ ਹੋਣ \'ਤੇ ਇੱਥੇ ਦਿਖਾਈ ਦੇਣਗੀਆਂ';
-
-  @override
-  String get featureComingSoon => 'ਇਹ ਵਿਸ਼ੇਸ਼ਤਾ ਅਗਲੇ ਅੱਪਡੇਟ ਵਿੱਚ ਉਪਲਬਧ ਹੋਵੇਗੀ';
 
   @override
   String get signOutAction => 'ਸਾਈਨ ਆਉਟ';

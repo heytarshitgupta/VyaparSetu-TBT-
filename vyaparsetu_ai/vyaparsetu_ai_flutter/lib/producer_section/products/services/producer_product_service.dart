@@ -1,3 +1,6 @@
+import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart' as sp;
+
+import '../../../../client.dart' as app;
 import '../models/producer_product.dart';
 import '../models/producer_product_draft.dart';
 import 'producer_product_image_service.dart';
@@ -33,11 +36,6 @@ abstract class IProducerProductService {
 }
 
 class ProducerProductService implements IProducerProductService {
-  dynamic get client => null;
-  @override
-  final IProducerProductImageService? imageService;
-  static final List<ProducerProduct> _products = [];
-
   ProducerProductService({
     dynamic client,
     IProducerProductImageService? imageService,
@@ -47,60 +45,55 @@ class ProducerProductService implements IProducerProductService {
            : null;
 
   @override
+  final IProducerProductImageService? imageService;
+  dynamic get client => app.client;
+
+  Future<List<sp.Product>> _serverProducts() =>
+      app.client.product.listMyProducts();
+
+  @override
   Future<List<ProducerProduct>> fetchProducts({
     ProductStatus? statusFilter,
-  }) async => statusFilter == null
-      ? List.unmodifiable(_products)
-      : _products.where((p) => p.status == statusFilter).toList();
+  }) async {
+    final rows = await _serverProducts();
+    return rows
+        .where(
+          (row) =>
+              statusFilter == null || _toOldStatus(row.status) == statusFilter,
+        )
+        .map(_toOldProduct)
+        .toList();
+  }
 
   @override
   Future<ProducerProduct> updateProductStatus({
     required String productId,
     required ProductStatus newStatus,
   }) async {
-    final index = _products.indexWhere((p) => p.id == productId);
-    if (index < 0) throw const ProductOperationException('Product not found');
-    final old = _products[index];
-    final updated = ProducerProduct(
-      id: old.id,
-      producerId: old.producerId,
-      name: old.name,
-      description: old.description,
-      category: old.category,
-      pricePaise: old.pricePaise,
-      unit: old.unit,
-      images: old.images,
-      status: newStatus,
-      createdAt: old.createdAt,
-      updatedAt: DateTime.now(),
-    );
-    _products[index] = updated;
-    return updated;
+    final id = int.parse(productId);
+    final row = newStatus == ProductStatus.active
+        ? await app.client.product.publish(productId: id)
+        : newStatus == ProductStatus.hidden
+        ? await app.client.product.hide(productId: id)
+        : await app.client.product.hide(productId: id);
+    return _toOldProduct(row);
   }
 
   @override
   Future<void> deleteProduct(String productId) async {
-    _products.removeWhere((p) => p.id == productId);
+    await app.client.product.deleteDraft(productId: int.parse(productId));
   }
 
   @override
   Future<ProducerProduct> createDraft(ProducerProductDraft draft) async {
-    final now = DateTime.now();
-    final product = ProducerProduct(
-      id: 'demo-${_products.length + 1}',
-      producerId: 'demo-producer',
+    final row = await app.client.product.createDraft(
       name: draft.name,
       description: draft.description,
-      category: draft.category,
       pricePaise: draft.pricePaise,
+      category: draft.category,
       unit: draft.unit,
-      images: draft.images,
-      status: ProductStatus.draft,
-      createdAt: now,
-      updatedAt: now,
     );
-    _products.insert(0, product);
-    return product;
+    return _toOldProduct(row);
   }
 
   @override
@@ -108,48 +101,42 @@ class ProducerProductService implements IProducerProductService {
     required String productId,
     required ProducerProductDraft draft,
   }) async {
-    final index = _products.indexWhere((p) => p.id == productId);
-    if (index < 0) throw const ProductOperationException('Product not found');
-    final old = _products[index];
-    final updated = ProducerProduct(
-      id: old.id,
-      producerId: old.producerId,
+    final row = await app.client.product.updateDraft(
+      productId: int.parse(productId),
       name: draft.name,
       description: draft.description,
-      category: draft.category,
       pricePaise: draft.pricePaise,
+      category: draft.category,
       unit: draft.unit,
-      images: draft.images,
-      status: old.status,
-      createdAt: old.createdAt,
-      updatedAt: DateTime.now(),
     );
-    _products[index] = updated;
-    return updated;
+    return _toOldProduct(row);
   }
 
   @override
   Future<ProducerProduct> updateProductImages({
     required String productId,
     required List<String> imagePaths,
-  }) async {
-    final index = _products.indexWhere((p) => p.id == productId);
-    if (index < 0) throw const ProductOperationException('Product not found');
-    final old = _products[index];
-    final updated = ProducerProduct(
-      id: old.id,
-      producerId: old.producerId,
-      name: old.name,
-      description: old.description,
-      category: old.category,
-      pricePaise: old.pricePaise,
-      unit: old.unit,
-      images: imagePaths,
-      status: old.status,
-      createdAt: old.createdAt,
-      updatedAt: DateTime.now(),
-    );
-    _products[index] = updated;
-    return updated;
-  }
+  }) async => throw const ProductOperationException(
+    'Photo storage is updated when creating or publishing a product.',
+  );
+
+  ProducerProduct _toOldProduct(sp.Product row) => ProducerProduct(
+    id: row.id.toString(),
+    producerId: row.producerProfileId.toString(),
+    name: row.name,
+    description: row.description,
+    category: row.category ?? '',
+    pricePaise: row.pricePaise,
+    unit: row.unit,
+    status: _toOldStatus(row.status),
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
+
+  ProductStatus _toOldStatus(sp.ProductStatus status) =>
+      status == sp.ProductStatus.published
+      ? ProductStatus.active
+      : status == sp.ProductStatus.hidden
+      ? ProductStatus.hidden
+      : ProductStatus.draft;
 }

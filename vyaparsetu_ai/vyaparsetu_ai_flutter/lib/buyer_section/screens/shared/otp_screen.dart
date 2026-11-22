@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../core/routes/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_top_bar_controls.dart';
-import '../../../core/auth/auth_service.dart';
 import '../../../core/auth/auth_exception_handler.dart';
 
 class OtpScreen extends StatefulWidget {

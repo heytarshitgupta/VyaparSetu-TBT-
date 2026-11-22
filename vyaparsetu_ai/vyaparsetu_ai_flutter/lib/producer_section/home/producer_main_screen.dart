@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../core/auth/auth_service.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
+import '../../client.dart' as app_client;
 import '../../core/localization/generated/app_localizations.dart';
 import '../../core/routes/app_router.dart';
-import '../auth/services/producer_auth_service.dart';
 import '../opportunities/buyer_needs_tab.dart';
 import '../products/providers/producer_products_provider.dart';
 import '../products/screens/add_product_screen.dart';
@@ -77,38 +77,20 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
 
   static Future<ProducerShellProfile?> _defaultProfileLoader() async {
     try {
-      final user = AuthService.instance.currentUser;
-      if (user == null) return null;
-      final profile = await ProducerAuthService.instance.fetchProfile();
-      final producerProfile = await ProducerAuthService.instance
-          .fetchProducerProfile();
-      final fullName = (profile?['full_name'] as String?)?.trim();
-      final metaName = (user.userMetadata?['full_name'] as String?)?.trim();
-
+      final accountProfile = await app_client.client.profile.getMine();
+      if (accountProfile == null) return null;
       return ProducerShellProfile(
-        fullName: (fullName != null && fullName.isNotEmpty)
-            ? fullName
-            : (metaName ?? ''),
-        email: user.email ?? (profile?['email'] as String?) ?? '',
-        phone: (profile?['phone'] as String?)?.trim(),
-        businessName: (producerProfile?['business_name'] as String?)?.trim(),
-        craftCategory: (producerProfile?['craft_category'] as String?)?.trim(),
-        bio: (producerProfile?['bio'] as String?)?.trim(),
-        state: (producerProfile?['state'] as String?)?.trim(),
-        district: (producerProfile?['district'] as String?)?.trim(),
-        city: (producerProfile?['city'] as String?)?.trim(),
-        pincode: (producerProfile?['pincode'] as String?)?.trim(),
-        address: (producerProfile?['address'] as String?)?.trim(),
-        panLast4: (producerProfile?['pan_last4'] as String?)?.trim(),
-        panVerificationStatus:
-            (producerProfile?['pan_verification_status'] as String?) ??
-            'unverified',
-        gstRegistered: (producerProfile?['gst_registered'] as bool?) ?? false,
-        gstin: (producerProfile?['gstin'] as String?)?.trim(),
-        gstVerificationStatus:
-            (producerProfile?['gst_verification_status'] as String?) ??
-            'not_applicable',
-        onboardingStep: (producerProfile?['onboarding_step'] as int?) ?? 1,
+        fullName: accountProfile.displayName,
+        email: '',
+        businessName: accountProfile.businessName,
+        craftCategory: accountProfile.craftCategory,
+        city: accountProfile.city,
+        state: accountProfile.state,
+        address: accountProfile.address,
+        onboardingStep: 1,
+        panVerificationStatus: 'unverified',
+        gstRegistered: false,
+        gstVerificationStatus: 'not_applicable',
       );
     } catch (_) {
       return null;
@@ -117,7 +99,7 @@ class _ProducerMainScreenState extends State<ProducerMainScreen> {
 
   Future<void> _handleSignOut() async {
     try {
-      await AuthService.instance.signOut();
+      await app_client.client.auth.signOutDevice();
     } catch (_) {}
     if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(

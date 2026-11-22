@@ -20,13 +20,21 @@ import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:vyaparsetu_ai_client/src/protocol/account_profile.dart'
     as _i8viowtb;
+import 'package:vyaparsetu_ai_client/src/protocol/app_notification.dart'
+    as _iyi705kw;
+import 'package:vyaparsetu_ai_client/src/protocol/buyer_requirement.dart'
+    as _izbpoeda;
 import 'package:vyaparsetu_ai_client/src/protocol/greetings/greeting.dart'
     as _i6ek115x;
 import 'package:vyaparsetu_ai_client/src/protocol/marketplace_role.dart'
     as _ibpr19yd;
 import 'package:vyaparsetu_ai_client/src/protocol/product.dart' as _idm7l56a;
+import 'package:vyaparsetu_ai_client/src/protocol/requirement_response.dart'
+    as _itzn3mk3;
 import 'package:vyaparsetu_ai_client/src/protocol/trade_request.dart'
     as _ir66x6wy;
+import 'package:vyaparsetu_ai_client/src/protocol/wishlist_item.dart'
+    as _i0vcfhnc;
 import 'protocol.dart' as _il2as5qe;
 
 /// By extending [EmailOtpIdpBaseEndpoint], the email identity provider
@@ -314,6 +322,94 @@ class EndpointEmailIdp extends _iaic.EndpointEmailOtpIdpBase {
 }
 
 /// {@category Endpoint}
+class EndpointMarketplaceExtra extends _isc.EndpointRef {
+  EndpointMarketplaceExtra(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'marketplaceExtra';
+
+  _ida.Future<List<_i0vcfhnc.WishlistItem>> wishlist() =>
+      caller.callServerEndpoint<List<_i0vcfhnc.WishlistItem>>(
+        'marketplaceExtra',
+        'wishlist',
+        {},
+      );
+
+  _ida.Future<_i0vcfhnc.WishlistItem> toggleWishlist({
+    required int productId,
+  }) => caller.callServerEndpoint<_i0vcfhnc.WishlistItem>(
+    'marketplaceExtra',
+    'toggleWishlist',
+    {'productId': productId},
+  );
+
+  _ida.Future<List<_izbpoeda.BuyerRequirement>> listRequirements() =>
+      caller.callServerEndpoint<List<_izbpoeda.BuyerRequirement>>(
+        'marketplaceExtra',
+        'listRequirements',
+        {},
+      );
+
+  _ida.Future<_izbpoeda.BuyerRequirement> createRequirement({
+    required String title,
+    required String description,
+    required String category,
+    required int quantity,
+    int? budgetPaise,
+    String? city,
+    String? state,
+  }) => caller.callServerEndpoint<_izbpoeda.BuyerRequirement>(
+    'marketplaceExtra',
+    'createRequirement',
+    {
+      'title': title,
+      'description': description,
+      'category': category,
+      'quantity': quantity,
+      'budgetPaise': budgetPaise,
+      'city': city,
+      'state': state,
+    },
+  );
+
+  _ida.Future<_itzn3mk3.RequirementResponse> respondRequirement({
+    required int requirementId,
+    required String message,
+    int? quotedPaise,
+  }) => caller.callServerEndpoint<_itzn3mk3.RequirementResponse>(
+    'marketplaceExtra',
+    'respondRequirement',
+    {
+      'requirementId': requirementId,
+      'message': message,
+      'quotedPaise': quotedPaise,
+    },
+  );
+
+  _ida.Future<List<_iyi705kw.AppNotification>> notifications() =>
+      caller.callServerEndpoint<List<_iyi705kw.AppNotification>>(
+        'marketplaceExtra',
+        'notifications',
+        {},
+      );
+
+  _ida.Future<_iyi705kw.AppNotification> markNotificationRead({
+    required int notificationId,
+  }) => caller.callServerEndpoint<_iyi705kw.AppNotification>(
+    'marketplaceExtra',
+    'markNotificationRead',
+    {'notificationId': notificationId},
+  );
+
+  _ida.Future<Map<String, int>> sellerStats() =>
+      caller.callServerEndpoint<Map<String, int>>(
+        'marketplaceExtra',
+        'sellerStats',
+        {},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointProduct extends _isc.EndpointRef {
   EndpointProduct(_isc.EndpointCaller caller) : super(caller);
 
@@ -387,6 +483,33 @@ class EndpointProduct extends _isc.EndpointRef {
         'hide',
         {'productId': productId},
       );
+
+  _ida.Future<_idm7l56a.Product> updateDraft({
+    required int productId,
+    required String name,
+    required String description,
+    int? pricePaise,
+    String? category,
+    String? unit,
+  }) => caller.callServerEndpoint<_idm7l56a.Product>(
+    'product',
+    'updateDraft',
+    {
+      'productId': productId,
+      'name': name,
+      'description': description,
+      'pricePaise': pricePaise,
+      'category': category,
+      'unit': unit,
+    },
+  );
+
+  _ida.Future<bool> deleteDraft({required int productId}) =>
+      caller.callServerEndpoint<bool>(
+        'product',
+        'deleteDraft',
+        {'productId': productId},
+      );
 }
 
 /// {@category Endpoint}
@@ -424,6 +547,13 @@ class EndpointProfile extends _isc.EndpointRef {
       'address': address,
     },
   );
+
+  _ida.Future<bool> verifyProducerPan({required String panNumber}) =>
+      caller.callServerEndpoint<bool>(
+        'profile',
+        'verifyProducerPan',
+        {'panNumber': panNumber},
+      );
 }
 
 /// {@category Endpoint}
@@ -471,6 +601,67 @@ class EndpointTrade extends _isc.EndpointRef {
         'trade',
         'accept',
         {'requestId': requestId},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointUtility extends _isc.EndpointRef {
+  EndpointUtility(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'utility';
+
+  /// Fast suggested price in paise based on artisan product categories and keywords
+  _ida.Future<int> suggestedPrice({
+    required String name,
+    required String category,
+  }) => caller.callServerEndpoint<int>(
+    'utility',
+    'suggestedPrice',
+    {
+      'name': name,
+      'category': category,
+    },
+  );
+
+  /// Full pricing engine calculation porting pricing_engine.py
+  _ida.Future<Map<String, String>> calculatePrice({
+    required String productId,
+    required String category,
+    required String description,
+    required bool isBulk,
+  }) => caller.callServerEndpoint<Map<String, String>>(
+    'utility',
+    'calculatePrice',
+    {
+      'productId': productId,
+      'category': category,
+      'description': description,
+      'isBulk': isBulk,
+    },
+  );
+
+  /// AI Catalog generation with Gemini API or deterministic artisan template fallback
+  _ida.Future<String> generateCatalogDescription({
+    required String name,
+    required String category,
+    String? voiceText,
+  }) => caller.callServerEndpoint<String>(
+    'utility',
+    'generateCatalogDescription',
+    {
+      'name': name,
+      'category': category,
+      'voiceText': voiceText,
+    },
+  );
+
+  /// Port of improve-product-photo: returns photo safely (graceful fallback)
+  _ida.Future<_idt.ByteData?> improvePhoto({required _idt.ByteData? photo}) =>
+      caller.callServerEndpoint<_idt.ByteData?>(
+        'utility',
+        'improvePhoto',
+        {'photo': photo},
       );
 }
 
@@ -531,20 +722,26 @@ class Client extends _isc.ServerpodClientShared {
          httpClientOverride: httpClientOverride,
        ) {
     emailIdp = EndpointEmailIdp(this);
+    marketplaceExtra = EndpointMarketplaceExtra(this);
     product = EndpointProduct(this);
     profile = EndpointProfile(this);
     trade = EndpointTrade(this);
+    utility = EndpointUtility(this);
     greeting = EndpointGreeting(this);
     modules = Modules(this);
   }
 
   late final EndpointEmailIdp emailIdp;
 
+  late final EndpointMarketplaceExtra marketplaceExtra;
+
   late final EndpointProduct product;
 
   late final EndpointProfile profile;
 
   late final EndpointTrade trade;
+
+  late final EndpointUtility utility;
 
   late final EndpointGreeting greeting;
 
@@ -553,9 +750,11 @@ class Client extends _isc.ServerpodClientShared {
   @override
   Map<String, _isc.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
+    'marketplaceExtra': marketplaceExtra,
     'product': product,
     'profile': profile,
     'trade': trade,
+    'utility': utility,
     'greeting': greeting,
   };
 

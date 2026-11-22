@@ -78,13 +78,27 @@ class TradeEndpoint extends Endpoint {
       where: (row) =>
           row.id.equals(requestId) &
           row.producerProfileId.equals(producer.id!) &
-          row.status.equals(TradeStatus.requested),
+          row.status.notEquals(TradeStatus.accepted),
       columnValues: (row) => [
         row.status(TradeStatus.quoted),
         row.totalPaise(totalPaise),
       ],
     );
-    return _updated(rows);
+    final updated = _updated(rows);
+    await AppNotification.db.insertRow(
+      session,
+      AppNotification(
+        profileId: updated.buyerProfileId,
+        title: 'New quote',
+        message:
+            '${updated.productName}: ₹${(totalPaise / 100).toStringAsFixed(2)}',
+        type: 'quote',
+        relatedId: updated.id,
+        isRead: false,
+        createdAt: DateTime.now().toUtc(),
+      ),
+    );
+    return updated;
   }
 
   Future<TradeRequest> accept(Session session, {required int requestId}) async {
@@ -100,7 +114,22 @@ class TradeEndpoint extends Endpoint {
           row.status.equals(TradeStatus.quoted),
       columnValues: (row) => [row.status(TradeStatus.accepted)],
     );
-    if (rows.isNotEmpty) return rows.single;
+    if (rows.isNotEmpty) {
+      final accepted = rows.single;
+      await AppNotification.db.insertRow(
+        session,
+        AppNotification(
+          profileId: accepted.producerProfileId,
+          title: 'Order accepted',
+          message: '${accepted.productName} order #${accepted.id} accepted',
+          type: 'order_accepted',
+          relatedId: accepted.id,
+          isRead: false,
+          createdAt: DateTime.now().toUtc(),
+        ),
+      );
+      return accepted;
+    }
     final accepted = await TradeRequest.db.findFirstRow(
       session,
       where: (row) =>

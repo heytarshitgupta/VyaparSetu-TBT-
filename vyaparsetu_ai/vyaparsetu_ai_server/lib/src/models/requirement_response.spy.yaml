@@ -1,0 +1,9 @@
+class: RequirementResponse
+table: requirement_response
+fields:
+  requirementId: int, relation(parent=buyer_requirement, onDelete=Cascade)
+  producerProfileId: int, relation(parent=account_profile, onDelete=Cascade)
+  message: String
+  quotedPaise: int?
+  status: String, default="responded"
+  createdAt: DateTime

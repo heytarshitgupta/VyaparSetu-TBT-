@@ -102,7 +102,7 @@ class ProductPriceParser {
 
   /// Parses PostgreSQL NUMERIC(12, 2) database values (String or num) into integer paise.
   ///
-  /// Used when deserializing records from Supabase / PostgREST.
+  /// Used when deserializing database records.
   /// Returns `null` if [value] is null or empty string.
   /// Throws [FormatException] if malformed or exceeding [maxPaise].
   static int? parseDbValueToPaise(dynamic value) {

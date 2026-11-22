@@ -1,65 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/widgets/empty_state_widget.dart';
-import '../home/widgets/product_card.dart';
-import 'wishlist_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BuyerWishlistScreen extends StatelessWidget {
+import '../../../providers/session_provider.dart';
+
+final _wishlistProvider = FutureProvider.autoDispose((ref) async {
+  final client = ref.watch(serverClientProvider);
+  final rows = await client.marketplaceExtra.wishlist();
+  final catalog = await client.product.catalog(query: '');
+  final ids = rows.map((row) => row.productId).toSet();
+  return catalog.where((product) => ids.contains(product.id)).toList();
+});
+
+class BuyerWishlistScreen extends ConsumerWidget {
   const BuyerWishlistScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final wishlist = ref.watch(_wishlistProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'My Wishlist',
-          style: TextStyle(color: AppColors.primary),
+      appBar: AppBar(title: const Text('My Wishlist')),
+      body: wishlist.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => Center(
+          child: TextButton(
+            onPressed: () => ref.invalidate(_wishlistProvider),
+            child: const Text('Retry wishlist'),
+          ),
         ),
-      ),
-      body: Consumer<WishlistProvider>(
-        builder: (context, provider, child) {
-          final products = provider.wishlistProducts;
-
-          if (products.isEmpty) {
-            return const EmptyStateWidget(
-              icon: Icons.favorite_border,
-              title: 'Your wishlist is empty',
-              subtitle: 'Explore the marketplace and save products you like.',
-            );
-          }
-
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.75,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-            ),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  ProductCard(product: products[index], width: double.infinity),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.favorite,
-                        color: AppColors.primary,
+        data: (products) => products.isEmpty
+            ? const Center(child: Text('Your wishlist is empty'))
+            : ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: products.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(product.name),
+                      subtitle: product.description.isEmpty
+                          ? null
+                          : Text(product.description),
+                      trailing: IconButton(
+                        tooltip: 'Remove',
+                        icon: const Icon(Icons.favorite),
+                        onPressed: () async {
+                          await ref
+                              .read(serverClientProvider)
+                              .marketplaceExtra
+                              .toggleWishlist(productId: product.id!);
+                          ref.invalidate(_wishlistProvider);
+                        },
                       ),
-                      onPressed: () {
-                        provider.toggleWishlist(products[index].id);
-                      },
                     ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
+                  );
+                },
+              ),
       ),
     );
   }

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/buyer_colors.dart';
-import '../../../core/mock_data/requests.dart';
 import '../../../core/routes/app_router.dart';
-import 'requests_provider.dart';
+import '../../../providers/session_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PostRequirementScreen extends StatefulWidget {
+class PostRequirementScreen extends ConsumerStatefulWidget {
   final String? prefilledCategory;
 
   const PostRequirementScreen({super.key, this.prefilledCategory});
 
   @override
-  State<PostRequirementScreen> createState() => _PostRequirementScreenState();
+  ConsumerState<PostRequirementScreen> createState() =>
+      _PostRequirementScreenState();
 }
 
-class _PostRequirementScreenState extends State<PostRequirementScreen> {
+class _PostRequirementScreenState extends ConsumerState<PostRequirementScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _categoryController;
@@ -98,21 +98,21 @@ class _PostRequirementScreenState extends State<PostRequirementScreen> {
     }
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_isFormValid) return;
-
-    final newRequest = BuyerRequest(
-      id: 'req_${DateTime.now().millisecondsSinceEpoch}',
-      title: 'Requirement for ${_categoryController.text.trim()}',
-      status: 'Open',
-      date: 'Just Now',
-      quantity: '${_quantityController.text.trim()} $_selectedUnit',
-    );
-
-    Provider.of<RequestsProvider>(
-      context,
-      listen: false,
-    ).addRequest(newRequest);
+    final quantity = int.tryParse(_quantityController.text.trim()) ?? 0;
+    final budget = double.tryParse(_budgetController.text.trim());
+    await ref
+        .read(serverClientProvider)
+        .marketplaceExtra
+        .createRequirement(
+          title: 'Requirement for ${_categoryController.text.trim()}',
+          description: _specsController.text.trim(),
+          category: _categoryController.text.trim(),
+          quantity: quantity,
+          budgetPaise: budget == null ? null : (budget * 100).round(),
+          city: _locationController.text.trim(),
+        );
 
     showDialog(
       context: context,

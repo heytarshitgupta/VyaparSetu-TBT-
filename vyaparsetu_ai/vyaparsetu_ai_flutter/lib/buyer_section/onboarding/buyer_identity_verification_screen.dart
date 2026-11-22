@@ -110,7 +110,6 @@ class _BuyerIdentityVerificationScreenState
 
     setState(() => _isVerifying = true);
 
-    // Mocking the verification for the prototype without hitting Supabase backend
     await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
@@ -133,12 +132,6 @@ class _BuyerIdentityVerificationScreenState
         _isVerified = true;
         _maskedPan = '******${trimmedPan.substring(6)}';
         _panLocalSuccessInfo = 'PAN verified successfully.';
-      });
-    } else {
-      setState(() {
-        _isVerifying = false;
-        _panLocalError =
-            'PAN could not be verified. Please check your details.';
       });
     }
   }

@@ -11,6 +11,15 @@ emailIdp:
   - verifyPasswordResetCode:
   - finishPasswordReset:
   - hasAccount:
+marketplaceExtra:
+  - wishlist:
+  - toggleWishlist:
+  - listRequirements:
+  - createRequirement:
+  - respondRequirement:
+  - notifications:
+  - markNotificationRead:
+  - sellerStats:
 product:
   - createDraft:
   - getPhoto:
@@ -19,13 +28,21 @@ product:
   - catalog:
   - publish:
   - hide:
+  - updateDraft:
+  - deleteDraft:
 profile:
   - getMine:
   - completeOnboarding:
+  - verifyProducerPan:
 trade:
   - listMine:
   - requestQuote:
   - quote:
   - accept:
+utility:
+  - suggestedPrice:
+  - calculatePrice:
+  - generateCatalogDescription:
+  - improvePhoto:
 greeting:
   - hello:

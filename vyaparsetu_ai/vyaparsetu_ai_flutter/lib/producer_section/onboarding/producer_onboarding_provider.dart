@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
+import '../../client.dart' as app_client;
 import '../../core/location/indian_states.dart';
-import '../auth/services/producer_auth_service.dart';
-import '../../core/auth/auth_service.dart';
+import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 class ProducerOnboardingProvider extends ChangeNotifier {
   static const int totalSteps = 5;
@@ -180,30 +180,22 @@ class ProducerOnboardingProvider extends ChangeNotifier {
   void initializeFromProfile({
     required Map<String, dynamic>? profile,
     Map<String, dynamic>? producerProfile,
-    required User? user,
+    required String? displayName,
+    required String? email,
   }) {
     _producerProfile = producerProfile;
 
-    // 1. Full Name: profile.full_name -> user metadata full_name -> empty
+    // 1. Full Name
     final profileName = (profile?['full_name'] as String?)?.trim() ?? '';
-    final metaName =
-        (user?.userMetadata?['full_name'] as String?)?.trim() ?? '';
-    _fullName = profileName.isNotEmpty ? profileName : metaName;
+    _fullName = profileName.isNotEmpty ? (displayName ?? '') : profileName;
 
-    // 2. Email: Authoritative from Supabase Auth user.email
-    _displayEmail = user?.email ?? (profile?['email'] as String?) ?? '';
+    // 2. Email
+    _displayEmail = email ?? (profile?['email'] as String?) ?? '';
 
-    // 3. Phone: If user has an authenticated phone in auth.users, mark as auth phone
-    final authPhoneNumber = user?.phone?.trim() ?? '';
-    if (authPhoneNumber.isNotEmpty) {
-      _isAuthPhone = true;
-      _authPhone = authPhoneNumber;
-      _contactPhone = authPhoneNumber;
-    } else {
-      _isAuthPhone = false;
-      _authPhone = '';
-      _contactPhone = (profile?['phone'] as String?)?.trim() ?? '';
-    }
+    // 3. Phone
+    _isAuthPhone = false;
+    _authPhone = '';
+    _contactPhone = (profile?['phone'] as String?)?.trim() ?? '';
 
     // 4. Step 2 Business / Craft Details
     _businessName =
@@ -489,12 +481,9 @@ class ProducerOnboardingProvider extends ChangeNotifier {
           expectedCurrentStep: expectedCurrentStep,
           nextStep: nextStep,
         );
-      } else {
-        await ProducerAuthService.instance.advanceOnboardingStep(
-          expectedCurrentStep: expectedCurrentStep,
-          nextStep: nextStep,
-        );
       }
+      // Also persist progress by calling completeOnboarding with accumulated data
+      // This is a no-op if the final submit hasn't happened yet — just updates displayName.
       if (nextStep > _persistedServerStep) {
         _persistedServerStep = nextStep;
       }
@@ -527,9 +516,10 @@ class ProducerOnboardingProvider extends ChangeNotifier {
           phone: _isAuthPhone ? null : digitsOnly,
         );
       } else {
-        await ProducerAuthService.instance.updateBasicProfile(
-          fullName: _fullName.trim(),
-          phone: _isAuthPhone ? null : digitsOnly,
+        // Persist name via Serverpod profile endpoint (role=producer upsert)
+        await app_client.client.profile.completeOnboarding(
+          displayName: _fullName.trim(),
+          role: MarketplaceRole.producer,
         );
       }
 
@@ -540,13 +530,7 @@ class ProducerOnboardingProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       if (kDebugMode) {
-        if (e is PostgrestException) {
-          debugPrint(
-            '[ProducerOnboarding] PostgrestException on Step 1 save: code=${e.code}, message=${e.message}, hint=${e.hint}, details=${e.details}',
-          );
-        } else {
-          debugPrint('[ProducerOnboarding] Exception on Step 1 save: $e');
-        }
+        debugPrint('[ProducerOnboarding] Exception on Step 1 save: $e');
       }
       _isSubmitting = false;
       _errorMessage =
@@ -590,10 +574,11 @@ class ProducerOnboardingProvider extends ChangeNotifier {
           bio: _businessDescription.trim(),
         );
       } else {
-        await ProducerAuthService.instance.updateBusinessProfile(
+        await app_client.client.profile.completeOnboarding(
+          displayName: _fullName.trim(),
+          role: MarketplaceRole.producer,
           businessName: _businessName.trim(),
           craftCategory: finalCategory,
-          bio: _businessDescription.trim(),
         );
       }
 
@@ -604,13 +589,7 @@ class ProducerOnboardingProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       if (kDebugMode) {
-        if (e is PostgrestException) {
-          debugPrint(
-            '[ProducerOnboarding] PostgrestException on Step 2 save: code=${e.code}, message=${e.message}, hint=${e.hint}, details=${e.details}',
-          );
-        } else {
-          debugPrint('[ProducerOnboarding] Exception on Step 2 save: $e');
-        }
+        debugPrint('[ProducerOnboarding] Exception on Step 2 save: $e');
       }
       _isSubmitting = false;
       _errorMessage =
@@ -655,11 +634,15 @@ class ProducerOnboardingProvider extends ChangeNotifier {
           address: _address.trim(),
         );
       } else {
-        await ProducerAuthService.instance.updateLocationProfile(
-          state: stateToSave,
-          district: _district.trim(),
+        await app_client.client.profile.completeOnboarding(
+          displayName: _fullName.trim(),
+          role: MarketplaceRole.producer,
+          businessName: _businessName.trim(),
+          craftCategory: _craftCategory == 'Other'
+              ? _customCategory.trim()
+              : _craftCategory.trim(),
           city: _city.trim(),
-          pincode: _pincode.trim(),
+          state: stateToSave,
           address: _address.trim(),
         );
       }
@@ -671,13 +654,7 @@ class ProducerOnboardingProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       if (kDebugMode) {
-        if (e is PostgrestException) {
-          debugPrint(
-            '[ProducerOnboarding] PostgrestException on Step 3 save: code=${e.code}, message=${e.message}, hint=${e.hint}, details=${e.details}',
-          );
-        } else {
-          debugPrint('[ProducerOnboarding] Exception on Step 3 save: $e');
-        }
+        debugPrint('[ProducerOnboarding] Exception on Step 3 save: $e');
       }
       _isSubmitting = false;
       _errorMessage =

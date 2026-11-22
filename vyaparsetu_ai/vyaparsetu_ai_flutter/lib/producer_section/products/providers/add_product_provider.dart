@@ -273,7 +273,7 @@ class AddProductProvider extends ChangeNotifier {
   // Persistence & Draft Management
   // ---------------------------------------------------------------------------
 
-  /// Explicitly persists current in-memory draft to Supabase.
+  /// Explicitly persists the current in-memory draft.
   ///
   /// - First Save: Calls [createDraft], stores returned product ID, sets isDirty = false.
   /// - Subsequent Saves: Calls [updateDraft] using [persistedProductId], sets isDirty = false.
@@ -574,7 +574,7 @@ class AddProductProvider extends ChangeNotifier {
         );
       }
 
-      // Step A: Upload to Supabase Storage
+      // Step A: Upload product photo
       newlyUploadedPath = await imageService.uploadProductImage(
         productId: productId,
         bytes: bytes,

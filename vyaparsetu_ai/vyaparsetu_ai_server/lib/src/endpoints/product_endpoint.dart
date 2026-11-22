@@ -148,6 +148,51 @@ class ProductEndpoint extends Endpoint {
   Future<Product> hide(Session session, {required int productId}) =>
       _changeStatus(session, productId, ProductStatus.hidden);
 
+  Future<Product> updateDraft(
+    Session session, {
+    required int productId,
+    required String name,
+    required String description,
+    int? pricePaise,
+    String? category,
+    String? unit,
+  }) async {
+    final producer = await _requireProducer(session);
+    final cleanName = name.trim();
+    if (cleanName.isEmpty || cleanName.runes.length > 120) {
+      throw ProductDraftException(message: 'Enter a valid product name.');
+    }
+    final rows = await Product.db.updateWhere(
+      session,
+      where: (row) =>
+          row.id.equals(productId) & row.producerProfileId.equals(producer.id!),
+      columnValues: (row) => [
+        row.name(cleanName),
+        row.description(description.trim()),
+        if (pricePaise != null) row.pricePaise(pricePaise),
+        if (category != null) row.category(category.trim()),
+        if (unit != null) row.unit(unit.trim()),
+      ],
+    );
+    if (rows.isEmpty) {
+      throw ProductDraftException(message: 'Product unavailable.');
+    }
+    return rows.single;
+  }
+
+  Future<bool> deleteDraft(Session session, {required int productId}) async {
+    final producer = await _requireProducer(session);
+    final deleted = await Product.db.deleteWhere(
+      session,
+      where: (row) =>
+          row.id.equals(productId) & row.producerProfileId.equals(producer.id!),
+    );
+    if (deleted.isEmpty) {
+      throw ProductDraftException(message: 'Product unavailable.');
+    }
+    return true;
+  }
+
   Future<Product> _changeStatus(
     Session session,
     int productId,

@@ -558,9 +558,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get badgeCouldNotVerify => 'Could Not Verify';
 
   @override
-  String get badgeComingSoon => 'Coming Soon';
-
-  @override
   String get badgeNotRegistered => 'Not Registered';
 
   @override
@@ -619,10 +616,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get buyerNeedsWaitingSubtitle =>
       'Buyer requests will be listed here when available';
-
-  @override
-  String get featureComingSoon =>
-      'This feature will be available in the next update';
 
   @override
   String get signOutAction => 'Sign Out';

@@ -9,8 +9,6 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'core/routes/app_router.dart';
 import 'buyer_section/onboarding/buyer_profile_provider.dart';
-import 'buyer_section/post_requirement/requests_provider.dart';
-import 'buyer_section/wishlist/wishlist_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +20,6 @@ void main() async {
           provider.ChangeNotifierProvider(create: _BuyerProfileProvider.create),
           provider.ChangeNotifierProvider(create: _LanguageProvider.create),
           provider.ChangeNotifierProvider(create: _ThemeProvider.create),
-          provider.ChangeNotifierProvider(create: _RequestsProvider.create),
-          provider.ChangeNotifierProvider(create: _WishlistProvider.create),
         ],
         child: MyApp(),
       ),
@@ -41,14 +37,6 @@ class _LanguageProvider {
 
 class _ThemeProvider {
   static ThemeProvider create(BuildContext _) => ThemeProvider();
-}
-
-class _RequestsProvider {
-  static RequestsProvider create(BuildContext _) => RequestsProvider();
-}
-
-class _WishlistProvider {
-  static WishlistProvider create(BuildContext _) => WishlistProvider();
 }
 
 class MyApp extends StatelessWidget {

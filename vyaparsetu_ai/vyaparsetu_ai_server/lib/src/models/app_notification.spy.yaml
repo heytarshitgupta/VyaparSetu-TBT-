@@ -1,0 +1,10 @@
+class: AppNotification
+table: app_notification
+fields:
+  profileId: int, relation(parent=account_profile, onDelete=Cascade)
+  title: String
+  message: String
+  type: String
+  relatedId: int?
+  isRead: bool, default=false
+  createdAt: DateTime

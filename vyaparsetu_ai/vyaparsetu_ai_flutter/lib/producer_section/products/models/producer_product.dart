@@ -73,7 +73,7 @@ class ProducerProduct {
   /// Contains no currency symbols or locale-specific formatting.
   String? get priceDecimalString => paiseToDecimalString(pricePaise);
 
-  /// Factory constructor to parse JSON rows from PostgREST / Supabase.
+  /// Factory constructor for database JSON rows.
   factory ProducerProduct.fromJson(Map<String, dynamic> json) {
     final rawId = json['id'];
     final rawProducerId = json['producer_id'];
@@ -180,7 +180,7 @@ class ProducerProduct {
   static int? parsePriceToPaise(dynamic value) =>
       ProductPriceParser.parseDbValueToPaise(value);
 
-  /// Converts integer paise back to an exact two-decimal string for Supabase / PostgreSQL.
+  /// Converts integer paise back to an exact two-decimal string.
   /// Delegates to canonical [ProductPriceParser.paiseToDecimalString].
   static String? paiseToDecimalString(int? paise) =>
       ProductPriceParser.paiseToDecimalString(paise);

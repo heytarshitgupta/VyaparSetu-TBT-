@@ -1,7 +1,8 @@
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/auth/auth_service.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
+import '../../client.dart' as app_client;
 import '../../core/localization/generated/app_localizations.dart';
 import '../../core/localization/language_provider.dart';
 import '../../core/routes/app_router.dart';
@@ -105,7 +106,7 @@ class ProducerQuickActionMenu extends StatelessWidget {
                 if (onSignOut != null) {
                   await onSignOut();
                 } else {
-                  await AuthService.instance.signOut();
+                  await app_client.client.auth.signOutDevice();
                 }
               } catch (_) {
                 // Safe failure fallback

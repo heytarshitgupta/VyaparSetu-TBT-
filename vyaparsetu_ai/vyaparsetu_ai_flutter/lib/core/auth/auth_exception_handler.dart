@@ -5,7 +5,7 @@ import 'auth_service.dart';
 class AuthExceptionHandler {
   AuthExceptionHandler._();
 
-  /// Converts Supabase and network errors into clean, user-friendly messages.
+  /// Converts authentication errors into clean, user-friendly messages.
   /// Never leaks database queries, stack traces, or internal server errors.
   static String getErrorMessage(dynamic error) {
     if (kDebugMode) {
@@ -76,7 +76,7 @@ class AuthExceptionHandler {
 
       if (message.contains('provider is not configured') ||
           message.contains('sms provider')) {
-        return 'SMS Provider not configured in Supabase. Add a Test Phone Number in your dashboard to test this feature.';
+        return 'SMS authentication is not configured. Use email sign-in.';
       }
 
       return 'Authentication failed. Please check your details and try again.';

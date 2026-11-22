@@ -16,10 +16,18 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
+import 'package:vyaparsetu_ai_client/src/protocol/app_notification.dart'
+    as _iyi705kw;
+import 'package:vyaparsetu_ai_client/src/protocol/buyer_requirement.dart'
+    as _izbpoeda;
 import 'package:vyaparsetu_ai_client/src/protocol/product.dart' as _idm7l56a;
 import 'package:vyaparsetu_ai_client/src/protocol/trade_request.dart'
     as _ir66x6wy;
+import 'package:vyaparsetu_ai_client/src/protocol/wishlist_item.dart'
+    as _i0vcfhnc;
 import 'account_profile.dart' as _i9dsm4op;
+import 'app_notification.dart' as _ip1vhxmg;
+import 'buyer_requirement.dart' as _ivd72sic;
 import 'greetings/greeting.dart' as _izw8z7ou;
 import 'marketplace_role.dart' as _i1ko12if;
 import 'product.dart' as _i8ctgxfn;
@@ -27,9 +35,13 @@ import 'product_draft_exception.dart' as _i1druvxr;
 import 'product_photo.dart' as _ihhflbx4;
 import 'product_status.dart' as _izdy7rp7;
 import 'profile_exception.dart' as _ip8pwhpv;
+import 'requirement_response.dart' as _iue4ntea;
 import 'trade_request.dart' as _ixjhwvo7;
 import 'trade_status.dart' as _ieevlvna;
+import 'wishlist_item.dart' as _iq96ht7h;
 export 'account_profile.dart';
+export 'app_notification.dart';
+export 'buyer_requirement.dart';
 export 'greetings/greeting.dart';
 export 'marketplace_role.dart';
 export 'product.dart';
@@ -37,8 +49,10 @@ export 'product_draft_exception.dart';
 export 'product_photo.dart';
 export 'product_status.dart';
 export 'profile_exception.dart';
+export 'requirement_response.dart';
 export 'trade_request.dart';
 export 'trade_status.dart';
+export 'wishlist_item.dart';
 export 'client.dart';
 
 class Protocol extends _isc.SerializationManager
@@ -55,6 +69,8 @@ class Protocol extends _isc.SerializationManager
         this,
         types: const [
           _isc.getType<_i9dsm4op.AccountProfile>,
+          _isc.getType<_ip1vhxmg.AppNotification>,
+          _isc.getType<_ivd72sic.BuyerRequirement>,
           _isc.getType<_izw8z7ou.Greeting>,
           _isc.getType<_i1ko12if.MarketplaceRole>,
           _isc.getType<_i8ctgxfn.Product>,
@@ -62,9 +78,13 @@ class Protocol extends _isc.SerializationManager
           _isc.getType<_ihhflbx4.ProductPhoto>,
           _isc.getType<_izdy7rp7.ProductStatus>,
           _isc.getType<_ip8pwhpv.ProfileException>,
+          _isc.getType<_iue4ntea.RequirementResponse>,
           _isc.getType<_ixjhwvo7.TradeRequest>,
           _isc.getType<_ieevlvna.TradeStatus>,
+          _isc.getType<_iq96ht7h.WishlistItem>,
           _isc.getType<_i9dsm4op.AccountProfile?>,
+          _isc.getType<_ip1vhxmg.AppNotification?>,
+          _isc.getType<_ivd72sic.BuyerRequirement?>,
           _isc.getType<_izw8z7ou.Greeting?>,
           _isc.getType<_i1ko12if.MarketplaceRole?>,
           _isc.getType<_i8ctgxfn.Product?>,
@@ -72,10 +92,17 @@ class Protocol extends _isc.SerializationManager
           _isc.getType<_ihhflbx4.ProductPhoto?>,
           _isc.getType<_izdy7rp7.ProductStatus?>,
           _isc.getType<_ip8pwhpv.ProfileException?>,
+          _isc.getType<_iue4ntea.RequirementResponse?>,
           _isc.getType<_ixjhwvo7.TradeRequest?>,
           _isc.getType<_ieevlvna.TradeStatus?>,
+          _isc.getType<_iq96ht7h.WishlistItem?>,
+          _isc.getType<List<_i0vcfhnc.WishlistItem>>,
+          _isc.getType<List<_izbpoeda.BuyerRequirement>>,
+          _isc.getType<List<_iyi705kw.AppNotification>>,
+          _isc.getType<Map<String, int>>,
           _isc.getType<List<_idm7l56a.Product>>,
           _isc.getType<List<_ir66x6wy.TradeRequest>>,
+          _isc.getType<Map<String, String>>,
         ],
         modules: const [
           _iaic.Protocol.new,
@@ -83,6 +110,8 @@ class Protocol extends _isc.SerializationManager
         ],
         classNames: const [
           'AccountProfile',
+          'AppNotification',
+          'BuyerRequirement',
           'Greeting',
           'MarketplaceRole',
           'Product',
@@ -90,8 +119,10 @@ class Protocol extends _isc.SerializationManager
           'ProductPhoto',
           'ProductStatus',
           'ProfileException',
+          'RequirementResponse',
           'TradeRequest',
           'TradeStatus',
+          'WishlistItem',
         ],
       );
 
@@ -122,6 +153,12 @@ class Protocol extends _isc.SerializationManager
     if (t == _i9dsm4op.AccountProfile) {
       return _i9dsm4op.AccountProfile.fromJson(data) as T;
     }
+    if (t == _ip1vhxmg.AppNotification) {
+      return _ip1vhxmg.AppNotification.fromJson(data) as T;
+    }
+    if (t == _ivd72sic.BuyerRequirement) {
+      return _ivd72sic.BuyerRequirement.fromJson(data) as T;
+    }
     if (t == _izw8z7ou.Greeting) {
       return _izw8z7ou.Greeting.fromJson(data) as T;
     }
@@ -143,14 +180,28 @@ class Protocol extends _isc.SerializationManager
     if (t == _ip8pwhpv.ProfileException) {
       return _ip8pwhpv.ProfileException.fromJson(data) as T;
     }
+    if (t == _iue4ntea.RequirementResponse) {
+      return _iue4ntea.RequirementResponse.fromJson(data) as T;
+    }
     if (t == _ixjhwvo7.TradeRequest) {
       return _ixjhwvo7.TradeRequest.fromJson(data) as T;
     }
     if (t == _ieevlvna.TradeStatus) {
       return _ieevlvna.TradeStatus.fromJson(data) as T;
     }
+    if (t == _iq96ht7h.WishlistItem) {
+      return _iq96ht7h.WishlistItem.fromJson(data) as T;
+    }
     if (t == _isc.getType<_i9dsm4op.AccountProfile?>()) {
       return (data != null ? _i9dsm4op.AccountProfile.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ip1vhxmg.AppNotification?>()) {
+      return (data != null ? _ip1vhxmg.AppNotification.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ivd72sic.BuyerRequirement?>()) {
+      return (data != null ? _ivd72sic.BuyerRequirement.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_izw8z7ou.Greeting?>()) {
@@ -180,11 +231,44 @@ class Protocol extends _isc.SerializationManager
       return (data != null ? _ip8pwhpv.ProfileException.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_iue4ntea.RequirementResponse?>()) {
+      return (data != null
+              ? _iue4ntea.RequirementResponse.fromJson(data)
+              : null)
+          as T;
+    }
     if (t == _isc.getType<_ixjhwvo7.TradeRequest?>()) {
       return (data != null ? _ixjhwvo7.TradeRequest.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_ieevlvna.TradeStatus?>()) {
       return (data != null ? _ieevlvna.TradeStatus.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iq96ht7h.WishlistItem?>()) {
+      return (data != null ? _iq96ht7h.WishlistItem.fromJson(data) : null) as T;
+    }
+    if (t == List<_i0vcfhnc.WishlistItem>) {
+      return (data as List)
+              .map((e) => deserialize<_i0vcfhnc.WishlistItem>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_izbpoeda.BuyerRequirement>) {
+      return (data as List)
+              .map((e) => deserialize<_izbpoeda.BuyerRequirement>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iyi705kw.AppNotification>) {
+      return (data as List)
+              .map((e) => deserialize<_iyi705kw.AppNotification>(e))
+              .toList()
+          as T;
+    }
+    if (t == Map<String, int>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<int>(v)),
+          )
+          as T;
     }
     if (t == List<_idm7l56a.Product>) {
       return (data as List)
@@ -196,6 +280,12 @@ class Protocol extends _isc.SerializationManager
       return (data as List)
               .map((e) => deserialize<_ir66x6wy.TradeRequest>(e))
               .toList()
+          as T;
+    }
+    if (t == Map<String, String>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<String>(v)),
+          )
           as T;
     }
     final modules = deserializationMetadata.modulesForDeserialization(
@@ -214,6 +304,8 @@ class Protocol extends _isc.SerializationManager
   static String? getClassNameForType(Type type) {
     return switch (type) {
       _i9dsm4op.AccountProfile => 'AccountProfile',
+      _ip1vhxmg.AppNotification => 'AppNotification',
+      _ivd72sic.BuyerRequirement => 'BuyerRequirement',
       _izw8z7ou.Greeting => 'Greeting',
       _i1ko12if.MarketplaceRole => 'MarketplaceRole',
       _i8ctgxfn.Product => 'Product',
@@ -221,8 +313,10 @@ class Protocol extends _isc.SerializationManager
       _ihhflbx4.ProductPhoto => 'ProductPhoto',
       _izdy7rp7.ProductStatus => 'ProductStatus',
       _ip8pwhpv.ProfileException => 'ProfileException',
+      _iue4ntea.RequirementResponse => 'RequirementResponse',
       _ixjhwvo7.TradeRequest => 'TradeRequest',
       _ieevlvna.TradeStatus => 'TradeStatus',
+      _iq96ht7h.WishlistItem => 'WishlistItem',
       _ => null,
     };
   }
@@ -242,6 +336,10 @@ class Protocol extends _isc.SerializationManager
     switch (data) {
       case _i9dsm4op.AccountProfile():
         return 'AccountProfile';
+      case _ip1vhxmg.AppNotification():
+        return 'AppNotification';
+      case _ivd72sic.BuyerRequirement():
+        return 'BuyerRequirement';
       case _izw8z7ou.Greeting():
         return 'Greeting';
       case _i1ko12if.MarketplaceRole():
@@ -256,10 +354,14 @@ class Protocol extends _isc.SerializationManager
         return 'ProductStatus';
       case _ip8pwhpv.ProfileException():
         return 'ProfileException';
+      case _iue4ntea.RequirementResponse():
+        return 'RequirementResponse';
       case _ixjhwvo7.TradeRequest():
         return 'TradeRequest';
       case _ieevlvna.TradeStatus():
         return 'TradeStatus';
+      case _iq96ht7h.WishlistItem():
+        return 'WishlistItem';
     }
     className = _iaic.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -285,6 +387,12 @@ class Protocol extends _isc.SerializationManager
     if (dataClassName == 'AccountProfile') {
       return deserialize<_i9dsm4op.AccountProfile>(data['data']);
     }
+    if (dataClassName == 'AppNotification') {
+      return deserialize<_ip1vhxmg.AppNotification>(data['data']);
+    }
+    if (dataClassName == 'BuyerRequirement') {
+      return deserialize<_ivd72sic.BuyerRequirement>(data['data']);
+    }
     if (dataClassName == 'Greeting') {
       return deserialize<_izw8z7ou.Greeting>(data['data']);
     }
@@ -306,11 +414,17 @@ class Protocol extends _isc.SerializationManager
     if (dataClassName == 'ProfileException') {
       return deserialize<_ip8pwhpv.ProfileException>(data['data']);
     }
+    if (dataClassName == 'RequirementResponse') {
+      return deserialize<_iue4ntea.RequirementResponse>(data['data']);
+    }
     if (dataClassName == 'TradeRequest') {
       return deserialize<_ixjhwvo7.TradeRequest>(data['data']);
     }
     if (dataClassName == 'TradeStatus') {
       return deserialize<_ieevlvna.TradeStatus>(data['data']);
+    }
+    if (dataClassName == 'WishlistItem') {
+      return deserialize<_iq96ht7h.WishlistItem>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       return _iaic.Protocol().deserializeByClassName({

@@ -4,10 +4,9 @@ import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
 
 import '../../providers/session_provider.dart';
-import '../producer/product_drafts_screen.dart';
-import '../marketplace/marketplace_screen.dart';
-import '../marketplace/trades_screen.dart';
 import 'profile_setup_form.dart';
+import '../../buyer_section/home/buyer_main_screen.dart';
+import '../../producer_section/home/producer_main_screen.dart';
 
 class SignInScreen extends ConsumerWidget {
   const SignInScreen({super.key, this.initialRole});
@@ -116,41 +115,9 @@ class _AccountPageState extends ConsumerState<_AccountPage> {
                     if (mounted) ref.invalidate(accountProfileProvider);
                   },
                 )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(switch (value.role) {
-                      MarketplaceRole.buyer => 'Buyer workspace',
-                      MarketplaceRole.producer => 'Producer workspace',
-                    }, style: Theme.of(context).textTheme.headlineSmall),
-                    const SizedBox(height: 8),
-                    Text('Welcome, ${value.displayName}.'),
-                    const SizedBox(height: 24),
-                    FilledButton(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => value.role == MarketplaceRole.producer
-                              ? const ProductDraftsScreen()
-                              : const MarketplaceScreen(),
-                        ),
-                      ),
-                      child: Text(
-                        value.role == MarketplaceRole.producer
-                            ? 'My Products'
-                            : 'Browse marketplace',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    OutlinedButton(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => TradesScreen(role: value.role),
-                        ),
-                      ),
-                      child: const Text('Quotes and orders'),
-                    ),
-                  ],
-                ),
+              : value.role == MarketplaceRole.buyer
+              ? const BuyerMainScreen()
+              : const ProducerMainScreen(),
         ),
       ),
     );
