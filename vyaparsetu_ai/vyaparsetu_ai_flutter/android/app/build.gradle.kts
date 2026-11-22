@@ -47,6 +47,14 @@ android {
         versionName = flutter.versionName
     }
 
+    lint {
+        // Lint is not part of shipping the APK, and AGP 9's lint can crash on
+        // third-party plugin sources (for example image_picker_android).
+        // Static analysis runs separately with `flutter analyze`.
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
     buildTypes {
         release {
             // Release builds on Serverpod Cloud are signed with the release
