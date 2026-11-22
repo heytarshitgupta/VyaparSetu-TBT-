@@ -4,27 +4,33 @@ import 'dart:typed_data';
 
 import 'package:serverpod/serverpod.dart';
 
+import '../generated/protocol.dart';
+import '../pricing/pricing_engine.dart';
+
 class UtilityEndpoint extends Endpoint {
-  /// Fast suggested price in paise based on artisan product categories and keywords
+  /// Fast suggested price in paise, from the same engine the full calculator
+  /// uses. Kept for the one-tap suggestion in the add-product form.
   Future<int> suggestedPrice(
     Session session, {
     required String name,
     required String category,
   }) async {
-    final text = '$name $category'.toLowerCase();
-    if (text.contains('pashmina') || text.contains('zari')) return 350000;
-    if (text.contains('silk') || text.contains('phulkari')) return 125000;
-    if (text.contains('brass') || text.contains('bell metal') || text.contains('bronze')) return 185000;
-    if (text.contains('khadi') || text.contains('kurta') || text.contains('bedsheet')) return 85000;
-    if (text.contains('wood') || text.contains('sheesham') || text.contains('channapatna')) return 65000;
-    if (text.contains('pottery') || text.contains('terracotta') || text.contains('ceramic')) return 55000;
-    if (text.contains('honey') || text.contains('oil')) return 45000;
-    if (text.contains('jaggery') || text.contains('gur') || text.contains('pickle')) return 30000;
-    if (text.contains('bamboo') || text.contains('jute')) return 45000;
-    return 50000;
+    final recommendation = await _recommend(
+      session,
+      name: name,
+      category: category,
+      description: '',
+    );
+    return (recommendation.recommendedRupees * 100).round();
   }
 
-  /// Full pricing engine calculation porting pricing_engine.py
+  /// Full pricing recommendation.
+  ///
+  /// The cost floor is deterministic (matched artisan cost profile plus the
+  /// real WPI index). The market band comes from comparable listings: the
+  /// illustrative benchmark plus live catalogue prices in the same segment.
+  /// Nothing here pretends to know a single "correct" price; it returns a
+  /// band, a confidence level, and the reasons behind every number.
   Future<Map<String, String>> calculatePrice(
     Session session, {
     required String productId,
@@ -32,110 +38,91 @@ class UtilityEndpoint extends Endpoint {
     required String description,
     bool isBulk = false,
   }) async {
-    // 1. WPI category inflation multiplier
-    double wpiMultiplier = 1.05;
-    final catLower = category.toLowerCase();
-    if (catLower.contains('food')) {
-      wpiMultiplier = 1.08;
-    } else if (catLower.contains('textile') || catLower.contains('handloom')) {
-      wpiMultiplier = 1.06;
-    } else if (catLower.contains('metal') || catLower.contains('manufacturing')) {
-      wpiMultiplier = 1.05;
-    } else if (catLower.contains('craft') || catLower.contains('wood')) {
-      wpiMultiplier = 1.07;
-    }
+    var name = '';
+    var resolvedCategory = category;
+    var resolvedDescription = description;
 
-    // 2. Base costs estimation from category / description keywords
-    double baseMaterialCost = 100.0;
-    double materialQty = 1.5;
-    double laborHours = 2.0;
-    double hourlyWage = 50.0;
-    double packagingCost = 30.0;
-    double targetMarginPct = 0.30;
-
-    if (catLower.contains('food')) {
-      baseMaterialCost = 80.0;
-      materialQty = 1.2;
-      laborHours = 1.0;
-      hourlyWage = 45.0;
-      packagingCost = 25.0;
-      targetMarginPct = 0.25;
-    } else if (catLower.contains('handloom') || catLower.contains('cloth') || catLower.contains('textile')) {
-      baseMaterialCost = 180.0;
-      materialQty = 2.0;
-      laborHours = 4.5;
-      hourlyWage = 55.0;
-      packagingCost = 40.0;
-      targetMarginPct = 0.35;
-    } else if (catLower.contains('metal') || catLower.contains('brass')) {
-      baseMaterialCost = 350.0;
-      materialQty = 1.5;
-      laborHours = 3.5;
-      hourlyWage = 60.0;
-      packagingCost = 50.0;
-      targetMarginPct = 0.30;
-    } else if (catLower.contains('pottery') || catLower.contains('handicraft')) {
-      baseMaterialCost = 50.0;
-      materialQty = 2.0;
-      laborHours = 2.5;
-      hourlyWage = 45.0;
-      packagingCost = 35.0;
-      targetMarginPct = 0.30;
-    }
-
-    // 3. Cost floor calculation
-    final rawCost = baseMaterialCost * materialQty * wpiMultiplier;
-    final laborCost = laborHours * hourlyWage;
-    final breakEven = rawCost + laborCost + packagingCost;
-    final desiredFloor = breakEven * (1 + targetMarginPct);
-
-    // 4. Market ceiling estimate from retail benchmarks
-    double marketCeiling = 800.0;
-    final descLower = description.toLowerCase();
-    if (descLower.contains('pashmina') || descLower.contains('silk')) {
-      marketCeiling = 3200.0;
-    } else if (descLower.contains('phulkari') || descLower.contains('brass')) {
-      marketCeiling = 1800.0;
-    } else if (descLower.contains('khadi') || descLower.contains('bedsheet') || descLower.contains('wood')) {
-      marketCeiling = 950.0;
-    } else if (descLower.contains('honey') || descLower.contains('oil') || descLower.contains('ghee')) {
-      marketCeiling = 650.0;
-    } else if (descLower.contains('terracotta') || descLower.contains('pickle') || descLower.contains('gur')) {
-      marketCeiling = 450.0;
-    }
-
-    // 5. Tier & recommendation
-    double optimalPrice;
-    String pricingType;
-    String advice;
-
-    if (isBulk) {
-      optimalPrice = breakEven * 1.15;
-      if (optimalPrice < marketCeiling * 0.75) {
-        optimalPrice = marketCeiling * 0.75;
+    final numericId = int.tryParse(productId);
+    if (numericId != null) {
+      try {
+        final product = await Product.db.findById(session, numericId);
+        if (product != null) {
+          name = product.name;
+          resolvedCategory = product.category?.isNotEmpty == true
+              ? product.category!
+              : category;
+          resolvedDescription = product.description;
+        }
+      } catch (error) {
+        session.log(
+          'Pricing lookup for product $productId failed, using request data: '
+          '$error',
+          level: LogLevel.warning,
+        );
       }
-      pricingType = 'B2B Wholesale Tier (Aggregation Recommended)';
-      advice = 'Bulk wholesale demand tier. Recommended margin preserves artisan break-even above ₹${breakEven.toStringAsFixed(2)}.';
-    } else {
-      optimalPrice = desiredFloor;
-      if (optimalPrice > marketCeiling) {
-        optimalPrice = marketCeiling;
-      }
-      if (optimalPrice < breakEven) {
-        optimalPrice = breakEven * 1.05;
-      }
-      pricingType = 'B2C Retail Tier';
-      advice = 'Break-even floor is ₹${breakEven.toStringAsFixed(2)}. Market ceiling benchmarks at ₹${marketCeiling.toStringAsFixed(2)}.';
     }
 
-    return {
-      'product_id': productId,
-      'pricing_tier': pricingType,
-      'break_even_floor': breakEven.toStringAsFixed(2),
-      'recommended_price': optimalPrice.toStringAsFixed(2),
-      'market_ceiling': marketCeiling.toStringAsFixed(2),
-      'ai_guidance': advice,
-    };
+    if (name.isEmpty) {
+      name = description.isEmpty ? category : description;
+    }
+
+    final recommendation = await _recommend(
+      session,
+      name: name,
+      category: resolvedCategory,
+      description: resolvedDescription,
+      isBulk: isBulk,
+    );
+    return recommendation.toJsonMap(productId);
+  }
+
+  Future<PriceRecommendation> _recommend(
+    Session session, {
+    required String name,
+    required String category,
+    required String description,
+    bool isBulk = false,
+  }) async {
+    final segment = PricingEngine.segmentFor(category, description);
+    final catalogPrices = await _catalogPrices(session, segment);
+
+    return PricingEngine.instance.recommend(
+      name: name,
+      category: category,
+      description: description,
+      isBulk: isBulk,
+      catalogPrices: catalogPrices,
+    );
+  }
+
+  /// Live listing prices (rupees) in the same market segment, so the band
+  /// follows the real marketplace instead of only the static benchmark.
+  Future<List<double>> _catalogPrices(Session session, String segment) async {
+    try {
+      final rows = await Product.db.find(
+        session,
+        where: (product) => product.status.equals(ProductStatus.published),
+        limit: 200,
+      );
+      final prices = <double>[];
+      for (final row in rows) {
+        final pricePaise = row.pricePaise;
+        if (pricePaise == null || pricePaise <= 0) continue;
+        final rowSegment = PricingEngine.segmentFor(
+          row.category ?? '',
+          row.description,
+        );
+        if (rowSegment != segment) continue;
+        prices.add(pricePaise / 100);
+      }
+      return prices;
+    } catch (error) {
+      session.log(
+        'Could not load catalogue prices for the market band: $error',
+        level: LogLevel.warning,
+      );
+      return const [];
+    }
   }
 
   /// AI Catalog generation with Gemini API or deterministic artisan template fallback
@@ -146,7 +133,8 @@ class UtilityEndpoint extends Endpoint {
     String? voiceText,
   }) async {
     final craft = voiceText?.trim() ?? '';
-    final apiKey = Platform.environment['GEMINI_API_KEY'] ??
+    final apiKey =
+        Platform.environment['GEMINI_API_KEY'] ??
         Platform.environment['LLM_API_KEY'] ??
         Serverpod.instance.getPassword('geminiApiKey') ??
         '';
@@ -177,7 +165,9 @@ class UtilityEndpoint extends Endpoint {
           ],
         });
         request.write(payload);
-        final response = await request.close().timeout(const Duration(seconds: 4));
+        final response = await request.close().timeout(
+          const Duration(seconds: 4),
+        );
 
         if (response.statusCode == 200) {
           final responseBody = await response.transform(utf8.decoder).join();
@@ -195,7 +185,10 @@ class UtilityEndpoint extends Endpoint {
           }
         }
       } catch (e) {
-        session.log('Gemini catalog generation API error, falling back to template: $e', level: LogLevel.warning);
+        session.log(
+          'Gemini catalog generation API error, falling back to template: $e',
+          level: LogLevel.warning,
+        );
       }
     }
 

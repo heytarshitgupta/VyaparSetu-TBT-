@@ -611,7 +611,8 @@ class EndpointUtility extends _isc.EndpointRef {
   @override
   String get name => 'utility';
 
-  /// Fast suggested price in paise based on artisan product categories and keywords
+  /// Fast suggested price in paise, from the same engine the full calculator
+  /// uses. Kept for the one-tap suggestion in the add-product form.
   _ida.Future<int> suggestedPrice({
     required String name,
     required String category,
@@ -624,7 +625,13 @@ class EndpointUtility extends _isc.EndpointRef {
     },
   );
 
-  /// Full pricing engine calculation porting pricing_engine.py
+  /// Full pricing recommendation.
+  ///
+  /// The cost floor is deterministic (matched artisan cost profile plus the
+  /// real WPI index). The market band comes from comparable listings: the
+  /// illustrative benchmark plus live catalogue prices in the same segment.
+  /// Nothing here pretends to know a single "correct" price; it returns a
+  /// band, a confidence level, and the reasons behind every number.
   _ida.Future<Map<String, String>> calculatePrice({
     required String productId,
     required String category,

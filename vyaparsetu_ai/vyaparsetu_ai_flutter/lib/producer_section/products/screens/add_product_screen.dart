@@ -85,6 +85,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   bool _isListening = false;
   String _spokenText = '';
   bool _isLoading = false;
+  bool _isSuggestingPrice = false;
   String? _hindiTitle;
   String? _hindiDescription;
 
@@ -263,6 +264,172 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void _onProviderChanged() {
     if (mounted) setState(() {});
+  }
+
+  // ---------------------------------------------------------------------------
+  // AI price suggestion
+  // ---------------------------------------------------------------------------
+
+  Future<void> _suggestPrice() async {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter a product name first.')),
+      );
+      return;
+    }
+
+    setState(() => _isSuggestingPrice = true);
+    try {
+      final description = _descriptionController.text.trim();
+      final category = _provider.draft.category.isEmpty
+          ? 'Handicrafts'
+          : _provider.draft.category;
+      final result = await client.utility.calculatePrice(
+        productId: '',
+        category: category,
+        description: description.isEmpty ? name : '$name $description',
+        isBulk: false,
+      );
+      if (!mounted) return;
+      await _showPriceRecommendation(result);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to suggest a price. ($error)')),
+      );
+    } finally {
+      if (mounted) setState(() => _isSuggestingPrice = false);
+    }
+  }
+
+  double _parseRupees(String? value) => double.tryParse(value ?? '') ?? 0;
+
+  String _formatRupees(String? value) {
+    final amount = _parseRupees(value);
+    return amount == amount.roundToDouble()
+        ? '₹${amount.toStringAsFixed(0)}'
+        : '₹${amount.toStringAsFixed(2)}';
+  }
+
+  Future<void> _showPriceRecommendation(Map<String, String> result) async {
+    final recommended = _parseRupees(result['recommended_price']);
+    if (recommended <= 0) return;
+
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final applied = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.auto_awesome, color: colorScheme.primary),
+                    const SizedBox(width: 8),
+                    Text(
+                      'AI price suggestion',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  _formatRupees(result['recommended_price']),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Market band '
+                  '${_formatRupees(result['price_low'])} – '
+                  '${_formatRupees(result['price_high'])}',
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _priceChip(
+                      'Cost floor ${_formatRupees(result['break_even_floor'])}',
+                    ),
+                    _priceChip(
+                      '${result['comparables_used'] ?? '0'} comparable '
+                      'listings',
+                    ),
+                    _priceChip(
+                      '${result['confidence'] ?? 'low'} confidence',
+                    ),
+                    _priceChip(
+                      'WPI ${result['wpi_period'] ?? ''}',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  result['ai_guidance'] ?? '',
+                  style: theme.textTheme.bodySmall,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('Keep my price'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: Text(
+                          'Use ${_formatRupees(result['recommended_price'])}',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (applied != true || !mounted) return;
+
+    final text = recommended.toStringAsFixed(
+      recommended == recommended.roundToDouble() ? 0 : 2,
+    );
+    _priceController
+      ..text = text
+      ..selection = TextSelection.collapsed(offset: text.length);
+    _provider.setPriceFromRupeesText(text);
+    setState(() => _priceError = null);
+  }
+
+  Widget _priceChip(String label) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(label, style: Theme.of(context).textTheme.labelSmall),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -1583,40 +1750,62 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Widget _buildPriceField(AppLocalizations l10n, ColorScheme colorScheme) {
-    return TextFormField(
-      key: const Key('add_product_price_field'),
-      controller: _priceController,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-      ],
-      decoration: InputDecoration(
-        labelText: '${l10n.priceLabel} *',
-        prefixText: '₹ ',
-        helperText: l10n.priceHelper,
-        errorText: _priceError,
-        border: const OutlineInputBorder(),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-      ),
-      onChanged: (val) {
-        if (val.trim().isEmpty) {
-          _provider.setPriceFromRupeesText('');
-          if (_priceError != null) setState(() => _priceError = null);
-          return;
-        }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextFormField(
+          key: const Key('add_product_price_field'),
+          controller: _priceController,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+          ],
+          decoration: InputDecoration(
+            labelText: '${l10n.priceLabel} *',
+            prefixText: '₹ ',
+            helperText: l10n.priceHelper,
+            errorText: _priceError,
+            border: const OutlineInputBorder(),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
+          ),
+          onChanged: (val) {
+            if (val.trim().isEmpty) {
+              _provider.setPriceFromRupeesText('');
+              if (_priceError != null) setState(() => _priceError = null);
+              return;
+            }
 
-        final success = _provider.setPriceFromRupeesText(val);
-        if (success) {
-          if (_priceError != null) setState(() => _priceError = null);
-        } else {
-          setState(() {
-            _priceError = l10n.priceInvalidError;
-          });
-        }
-      },
+            final success = _provider.setPriceFromRupeesText(val);
+            if (success) {
+              if (_priceError != null) setState(() => _priceError = null);
+            } else {
+              setState(() {
+                _priceError = l10n.priceInvalidError;
+              });
+            }
+          },
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            key: const Key('add_product_suggest_price_button'),
+            onPressed: _isSuggestingPrice ? null : _suggestPrice,
+            icon: _isSuggestingPrice
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.auto_awesome, size: 18),
+            label: Text(
+              _isSuggestingPrice ? 'Calculating…' : 'AI Suggest Price',
+            ),
+          ),
+        ),
+      ],
     );
   }
 
