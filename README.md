@@ -6,67 +6,6 @@ A two-sided B2B marketplace for Indian artisans, producers, and bulk buyers. Pro
 
 ---
 
-## Start here (read this first)
-
-This README is the project's single source of truth. Nobody on the team needs prior experience with Flutter, Dart, Serverpod, or databases — everything you need to demo the app and answer questions is written below in plain language.
-
-**If you are presenting tomorrow, read these in order (about 20 minutes):**
-
-1. **Live deployment** — what is already online and which link to open.
-2. **What the app does** — the product in one page.
-3. **Plain-English glossary** — every technical word explained like you are new to it.
-4. **Two-minute presentation script** — say this out loud once.
-5. **How it is put together** and **Code map** — so you can point at the screen and say "this file does this".
-6. **What happens when…** — the exact journey of each tap, end to end.
-7. **Mentor Q&A** — the questions teachers actually ask, with answers.
-
-**Three things you can do with this repo:**
-
-| I want to… | Go to |
-| --- | --- |
-| Show the working product | **Live deployment** + **Two-minute presentation script** |
-| Install the Android app | **Install the Android app** (permanent APK link) |
-| Change code and redeploy | **Run locally** → **Deploy the backend** → **APK releases** |
-
-You do **not** need to run anything locally to demo. The app, API, database, and APK are already deployed and live.
-
----
-
-## Plain-English glossary
-
-Read this once. Every term below is used later in the README.
-
-| Word | What it actually means here |
-| --- | --- |
-| **Frontend** | The screens the user sees and taps. Here: a Flutter app that runs as an Android APK **and** as a website. |
-| **Backend / server** | The program that holds the rules and the data. It answers the frontend's requests. Here: a Dart program built with Serverpod. |
-| **API** | The list of requests the frontend is allowed to make to the backend, e.g. "create a product", "accept a quote". |
-| **RPC** | "Remote procedure call" — the frontend calls a Dart function on the server as if it were local. Serverpod generates the glue code. |
-| **Endpoint** | One group of related RPC methods. `product` is an endpoint; `product.publish` is a method on it. |
-| **Database** | Where data survives restarts. Here: PostgreSQL, a table-based database. |
-| **Table** | One spreadsheet-like list in the database. `product` holds one row per listing. |
-| **Model** | A Dart class that describes one row (and is also the shape of the JSON sent over the API). Defined in `.spy.yaml` files. |
-| **Migration** | A versioned SQL script that changes the database structure (add a column, create a table). Serverpod applies them in order. |
-| **Session** | A signed-in state kept on the server. The phone stores a token; the server looks up who you are on every request. |
-| **OTP** | One-time password: the 6-digit code emailed to you at sign-in. No password to remember. |
-| **JWT** | A signed token that proves a session is genuine. Serverpod Cloud manages the signing keys. |
-| **Secret** | A password or key that must never be in git (database password, SMTP password, API key). Stored in `config/passwords.yaml` locally and as Cloud secrets in production. |
-| **Environment variable** | A value passed to a program from outside the code, e.g. `SERVER_URL=https://…`. |
-| **Deploy** | Ship the current code to the public server so real users get it. |
-| **CI / GitHub Actions** | GitHub's robots that run commands for you on every push. Here they build the APK and publish it. |
-| **Release asset** | A file attached to a GitHub Release. The APK lives there, which gives it a permanent download URL. |
-| **`--dart-define`** | A build-time setting passed into a Flutter build. We use it to bake the API URL into the APK. |
-| **Web build** | The same Flutter code compiled to JavaScript/WebAssembly so it runs in a browser. |
-| **APK** | The installable Android app file. |
-| **Paise** | 1/100 of a rupee. All money is stored as whole paise so there are no rounding errors. |
-| **State machine** | A rule for which status changes are allowed: a quote can go `requested → quoted → accepted`, never backwards. |
-| **Workspace / monorepo** | One repository holding several Dart packages that share dependencies (`vyaparsetu_ai/`). |
-| **Serverpod Cloud** | The hosting service that runs our backend, database, web app, and Insights dashboard. |
-| **Podlet** | Serverpod Cloud's name for one running copy of the backend. More podlets = more traffic capacity. |
-| **Insights** | Serverpod's built-in dashboard for logs, requests, and errors of the deployed server. |
-
----
-
 ## Live deployment
 
 | Service | URL |
@@ -104,43 +43,7 @@ Sign-in is passwordless: the user enters an email address, receives a 6-digit OT
 
 ---
 
-## Five-minute demo script
-
-1. **Open** https://vyaparsetu.serverpod.space/ and pick a role.
-2. **Producer:** sign in with an email, enter the OTP, complete onboarding (business name, craft, state).
-3. **Add a product:** take or choose a photo, type or dictate a description, tap **AI Generate Catalog**, optionally **Suggest Price**, then **Publish**.
-4. **Buyer:** in a second browser profile or phone, sign in, browse the marketplace, open the product, add it to the wishlist, and request a quote.
-5. **Producer:** open **Quotes & Orders**, submit a total in rupees.
-6. **Buyer:** open **Quotes & Orders**, accept the quote. Both accounts now show the same confirmed order.
-7. **Extras:** post a buyer requirement, respond to it as a producer, and show the notification feed.
-
----
-
-## Two-minute presentation script
-
-Say this in front of the app. Bold text is what you tap or point at.
-
-> **0:00 — Problem (20s).**
-> "India ke gaon ke artisans bahut achha handmade maal banate hain, lekin unke paas digital catalogue nahi hota, English description likhne ka time nahi hota, aur bulk buyers tak pahunchne ka rasta nahi hota. Beech mein middlemen poora margin le lete hain."
->
-> **0:20 — What we built (20s).**
-> "Humne **VyaparSetu** banaya — ek do-tarfa marketplace. Producer apna product photo aur voice se add karta hai, AI uski description aur price suggestion banata hai. Buyer catalogue browse karta hai, quote maangta hai, aur quote accept karte hi order confirm ho jata hai. **Same app Android par aur browser par chalti hai.**"
->
-> **0:40 — Live demo (50s).**
-> Open https://vyaparsetu.serverpod.space/ → **I Make & Sell Products** → email → **Send code** → OTP → onboarding → **Add Product** → name, category, price, photo → **Add Product**. Point at **My Products**: "Ye listing turant buyer catalogue mein live hai."
-> Then open the same URL in a second window → **I Want to Buy Products** → browse the catalogue → open the product → **Request quote**.
->
-> **1:30 — The quote loop (20s).**
-> "Ab producer ke **Quotes** tab mein wahi request aati hai. Producer total quote karta hai. Buyer **Accept** dabata hai — dono taraf same order, same status. Ek hi record, koi duplicate order table nahi."
->
-> **1:50 — Tech in one line (10s).**
-> "Poora stack Dart mein hai: Flutter frontend, Serverpod backend, PostgreSQL. Ek hi codebase se Android APK, website, API aur database — sab ek saath deploy hote hain. APK har push par GitHub Releases se automatically update hota hai."
-
-**If the demo breaks:** the app is already deployed, so use the screenshots/video you recorded, and say "network issue hai, lekin architecture ye hai" — then jump to **Mentor Q&A**. Never debug live in front of judges.
-
----
-
-## What happens when…
+## Request flows, end to end
 
 These four traces explain the whole product. Each step names the exact file so you can answer "where is that in the code?"
 
@@ -176,6 +79,41 @@ These four traces explain the whole product. Each step names the exact file so y
 3. `flutter build apk --release --build-number=<run number> --dart-define=SERVER_URL=<api>` produces `app-release.apk`.
 4. The file is renamed `vyaparsetu.apk` and uploaded to the `apk-latest` release with `gh release upload --clobber`.
 5. `https://github.com/heytarshitgupta/VyaparSetu-TBT-/releases/latest/download/vyaparsetu.apk` now serves the new file — the URL never changes, so shared links keep working.
+
+---
+
+## Plain-English glossary
+
+Read this once. Every term below is used later in the README.
+
+| Word | What it actually means here |
+| --- | --- |
+| **Frontend** | The screens the user sees and taps. Here: a Flutter app that runs as an Android APK **and** as a website. |
+| **Backend / server** | The program that holds the rules and the data. It answers the frontend's requests. Here: a Dart program built with Serverpod. |
+| **API** | The list of requests the frontend is allowed to make to the backend, e.g. "create a product", "accept a quote". |
+| **RPC** | "Remote procedure call" — the frontend calls a Dart function on the server as if it were local. Serverpod generates the glue code. |
+| **Endpoint** | One group of related RPC methods. `product` is an endpoint; `product.publish` is a method on it. |
+| **Database** | Where data survives restarts. Here: PostgreSQL, a table-based database. |
+| **Table** | One spreadsheet-like list in the database. `product` holds one row per listing. |
+| **Model** | A Dart class that describes one row (and is also the shape of the JSON sent over the API). Defined in `.spy.yaml` files. |
+| **Migration** | A versioned SQL script that changes the database structure (add a column, create a table). Serverpod applies them in order. |
+| **Session** | A signed-in state kept on the server. The phone stores a token; the server looks up who you are on every request. |
+| **OTP** | One-time password: the 6-digit code emailed to you at sign-in. No password to remember. |
+| **JWT** | A signed token that proves a session is genuine. Serverpod Cloud manages the signing keys. |
+| **Secret** | A password or key that must never be in git (database password, SMTP password, API key). Stored in `config/passwords.yaml` locally and as Cloud secrets in production. |
+| **Environment variable** | A value passed to a program from outside the code, e.g. `SERVER_URL=https://…`. |
+| **Deploy** | Ship the current code to the public server so real users get it. |
+| **CI / GitHub Actions** | GitHub's robots that run commands for you on every push. Here they build the APK and publish it. |
+| **Release asset** | A file attached to a GitHub Release. The APK lives there, which gives it a permanent download URL. |
+| **`--dart-define`** | A build-time setting passed into a Flutter build. We use it to bake the API URL into the APK. |
+| **Web build** | The same Flutter code compiled to JavaScript/WebAssembly so it runs in a browser. |
+| **APK** | The installable Android app file. |
+| **Paise** | 1/100 of a rupee. All money is stored as whole paise so there are no rounding errors. |
+| **State machine** | A rule for which status changes are allowed: a quote can go `requested → quoted → accepted`, never backwards. |
+| **Workspace / monorepo** | One repository holding several Dart packages that share dependencies (`vyaparsetu_ai/`). |
+| **Serverpod Cloud** | The hosting service that runs our backend, database, web app, and Insights dashboard. |
+| **Podlet** | Serverpod Cloud's name for one running copy of the backend. More podlets = more traffic capacity. |
+| **Insights** | Serverpod's built-in dashboard for logs, requests, and errors of the deployed server. |
 
 ---
 
@@ -224,7 +162,7 @@ These four traces explain the whole product. Each step names the exact file so y
 | **Flutter web served by the backend** | One deploy, one origin, no CORS setup, and the web app reads the API URL from `/assets/assets/config.json` generated by the server. |
 | **APK via GitHub Releases** | Serverpod Cloud artifact links expire. A GitHub Release asset at `/releases/latest/download/vyaparsetu.apk` is stable and free. |
 | **AI with a deterministic fallback** | Gemini 1.5 Flash is optional (4-second timeout). If there is no key or the call fails, a local template still produces usable catalog copy, so the demo never depends on network AI. |
-| **Heuristic pricing engine** | Works offline: category-based material/labour/packaging costs, a WPI-style inflation multiplier, a target margin, and a market ceiling. It is explainable to a judge, unlike a black-box model. |
+| **Heuristic pricing engine** | Works offline: category-based material/labour/packaging costs, a WPI-style inflation multiplier, a target margin, and a market ceiling. Every number is explainable, unlike a black-box model. |
 
 ---
 
@@ -490,7 +428,7 @@ VyaparSetu-TBT-/
 
 ## Code map (where each feature lives)
 
-Open the file named here when a mentor asks "where is that implemented?"
+Open the file named here when someone asks "where is that implemented?"
 
 | Feature | Flutter (what you see) | Server (the rules) |
 | --- | --- | --- |
@@ -531,55 +469,6 @@ Server endpoints live in `vyaparsetu_ai_server/lib/src/endpoints/`. Each file is
 
 ---
 
-## Mentor Q&A
-
-**What exactly is the product?**
-A mobile-first B2B marketplace that lets rural artisans create a product catalog and quote bulk buyers, and lets buyers discover, request, and confirm orders in one place.
-
-**Who is the user and why would they use it?**
-Producers in craft clusters (handloom, terracotta, brass, woodcraft, food) who sell through middlemen, and bulk buyers (retailers, exporters, gifting companies) who want authentic handmade supply. Producers get reach and pricing help; buyers get discovery and a structured quote flow.
-
-**Why not just use WhatsApp or IndiaMART?**
-WhatsApp has no catalog, quote state, or order record. IndiaMART is lead-generation and paid. VyaparSetu is purpose-built for artisans: voice-assisted listing, AI catalog copy, a price floor recommendation, and a simple quote → accept workflow.
-
-**What is technically interesting here?**
-End-to-end Dart with Serverpod: one set of models generates the database schema, server stubs, and typed client. The same codebase serves Android, web, API, and the web frontend. Auth, sessions, migrations, and cloud storage are integrated instead of stitched together.
-
-**How does authentication work?**
-Email + 6-digit OTP through Serverpod's email identity provider. The server issues a server-side session (30-day lifetime, 7-day inactivity timeout). No passwords are stored. On the cloud, SMTP credentials and the session pepper are project secrets.
-
-**How do you stop a buyer from accepting someone else's quote?**
-The `accept` endpoint loads the trade by id and checks `buyerProfileId` against the caller's profile from the session. The same pattern protects product edits, publishing, and producer quotes.
-
-**How is money handled?**
-All amounts are integers in paise (`pricePaise`, `budgetPaise`, `totalPaise`). The UI formats them as ₹. This avoids floating-point errors and keeps the database representation exact.
-
-**What happens if the AI key is missing or Gemini is slow?**
-The AI call is optional and has a 4-second timeout. On any failure, `generateCatalogDescription` returns a deterministic artisan template. The pricing engine is entirely local, so the core demo works offline.
-
-**How does the price suggestion work?**
-It estimates material cost, quantity, labour hours and wage, packaging, and a target margin by category, applies a WPI-style inflation multiplier, computes a break-even floor, and clamps the recommendation between the floor and a market ceiling. Bulk mode uses a thinner wholesale margin.
-
-**How is the app deployed?**
-Serverpod Cloud runs a monolith role: API, web server, and Insights in one project with managed PostgreSQL. `serverpod cloud deploy` builds the server, applies migrations, and rolls out. The Flutter web build is copied into `web/app` and served by the same backend.
-
-**How do users get updates?**
-Every push to `main` triggers GitHub Actions, builds a release APK with an incrementing build number, and replaces the asset in the `apk-latest` release. The `/releases/latest/download/vyaparsetu.apk` link never changes.
-
-**What about scale?**
-The API is stateless and can run multiple podlets; the database is managed and indexed on the main access paths. The monolith role can be split into separate API, web, and Insights roles. The next bottlenecks are image storage and catalog pagination, both straightforward to add.
-
-**What did you test?**
-`dart analyze`, `flutter test`, `dart test` (embedded PostgreSQL), plus a manual two-account end-to-end run: producer publishes a product, buyer requests a quote, producer quotes, buyer accepts, both sides see the confirmed order.
-
-**What is not built yet?**
-Payments/escrow, shipping and logistics, ratings, push notifications, real-time chat, GST invoicing, regional-language UI, and Play Store signing. The current release is a working marketplace core, not a finished commercial platform.
-
-**Why does production start with an empty database?**
-Seeding is development-only on purpose: a real deployment should not contain fake producers. For a demo, create a producer account and add products live, or run the development seed against a staging database.
-
----
-
 ## Limitations and next steps
 
 - Payments, escrow, and logistics are not implemented; orders are confirmed but settled offline.
@@ -588,9 +477,3 @@ Seeding is development-only on purpose: a real deployment should not contain fak
 - Images are stored as bytes in the database (type and size validated); production should add compression and a CDN.
 - The APK is debug-signed; Play Store distribution needs a release keystore.
 - OTP endpoints need per-IP rate limiting before a public launch.
-
----
-
-## Notes
-
-- Serverpod Cloud Starter trial ends **2026-12-23**. After that the project needs a paid plan or the Dockerfile-based self-host path.
