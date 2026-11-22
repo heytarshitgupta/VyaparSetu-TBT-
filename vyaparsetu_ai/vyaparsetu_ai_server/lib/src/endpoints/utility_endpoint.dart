@@ -95,16 +95,20 @@ class UtilityEndpoint extends Endpoint {
     );
   }
 
-  /// Live listing prices (rupees) in the same market segment, so the band
+  /// Live price signals (rupees) in the same market segment, so the band
   /// follows the real marketplace instead of only the static benchmark.
+  ///
+  /// Two sources: published listing prices, and accepted quotes converted to a
+  /// per-unit price. Accepted quotes are the strongest signal because a buyer
+  /// actually paid that amount.
   Future<List<double>> _catalogPrices(Session session, String segment) async {
+    final prices = <double>[];
     try {
       final rows = await Product.db.find(
         session,
         where: (product) => product.status.equals(ProductStatus.published),
         limit: 200,
       );
-      final prices = <double>[];
       for (final row in rows) {
         final pricePaise = row.pricePaise;
         if (pricePaise == null || pricePaise <= 0) continue;
@@ -115,14 +119,50 @@ class UtilityEndpoint extends Endpoint {
         if (rowSegment != segment) continue;
         prices.add(pricePaise / 100);
       }
-      return prices;
     } catch (error) {
       session.log(
         'Could not load catalogue prices for the market band: $error',
         level: LogLevel.warning,
       );
-      return const [];
     }
+
+    try {
+      final trades = await TradeRequest.db.find(
+        session,
+        where: (trade) =>
+            trade.status.equals(TradeStatus.accepted) &
+            trade.totalPaise.notEquals(null),
+        orderBy: (trade) => trade.createdAt.desc(),
+        limit: 200,
+      );
+      final products = <int, Product?>{};
+      for (final trade in trades) {
+        final totalPaise = trade.totalPaise;
+        if (totalPaise == null || totalPaise <= 0 || trade.quantity <= 0) {
+          continue;
+        }
+        final product = products.containsKey(trade.productId)
+            ? products[trade.productId]
+            : products[trade.productId] = await Product.db.findById(
+                session,
+                trade.productId,
+              );
+        if (product == null) continue;
+        final rowSegment = PricingEngine.segmentFor(
+          product.category ?? '',
+          product.description,
+        );
+        if (rowSegment != segment) continue;
+        prices.add(totalPaise / trade.quantity / 100);
+      }
+    } catch (error) {
+      session.log(
+        'Could not load accepted quotes for the market band: $error',
+        level: LogLevel.warning,
+      );
+    }
+
+    return prices;
   }
 
   /// AI Catalog generation with Gemini API or deterministic artisan template fallback

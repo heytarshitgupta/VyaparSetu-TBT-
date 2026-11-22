@@ -71,10 +71,32 @@ Serverpod Cloud runs API, web server, Insights, and managed PostgreSQL in one pr
 Every push to `main` triggers GitHub Actions, builds an APK with an incremented build number, and replaces the asset in the `apk-latest` release. The download URL never changes.
 
 **What did you test?**
-Static analysis, widget tests, Serverpod integration tests, and a deployed end-to-end run: OTP login, producer onboarding, product publish, buyer catalog, quote request, quote, and acceptance.
+Static analysis, widget tests, Serverpod integration tests, 7 pricing-engine unit tests, and a deployed end-to-end run: OTP login, producer onboarding, product publish, buyer catalog, quote request, quote, and acceptance.
+
+## AI models — what is real
+
+| Feature | Status |
+| --- | --- |
+| Auto-Cataloger | Gemini 1.5 Flash when a key is set, deterministic artisan template otherwise. Not trained by us; prompt + fallback. |
+| Price recommendation | Pure Dart in the backend. Cost floor from matched artisan cost profiles + real WPI (base 2022-23, July 2026), market band from comparables (benchmark + live published listings), confidence + reasons. |
+| Photo improvement | Reserved endpoint; returns the photo unchanged. Not wired to a vision model yet. |
+
+Honest numbers (leave-one-out, 30 illustrative benchmark rows):
+
+| Model | MAE | MAPE | R² |
+| --- | --- | --- | --- |
+| category median | ₹406.33 | 108.2% | −0.415 |
+| Ridge | ₹299.44 | 91.1% | 0.188 |
+| RandomForest | ₹285.55 | 70.0% | 0.200 |
+| k-NN k=5 | ₹288.18 | 77.3% | 0.232 |
+| shipped engine | ₹214.18 | 47.2% | 0.576 |
+
+So: we do **not** ship a regression as "AI price prediction" — its error is too high. We ship the transparent engine, and it beats every trained model we measured. The band improves as real accepted quotes accumulate. Do not claim better accuracy than this table.
+
+Retrain with `python ml/train_pricing.py` then `python ml/export_dart.py` from the repo root.
 
 **What is not built yet?**
-Payments, escrow, shipping, ratings, push notifications, real-time chat, GST invoicing, regional-language UI, and Play Store signing.
+Payments, escrow, shipping, ratings, push notifications, real-time chat, GST invoicing, regional-language UI, Play Store signing, and a real photo-enhancement model.
 
 ## Verification checklist
 
@@ -88,6 +110,6 @@ Payments, escrow, shipping, ratings, push notifications, real-time chat, GST inv
 ## Housekeeping
 
 - Serverpod Cloud Starter trial ends **2026-12-23**. After that the project needs a paid plan or the Dockerfile-based self-host path.
-- Production starts with an empty database; the development seed only runs in `development` mode. Create fresh accounts before a demo.
+- Production starts with an empty database, but the demo seed runs on startup whenever the product table has fewer than 10 rows: 20 published products with photos, 6 producers, 2 buyers, and 5 requirements. It is idempotent, so it seeds once and then skips.
 - The APK is debug-signed. That installs fine on phones but is not Play Store ready.
 - Keep `config/passwords.yaml`, `.env`, and SMTP/Gemini keys out of commits.
