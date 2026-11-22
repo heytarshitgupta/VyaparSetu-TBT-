@@ -37,7 +37,7 @@ The app is built for low-end Android phones (APK), but the same Flutter code run
 
 **Producers** complete a business profile, add products (photo + description, optional AI-generated catalog text), publish or hide listings, browse buyer requirements, quote a total in rupees, and see confirmed orders.
 
-**Buyers** browse and search published products, add items to a wishlist, post requirements, request a quote, receive notifications, and accept a quote to confirm an order.
+**Buyers** land on a Flipkart-style dashboard: logo bar, search, banner, circular categories, and a two-column "Recommended For You" grid with an **Order Now** button on every card. They can save items to a wishlist, open a product, request a quote, post requirements, receive notifications, and accept a quote to confirm an order.
 
 Sign-in is passwordless: the user enters an email address, receives a 6-digit OTP by email, and verifies it. In production the OTP is sent by Serverpod Cloud's transactional email service; locally it uses Gmail SMTP if configured, otherwise the code is printed to the server console.
 
@@ -440,7 +440,9 @@ Open the file named here when someone asks "where is that implemented?"
 | Producer home and tabs | `lib/producer_section/home/producer_main_screen.dart` | — |
 | Add / edit product | `lib/producer_section/products/providers/add_product_provider.dart`, `lib/features/producer/product_drafts_screen.dart` | `lib/src/endpoints/product_endpoint.dart` |
 | Product photo | `lib/features/marketplace/product_photo.dart` | `product_endpoint.dart` (magic-byte + size validation, `product_photo` table) |
-| Buyer catalog and wishlist | `lib/features/marketplace/marketplace_screen.dart`, `lib/buyer_section/wishlist/wishlist_screen.dart` | `product_endpoint.dart` (`catalog`), `marketplace_extra_endpoint.dart` |
+| Buyer dashboard | `lib/buyer_section/home/tabs/buyer_home_tab.dart`, `lib/buyer_section/home/widgets/buyer_product_card.dart` | `product_endpoint.dart` (`catalog`) |
+| Buyer catalog, categories and wishlist | `lib/features/marketplace/marketplace_screen.dart`, `lib/buyer_section/wishlist/wishlist_screen.dart` | `product_endpoint.dart` (`catalog`), `marketplace_extra_endpoint.dart` |
+| Product detail and quote request | `lib/features/marketplace/product_detail_screen.dart` | `trade_endpoint.dart` (`requestQuote`) |
 | Buyer requirements | `lib/buyer_section/post_requirement/post_requirement_screen.dart` | `marketplace_extra_endpoint.dart` |
 | Quote → accept → order | `lib/features/marketplace/trades_screen.dart` | `lib/src/endpoints/trade_endpoint.dart` |
 | Notifications | `lib/buyer_section/notifications/notifications_screen.dart` | `marketplace_extra_endpoint.dart` |

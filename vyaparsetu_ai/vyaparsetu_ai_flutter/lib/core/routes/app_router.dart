@@ -72,6 +72,14 @@ class AppRouter {
       case buyerSuccessRoute:
         return _route(settings, const BuyerMainScreen());
       case marketplaceRoute:
+        return _route(
+          settings,
+          MarketplaceScreen(
+            initialQuery: settings.arguments is String
+                ? settings.arguments as String
+                : '',
+          ),
+        );
       case productDetailRoute:
       case comparisonRoute:
       case sellerDashboardRoute:

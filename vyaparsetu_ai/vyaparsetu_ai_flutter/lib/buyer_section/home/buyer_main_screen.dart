@@ -6,6 +6,7 @@ import '../profile/buyer_profile_screen.dart';
 import '../../../features/marketplace/marketplace_screen.dart';
 import '../../../features/marketplace/trades_screen.dart';
 import 'package:vyaparsetu_ai_client/vyaparsetu_ai_client.dart';
+import 'tabs/buyer_home_tab.dart';
 
 class BuyerMainScreen extends StatefulWidget {
   const BuyerMainScreen({super.key});
@@ -17,8 +18,11 @@ class BuyerMainScreen extends StatefulWidget {
 class _BuyerMainScreenState extends State<BuyerMainScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _tabs = [
-    const MarketplaceScreen(),
+  late final List<Widget> _tabs = [
+    BuyerHomeTab(
+      onOpenMarketplace: () => setState(() => _currentIndex = 1),
+      onOpenAccount: () => setState(() => _currentIndex = 3),
+    ),
     const MarketplaceScreen(),
     const TradesScreen(role: MarketplaceRole.buyer, embedded: true),
     const BuyerProfileScreen(),
