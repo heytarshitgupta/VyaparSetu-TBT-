@@ -81,6 +81,7 @@ Sign-in is passwordless: the user enters an email address, receives a 6-digit OT
 - The server serves `web/app` at `/` when that directory exists (`FlutterRoute` in `lib/server.dart`). If it is missing, a "Flutter web app not built" page is shown.
 - Product photos are stored in the `product_photo` table as validated PNG/JPEG bytes (8 bytes–240 KB). Serverpod cloud storage is configured for future media and falls back to database storage.
 - Optional AI catalog generation uses `GEMINI_API_KEY` (or `LLM_API_KEY`); without a key a deterministic artisan template is used.
+- OTP email delivery uses Serverpod Cloud's transactional email service in production (`scloudAuthEmailKey`, provisioned automatically). Locally it uses Gmail SMTP if configured, otherwise the code is printed in the server console. Gmail SMTP egress is blocked from Serverpod Cloud, which is why the cloud path exists.
 - Demo catalog seeding runs only when `runMode == 'development'`, so production starts empty and real users onboard themselves.
 
 ---
@@ -242,7 +243,8 @@ The server tests use Serverpod's embedded PostgreSQL (`config/test.yaml`), so no
 | `vyaparsetu_ai_server/config/production.yaml` | Placeholder only; Serverpod Cloud injects the real host, ports, and domains at deploy time. |
 | `vyaparsetu_ai_server/config/passwords.yaml` | Local secrets. Gitignored — never commit it. |
 | `vyaparsetu_ai_server/.env` | `docker compose` passwords (`VYAPARSETU_DEV_DB_PASSWORD`, etc.). Gitignored. |
-| `SMTP_USER` / `SMTP_PASS` | Environment overrides for the Gmail sender. |
+| `SMTP_USER` / `SMTP_PASS` | Local/self-host Gmail sender. Not reachable from Serverpod Cloud. |
+| `scloudAuthEmailKey` | Serverpod Cloud transactional email token, provisioned automatically and used for production OTP delivery. |
 | `GEMINI_API_KEY` / `LLM_API_KEY` | Optional key for AI catalog generation. |
 | `SERVER_URL` | Flutter `--dart-define` that points the app at an API host. |
 | `vyaparsetu_ai_server/scloud.yaml` | Serverpod Cloud project link (`projectId: vyaparsetu`). Safe to commit. |
@@ -282,7 +284,7 @@ serverpod cloud password set smtpPass "your-gmail-app-password"
 serverpod cloud password set serverSideSessionKeyHashPepper <random-hex-value>
 ```
 
-Serverpod Cloud manages `database`, `serviceSecret`, `emailSecretHashPepper`, JWT keys, and the Cloud email key automatically. Re-deploy after changing a secret.
+Serverpod Cloud manages `database`, `serviceSecret`, `emailSecretHashPepper`, JWT keys, `scloudAuthEmailKey`, and the Cloud email key automatically. Re-deploy after changing a secret.
 
 ### Refresh the hosted web app
 
@@ -363,7 +365,8 @@ VyaparSetu-TBT-/
 | --- | --- |
 | Web URL shows "Flutter web app not built" | Run `serverpod run flutter_build` from `vyaparsetu_ai/`, then `serverpod cloud deploy`. Confirm `web/app/index.html` exists. |
 | `401 Unauthorized` on an API call | The endpoint requires a signed-in session. Sign in through the app; raw curl calls need the auth header. |
-| OTP never arrives | Check `smtpUser` / `smtpPass`. Locally, read the code from the server console. On Cloud, verify the secrets and redeploy. |
+| OTP never arrives | Locally, read the code from the server console or set `smtpUser` / `smtpPass`. On Cloud, OTPs go through Serverpod Cloud's email service; check `serverpod cloud log` for `Failed to send ... email via the Serverpod Cloud email service`. |
+| Send code spins for a minute then returns | This was the old Gmail SMTP path timing out from Serverpod Cloud. The server now uses the platform email service; redeploy if you see this. |
 | Database schema out of sync | `serverpod create-repair-migration`, then redeploy/restart. |
 | Android blocks the APK | Allow "Install unknown apps" for the browser, then retry. |
 | `docker compose` refuses to start Postgres | `.env` is missing or `VYAPARSETU_DEV_DB_PASSWORD` is empty. Re-run step 2 of local setup. |
