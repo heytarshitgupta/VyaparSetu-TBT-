@@ -42,10 +42,20 @@ jobs:
       - name: Build release APK
         working-directory: vyaparsetu_ai/vyaparsetu_ai_flutter
         run: |
-          flutter build apk --release \
-            --build-number=${{ github.run_number }} \
-            --dart-define=SERVER_URL="$SERVER_URL"
-          cp build/app/outputs/flutter-apk/app-release.apk vyaparsetu.apk
+          # Dependency resolution can fail transiently when the Gradle plugin
+          # portal returns incomplete metadata. Retry once with a clean cache.
+          for attempt in 1 2; do
+            echo "Build attempt $attempt"
+            if flutter build apk --release \
+                --build-number=${{ github.run_number }} \
+                --dart-define=SERVER_URL="$SERVER_URL"; then
+              cp build/app/outputs/flutter-apk/app-release.apk vyaparsetu.apk
+              exit 0
+            fi
+            echo "Attempt $attempt failed; clearing Gradle module cache"
+            rm -rf ~/.gradle/caches/modules-2
+          done
+          exit 1
 
       - name: Publish latest APK
         working-directory: vyaparsetu_ai/vyaparsetu_ai_flutter
