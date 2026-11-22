@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -78,12 +80,14 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final colors = BuyerColors.of(context);
     final product = widget.product;
+    final photo = ref.watch(productPhotoProvider(product.id!)).asData?.value;
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
         backgroundColor: colors.surface,
         foregroundColor: colors.textPrimary,
         elevation: 0,
+        centerTitle: false,
         title: Text(
           product.name,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700),
@@ -92,135 +96,163 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
         ),
       ),
       body: SafeArea(
-        child: Form(
-          key: _form,
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: colors.borderLight),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: AspectRatio(
-                  aspectRatio: 4 / 3,
-                  child: ProductPhotoView(productId: product.id!),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                product.name,
-                style: GoogleFonts.inter(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: colors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: Form(
+              key: _form,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
                 children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: colors.borderLight),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: AspectRatio(
+                      aspectRatio: 4 / 3,
+                      child: photo == null
+                          ? Icon(
+                              Icons.inventory_2_outlined,
+                              size: 64,
+                              color: colors.textLight,
+                            )
+                          : Image.memory(
+                              Uint8List.sublistView(photo),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              semanticLabel: 'Product photo',
+                              errorBuilder: (_, _, _) => Icon(
+                                Icons.inventory_2_outlined,
+                                size: 64,
+                                color: colors.textLight,
+                              ),
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
-                    formatRupees(product.pricePaise),
+                    product.name,
                     style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
                       color: colors.textPrimary,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(height: 6),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        formatRupees(product.pricePaise),
+                        style: GoogleFonts.inter(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: colors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '/ ${product.unit}',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (product.category != null &&
+                          product.category!.isNotEmpty)
+                        _MetaChip(label: product.category!),
+                      _MetaChip(label: 'MOQ ${product.minimumOrderQuantity}'),
+                      if (product.city != null && product.city!.isNotEmpty)
+                        _MetaChip(label: product.city!),
+                    ],
+                  ),
+                  if (product.description.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      product.description,
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        height: 1.5,
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 24),
                   Text(
-                    '/ ${product.unit}',
+                    'Request a quote',
                     style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: colors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  if (product.category != null && product.category!.isNotEmpty)
-                    _MetaChip(label: product.category!),
-                  _MetaChip(label: 'MOQ ${product.minimumOrderQuantity}'),
-                  if (product.city != null && product.city!.isNotEmpty)
-                    _MetaChip(label: product.city!),
-                ],
-              ),
-              if (product.description.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                Text(
-                  product.description,
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    height: 1.5,
-                    color: colors.textSecondary,
-                  ),
-                ),
-              ],
-              const SizedBox(height: 24),
-              Text(
-                'Request a quote',
-                style: GoogleFonts.inter(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: colors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _quantity,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Quantity'),
-                validator: (text) {
-                  final quantity = int.tryParse(text?.trim() ?? '');
-                  return quantity == null || quantity < 1 || quantity > 100000
-                      ? 'Enter a quantity between 1 and 100,000.'
-                      : null;
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _requirements,
-                decoration: const InputDecoration(
-                  labelText: 'Requirements or delivery date',
-                ),
-                maxLength: 2000,
-                maxLines: 3,
-              ),
-              if (_error != null) ...[
-                const SizedBox(height: 4),
-                Text(_error!, style: TextStyle(color: colors.badgePinkText)),
-              ],
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 46,
-                child: ElevatedButton(
-                  onPressed: _sending ? null : _send,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: colors.orangeAccent,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                  ),
-                  child: Text(
-                    _sending ? 'Sending…' : 'Request quote',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: FontWeight.w700,
+                      color: colors.textPrimary,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _quantity,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Quantity'),
+                    validator: (text) {
+                      final quantity = int.tryParse(text?.trim() ?? '');
+                      return quantity == null ||
+                              quantity < 1 ||
+                              quantity > 100000
+                          ? 'Enter a quantity between 1 and 100,000.'
+                          : null;
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _requirements,
+                    decoration: const InputDecoration(
+                      labelText: 'Requirements or delivery date',
+                    ),
+                    maxLength: 2000,
+                    maxLines: 3,
+                  ),
+                  if (_error != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      _error!,
+                      style: TextStyle(color: colors.badgePinkText),
+                    ),
+                  ],
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 46,
+                    child: ElevatedButton(
+                      onPressed: _sending ? null : _send,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.orangeAccent,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      child: Text(
+                        _sending ? 'Sending…' : 'Request quote',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

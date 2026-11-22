@@ -184,6 +184,7 @@ class _BuyerHomeTabState extends ConsumerState<BuyerHomeTab> {
           floating: true,
           pinned: false,
           automaticallyImplyLeading: false,
+          centerTitle: false,
           elevation: 2,
           shadowColor: Colors.black12,
           toolbarHeight: 60,

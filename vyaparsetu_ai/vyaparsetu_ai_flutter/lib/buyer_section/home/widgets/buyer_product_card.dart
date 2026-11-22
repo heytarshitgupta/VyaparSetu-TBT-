@@ -108,11 +108,7 @@ class BuyerProductCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.category?.isNotEmpty == true
-                          ? product.category!
-                          : (product.city?.isNotEmpty == true
-                                ? product.city!
-                                : 'Handmade'),
+                      _categoryLabel(product),
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
@@ -194,6 +190,16 @@ class BuyerProductCard extends ConsumerWidget {
       ),
     );
   }
+}
+
+String _categoryLabel(Product product) {
+  final raw = product.category?.trim();
+  if (raw != null && raw.isNotEmpty) {
+    return raw[0].toUpperCase() + raw.substring(1);
+  }
+  final city = product.city?.trim();
+  if (city != null && city.isNotEmpty) return city;
+  return 'Handmade';
 }
 
 class _ProductImage extends StatelessWidget {

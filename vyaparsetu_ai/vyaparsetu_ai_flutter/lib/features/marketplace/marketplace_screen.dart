@@ -94,6 +94,7 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
       appBar: AppBar(
         backgroundColor: colors.surface,
         elevation: 0,
+        centerTitle: false,
         foregroundColor: colors.textPrimary,
         leading: IconButton(
           icon: Icon(
