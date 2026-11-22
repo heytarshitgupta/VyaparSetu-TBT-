@@ -43,28 +43,62 @@ class _BuyerHomeTabState extends ConsumerState<BuyerHomeTab> {
     ),
     _Category(
       'Handlooms',
-      'Textiles',
+      'Handlooms',
       'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=200',
+      keywords: [
+        'handloom',
+        'textile',
+        'clothing',
+        'embroidery',
+        'khadi',
+        'pashmina',
+        'silk',
+        'cotton',
+      ],
     ),
     _Category(
       'Spices',
       'Spices',
       'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200',
+      keywords: ['spice', 'masala', 'pickle'],
     ),
     _Category(
       'Handicrafts',
       'Handicrafts',
       'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200',
+      keywords: [
+        'handicraft',
+        'clay',
+        'pottery',
+        'ceramic',
+        'terracotta',
+        'wood',
+        'metal',
+        'brass',
+        'copper',
+        'dhokra',
+        'craft',
+      ],
     ),
     _Category(
       'Food',
       'Food',
       'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200',
+      keywords: [
+        'food',
+        'honey',
+        'jaggery',
+        'oil',
+        'pickle',
+        'organic',
+        'homemade',
+      ],
     ),
     _Category(
       'Gifting',
       'Gifting',
       'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=200',
+      keywords: ['gift', 'toy', 'decor', 'pooja', 'festive'],
     ),
   ];
 
@@ -93,15 +127,18 @@ class _BuyerHomeTabState extends ConsumerState<BuyerHomeTab> {
   List<Product> _applyCategory(List<Product> products) {
     final category = _category;
     if (category == null) return products;
-    final needle = category.toLowerCase();
-    return products
-        .where(
-          (product) =>
-              (product.category?.toLowerCase().contains(needle) ?? false) ||
-              product.name.toLowerCase().contains(needle) ||
-              product.description.toLowerCase().contains(needle),
-        )
-        .toList();
+    final selected = _categories.firstWhere(
+      (entry) => entry.filter == category,
+      orElse: () => _categories.first,
+    );
+    if (selected.keywords.isEmpty) return products;
+    return products.where((product) {
+      final haystack =
+          '${product.category ?? ''} ${product.name} '
+                  '${product.description} ${product.craft ?? ''}'
+              .toLowerCase();
+      return selected.keywords.any(haystack.contains);
+    }).toList();
   }
 
   void _showFilterSheet() {
@@ -439,11 +476,17 @@ class _BuyerHomeTabState extends ConsumerState<BuyerHomeTab> {
 }
 
 class _Category {
-  const _Category(this.title, this.filter, this.imageUrl);
+  const _Category(
+    this.title,
+    this.filter,
+    this.imageUrl, {
+    this.keywords = const [],
+  });
 
   final String title;
   final String filter;
   final String imageUrl;
+  final List<String> keywords;
 }
 
 class _CircularCategory extends StatelessWidget {

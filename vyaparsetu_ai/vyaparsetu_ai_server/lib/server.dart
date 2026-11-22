@@ -119,8 +119,6 @@ void run(List<String> args) async {
   // Start the server.
   await pod.start();
 
-  // Seed demo catalog in development
-  if (pod.runMode == 'development') {
-    await seedDevelopmentData(pod);
-  }
+  // Seed the demo catalog whenever the marketplace is still mostly empty.
+  await seedDemoData(pod);
 }

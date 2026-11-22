@@ -144,7 +144,7 @@ Read this once. Every term below is used later in the README.
 - Product photos are stored in the `product_photo` table as validated PNG/JPEG bytes (8 bytes–240 KB). Serverpod cloud storage is configured for future media and falls back to database storage.
 - Optional AI catalog generation uses `GEMINI_API_KEY` (or `LLM_API_KEY`); without a key a deterministic artisan template is used.
 - OTP email delivery uses Serverpod Cloud's transactional email service in production (`scloudAuthEmailKey`, provisioned automatically). Locally it uses Gmail SMTP if configured, otherwise the code is printed in the server console. Gmail SMTP egress is blocked from Serverpod Cloud, which is why the cloud path exists.
-- Demo catalog seeding runs only when `runMode == 'development'`, so production starts empty and real users onboard themselves.
+- The demo catalog seeds itself on startup whenever the product table has fewer than 10 rows: 6 demo producers, 2 buyers, 20 published products with photos, and 5 buyer requirements. Seeding is idempotent, so it runs once and then skips. Real users can still onboard normally.
 
 ---
 
