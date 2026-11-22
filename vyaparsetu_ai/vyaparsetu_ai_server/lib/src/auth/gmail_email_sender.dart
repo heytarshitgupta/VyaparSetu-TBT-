@@ -4,6 +4,10 @@ import 'dart:math';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:serverpod/serverpod.dart' hide Message;
+import 'package:serverpod_auth_idp_server/providers/email.dart'
+    show ServerpodCloudEmailClient, ServerpodCloudEmailType;
+
+final _cloudEmailClient = ServerpodCloudEmailClient();
 
 String sixDigitCode() {
   final random = Random.secure();
@@ -18,6 +22,36 @@ Future<void> sendVyaparSetuEmailCode(
   required String verificationCode,
   Transaction? transaction,
 }) async {
+  // On Serverpod Cloud, Gmail SMTP egress is blocked. Use the platform's
+  // transactional email service instead; it is authenticated by the
+  // automatically provisioned `scloudAuthEmailKey` password.
+  final runMode = Serverpod.instance.runMode;
+  final isDeployed =
+      runMode != ServerpodRunMode.development &&
+      runMode != ServerpodRunMode.test;
+  final cloudKey =
+      Serverpod.instance.getPassword('scloudAuthEmailKey')?.trim() ?? '';
+
+  if (isDeployed && cloudKey.isNotEmpty) {
+    try {
+      await _cloudEmailClient.sendEmail(
+        token: cloudKey,
+        emailType: ServerpodCloudEmailType.signup,
+        email: email.trim(),
+        projectName: 'VyaparSetu',
+        authCode: verificationCode,
+      );
+      return;
+    } catch (error, stackTrace) {
+      session.log(
+        'Serverpod Cloud email delivery failed; falling back to SMTP.',
+        level: LogLevel.warning,
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
   final smtpUser =
       Platform.environment['SMTP_USER'] ??
       Serverpod.instance.getPassword('smtpUser') ??

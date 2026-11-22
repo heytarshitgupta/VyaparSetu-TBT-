@@ -79,7 +79,7 @@ Sign-in is passwordless: the user enters an email address, receives a 6-digit OT
 
 - `vyaparsetu_ai_client/` is generated from the server's `.spy.yaml` models and endpoint signatures. Never edit it by hand.
 - The server serves `web/app` at `/` when that directory exists (`FlutterRoute` in `lib/server.dart`). If it is missing, a "Flutter web app not built" page is shown.
-- Product photos are stored through Serverpod cloud storage (`ServerpodCloudProvider`, with `DatabaseCloudStorage` as fallback).
+- Product photos are stored in the `product_photo` table as validated PNG/JPEG bytes (8 bytes–240 KB). Serverpod cloud storage is configured for future media and falls back to database storage.
 - Optional AI catalog generation uses `GEMINI_API_KEY` (or `LLM_API_KEY`); without a key a deterministic artisan template is used.
 - Demo catalog seeding runs only when `runMode == 'development'`, so production starts empty and real users onboard themselves.
 
@@ -126,8 +126,8 @@ Indexes cover the foreign keys used by the main lists: products by producer, tra
 - **Secrets:** `config/passwords.yaml` is gitignored locally; in the cloud they are stored with `serverpod cloud password set` and injected as `SERVERPOD_PASSWORD_*` environment variables.
 - **Authorization:** endpoints never trust ids from the client. They load the caller's `account_profile` from the session and check ownership before reads or writes. State transitions (`publish`, `hide`, `quote`, `accept`) are validated on the server.
 - **Transport:** HTTPS everywhere on Serverpod Cloud; the Flutter client talks only to the API origin.
-- **Input handling:** typed models and generated serialization reject malformed payloads; money is an integer; SQL is parameterized by Serverpod's ORM.
-- **Known hardening work:** per-IP rate limiting on OTP requests, image size/type validation before storage, and audit logging for admin actions.
+- **Input handling:** typed models and generated serialization reject malformed payloads; money is an integer; SQL is parameterized by Serverpod's ORM. Uploaded photos are checked for PNG/JPEG magic bytes and capped at 240 KB.
+- **Known hardening work:** per-IP rate limiting on OTP requests and audit logging for admin actions.
 
 ---
 
@@ -425,7 +425,7 @@ Seeding is development-only on purpose: a real deployment should not contain fak
 - Payments, escrow, and logistics are not implemented; orders are confirmed but settled offline.
 - Notifications are in-app only; no FCM push or email digest yet.
 - The catalog is not paginated; it is fine for a demo catalog but should be paged for thousands of listings.
-- Images are stored as bytes in the database/cloud storage; production should add compression, size limits, and a CDN.
+- Images are stored as bytes in the database (type and size validated); production should add compression and a CDN.
 - The APK is debug-signed; Play Store distribution needs a release keystore.
 - OTP endpoints need per-IP rate limiting before a public launch.
 
