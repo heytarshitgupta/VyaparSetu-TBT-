@@ -52,7 +52,16 @@ const _productImages = <String, String>{
       'https://images.unsplash.com/photo-1602143407151-7111542de6e8$_imageQuery',
   'Bronze Heritage Pooja Thali Set':
       'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da$_imageQuery',
+  // Older demo products that were seeded with a transparent placeholder photo.
+  'Homemade pickle':
+      'https://images.unsplash.com/photo-1596040033229-a9821ebd058d$_imageQuery',
+  'Hand Painted Ceramic Mug':
+      'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d$_imageQuery',
 };
+
+/// Photos below this size are the 1x1 transparent placeholder written by
+/// earlier seed runs, not a real product photo.
+const _placeholderPhotoMaxBytes = 512;
 
 /// Idempotent demo seed. Runs on startup and skips once the catalog is full.
 Future<void> seedDemoData(Serverpod pod) async {
@@ -63,6 +72,7 @@ Future<void> seedDemoData(Serverpod pod) async {
       session.log(
         'Demo catalog already contains $existingProductsCount products. Skipping.',
       );
+      await _repairPlaceholderPhotos(session);
       return;
     }
 
@@ -555,6 +565,41 @@ Future<void> seedDemoData(Serverpod pod) async {
   }
 }
 
+/// Replaces placeholder photos written by earlier seed runs with real images,
+/// so an already-populated demo catalog still looks complete.
+Future<void> _repairPlaceholderPhotos(Session session) async {
+  final products = await Product.db.find(session);
+  final cache = <String, ByteData?>{};
+  var repaired = 0;
+  for (final product in products) {
+    final existing = await ProductPhoto.db.findFirstRow(
+      session,
+      where: (table) => table.productId.equals(product.id!),
+    );
+    if (existing != null &&
+        existing.bytes.lengthInBytes > _placeholderPhotoMaxBytes) {
+      continue;
+    }
+
+    final bytes = await _imageFor(session, product.name, cache);
+    if (bytes == null) continue;
+
+    if (existing == null) {
+      await ProductPhoto.db.insertRow(
+        session,
+        ProductPhoto(productId: product.id!, bytes: bytes),
+      );
+    } else {
+      existing.bytes = bytes;
+      await ProductPhoto.db.updateRow(session, existing);
+    }
+    repaired++;
+  }
+  if (repaired > 0) {
+    session.log('Repaired placeholder photos for $repaired demo products.');
+  }
+}
+
 /// Returns the photo for [name], caching downloads so repeated category images
 /// are fetched only once. Falls back to a known-good image, then null.
 Future<ByteData?> _imageFor(
@@ -562,7 +607,7 @@ Future<ByteData?> _imageFor(
   String name,
   Map<String, ByteData?> cache,
 ) async {
-  final url = _productImages[name] ?? _fallbackImage;
+  final url = _imageUrlFor(name);
   if (cache.containsKey(url)) return cache[url];
 
   var bytes = await _downloadImage(url);
@@ -586,6 +631,18 @@ Future<ByteData?> _imageFor(
     );
   }
   return bytes;
+}
+
+/// Looks up the curated photo for [name], ignoring case and surrounding space.
+String _imageUrlFor(String name) {
+  final key = name.trim();
+  final exact = _productImages[key];
+  if (exact != null) return exact;
+  final lower = key.toLowerCase();
+  for (final entry in _productImages.entries) {
+    if (entry.key.toLowerCase() == lower) return entry.value;
+  }
+  return _fallbackImage;
 }
 
 Future<ByteData?> _downloadImage(String url) async {
